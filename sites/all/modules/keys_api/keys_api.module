@@ -1,0 +1,194 @@
+<?php
+// $Id: keys_api.module,v 1.5.4.2 2008/10/16 17:10:57 greenskin Exp $
+
+/**
+ * Implementation of hook_help().
+ */
+
+// function keys_api_help($path, $args) {
+function keys_api_help($path, $args = null) {
+  switch ($path) {
+    case 'admin/help#keys_api':
+    case 'admin/help/keys_api':
+      return '<p>'. t('This module allows the use of unique keys based on a sites host name, like Google Maps API key. This module will provide the appropriate key to the service. Very useful for sites developed on several different computers.') .'</p>';
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function keys_api_perm() {
+  return array("administer keys");
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function keys_api_menu() {
+  $items['admin/settings/keys'] = array(
+    'title' => 'Keys',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('keys_manage_settings'),
+    'access arguments' => array('administer keys'),
+  );
+  $items['admin/settings/keys/delete_key'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'keys_manage_delete_key',
+    'access arguments' => array('administer keys'),
+  );
+
+  return $items;
+}
+
+/**
+ * Keys API Settings Form.
+ */
+function keys_manage_settings() {
+  drupal_add_js(drupal_get_path('module', 'keys_api') .'/keys_api.js', 'module');
+  drupal_add_css(drupal_get_path('module', 'keys_api') .'/keys_api.css', 'module');
+  $list = keys_services_list();
+
+  $form['set_keys'] = array(
+    '#type' => 'item',
+    '#title' => t("Existing Keys"),
+    '#description' => t("Keys that have already been added."),
+    '#value' => "<div id='keys_table'>". keys_manage_get_keys() ."</div>",
+  );
+  $form['key'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Key"),
+    '#description' => t("Add API Key you want to manage."),
+    '#required' => TRUE,
+  );
+  $form['domain'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Domain Name"),
+    '#description' => t("The domain name the supplied key is registered for. For example: example.com, sub.example.com, localhost, localhost:9000."),
+    '#required' => TRUE,
+  );
+  $form['set_domain'] = array(
+    '#type' => 'button',
+    '#value' => t("Set Domain to Current"),
+    '#attributes' => array('onclick' => 'setDomain(); return false;'),
+  );
+  $form['service'] = array(
+    '#type' => 'select',
+    '#title' => t("Service"),
+    '#description' => t("The Module specified Service name which the key is used for."),
+    '#required' => TRUE,
+    '#maxlength' => 60,
+    '#options' => $list,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t("Submit"),
+  );
+
+  if ($list[0] == 'none available') {
+    $error['error'] = array(
+      '#type' => 'item',
+      '#title' => t("Unavailable"),
+      '#value' => t("No modules that use this feature have been installed."),
+    );
+    return $error;
+  }
+  return $form;
+}
+
+function keys_manage_settings_validate($form, &$form_state) {
+  if ($form_state['values']['service'] == 'select') {
+    form_set_error('service', t("Please select a module for your key."));
+  }
+}
+
+function keys_manage_settings_submit($form, &$form_state) {
+  $key = $form_state['values']['key'];
+  $domain = $form_state['values']['domain'];
+  $service = $form_state['values']['service'];
+
+  db_query("DELETE FROM {keys_manage} WHERE domain_name = '%s' AND service = '%s'", $domain, $service);
+  db_query("INSERT INTO {keys_manage} (domain_name,service,api_key) VALUES('%s','%s','%s')", $domain, $service, $key);
+  drupal_set_message(t("Submit was successful."));
+}
+
+function keys_manage_get_keys() {
+  $x = 0;
+
+  $result = db_query("SELECT * FROM {keys_manage} ORDER BY domain_name, service, api_key");
+  $theaders = array('Domain Name', 'Service', 'API Key', '');
+  while ($data = db_fetch_object($result)) {
+    $rows[] = array(
+      'data' => array($data->domain_name, $data->service, $data->api_key, t("<a href='#' onclick='deleteItem(\"row$x\");'>delete</a>")),
+      'class' => "key row$x",
+    );
+    $x++;
+  }
+  return theme('table', $theaders, $rows);
+}
+
+function keys_services_list() {
+  $list = array('select' => t("-select service-"));
+  foreach (module_implements('keys_service', true) as $module) {
+    $function = $module .'_keys_service';
+    foreach($function() as $k => $v) {
+      if ($v['description'] != NULL) {
+        $description = " (". $v['description'] .")";
+      }
+      else {
+        $description = NULL;
+      }
+      $add = array($v['name'] => $v['name'] . $description);
+      $list = $list + $add;
+    }
+  }
+
+  if (count($list) == 1) {
+    $list = array(t("none available"));
+  }
+
+  return $list;
+}
+
+function keys_manage_delete_key() {
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    db_query("DELETE FROM {keys_manage} WHERE domain_name = '%s' AND service = '%s'", $_POST['name'], $_POST['service']);
+    print keys_manage_get_keys();
+  }
+  exit();
+}
+
+/**
+ * This gets a key managed by Keys API module.
+ *
+ * @param $service
+ *   The name of the service you want to get the key for.
+ * @param $domain
+ *   The domain you want to get the key for. Use $_SERVER['HTTP_HOST'] for current domain.
+ *
+ * @return
+ *   The API Key.
+ */
+function keys_api_get_key($service, $domain) {
+  $result = db_result(db_query("SELECT api_key FROM {keys_manage} WHERE domain_name = '%s' AND service = '%s'", $domain, $service));
+  $key = $result;
+  if ($key == NULL) {
+    $message = t("Key for '%service' @ '%domain' doesn't exist. You should <a href='@url'>configure a new key</a> on the key management page.", array('%service' => $service, '%domain' => $domain, '@url' => url('admin/settings/keys')));
+    drupal_set_message($message, 'error');
+  }
+  return $key;
+}
+
+/**
+ * This function developers can use to allow submission of a key on their own settings page.
+ *
+ * @param $service
+ *   The name of the service you want to get the key for.
+ * @param $domain
+ *   The domain you want to get the key for. Use $_SERVER['HTTP_HOST'] for current domain.
+ * @param $key
+ *   The API Key.
+ */
+function keys_api_set_key($service, $domain, $key) {
+  db_query("DELETE FROM {keys_manage} WHERE domain_name = '%s' AND service = '%s'", $domain, $service);
+  db_query("INSERT INTO {keys_manage} (domain_name,service,api_key) VALUES('%s','%s','%s')", $domain, $service, $key);
+}

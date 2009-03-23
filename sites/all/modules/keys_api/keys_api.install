@@ -1,0 +1,42 @@
+<?php
+// $Id: keys_api.install,v 1.2.4.1 2008/07/15 16:42:07 greenskin Exp $
+
+function keys_api_schema() {
+  $schema['keys_manage'] = array(
+    'description' => t('Primary keys storage table.'),
+    'fields' => array(
+      'domain_name' => array(
+        'description' => t('Domain name for which the key is allocated.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => true,
+      ),
+      'service' => array(
+        'description' => t('The service the key applies to.'),
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => true,
+      ),
+      'api_key' => array(
+        'description' => t('The appropriate key value.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => true
+      )
+    ),
+    'indexes' => array(
+      'api_key' => array('api_key')
+    ),
+  );
+
+  return $schema;
+}
+
+function keys_api_install() {
+  drupal_set_message(t('Beginning installation of Keys API module.'));
+  drupal_install_schema('keys_api');
+}
+
+function keys_api_uninstall() {
+  drupal_uninstall_schema('keys_api');
+}

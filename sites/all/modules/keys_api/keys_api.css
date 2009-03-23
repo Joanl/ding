@@ -1,0 +1,5 @@
+/* $Id: keys_api.css,v 1.2 2008/03/10 23:26:56 greenskin Exp $ */
+.key:hover {
+  background-color: #CCCCCC;
+  cursor: pointer;
+}
