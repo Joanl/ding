@@ -323,22 +323,20 @@ function office_hours_widget(&$form, &$form_state, $field, $items, $delta = 0) {
  * The $fields array is in $form['#field_info'][$element['#field_name']].
  */
 function office_hours_field_process($element, $edit, $form_state, $form) { 
-  static $iteration = 0; //we'll use this in order to determine what default day to display
+  $day = $delta = $element['#delta'];
   $field = $form['#field_info'][$element['#field_name']];
-  if ($field['multiple'] > 7) {
-		$day = ($iteration == 0) ? 0 :(($iteration & 1) ? ($iteration-1)/2 : $iteration/2);
+  // If we're into the second week, subtract 7 to make the day numbers
+  // correspond to their day names.
+  if ($field['multiple'] > 7 && $day >= 7) {
+		$day = $day - 7;
 	}
-  else {
-  	$day = $iteration;
-  }
   $field_day = $element['#columns'][0];
   $field_strhrs = $element['#columns'][1];
   $field_endhrs = $element['#columns'][2];  
-  $delta = $element['#delta'];
   $optionshr= _create_hours_arr($field, TRUE);
   $optionday= array(0 => t('Sunday'), 1 => t('Monday'), 2 => t('Tuesday'),3 => t('Wednesday'), 4 => t('Thursday'), 5 => t('Friday'), 6 => t('Saturday'), 7=> t('None'));
   
-  if ( $field['multiple'] == '7' || ($field['multiple'] == '14' && !($iteration & 1 )) ) {
+  if ($field['multiple'] == '7' || $field['multiple'] == '14') {
     $element['#prefix'] = '<div class="office-hours-block" style="display:inline">' . t($optionday[$day]);
   }
   else {
@@ -367,7 +365,6 @@ function office_hours_field_process($element, $edit, $form_state, $form) {
     '#default_value' => ($element['#value']['day'] == $day && isset($element['#value'][$field_endhrs])) ? $element['#value'][$field_endhrs] : '',
  );
   $form_state['#field_info'][$field['field_name']] = $field;
-  $iteration++;
   return $element;
 }
 
