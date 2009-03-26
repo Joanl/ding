@@ -1,0 +1,7 @@
+; $Id$
+name = Library slugs  
+description = Handles "slugs" for nodes, short names to be referenced in URLs
+package = Drupal for libraries
+core = 6.x
+dependencies[] = transliteration
+

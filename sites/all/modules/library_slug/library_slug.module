@@ -1,0 +1,9 @@
+<?php
+// $Id$
+
+/**
+ * @file library_slug.module
+ * Handles the generation and loading of nodes from "slugs", 
+ * small bits of text, suitable for use in URLs.
+ */
+
