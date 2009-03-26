@@ -1,4 +1,5 @@
-<?php // $Id: location.dk.inc,v 1.6 2008/01/24 09:00:02 bdragon Exp $
+<?php
+// $Id: location.dk.inc,v 1.6 2008/01/24 09:00:02 bdragon Exp $
 
 /**
  * @file location.dk.inc
@@ -13,23 +14,19 @@
  *    Map link if generation successful, otherwise null.
  */
 function location_map_link_dk_findvej($location = array()) {
-  if (isset($location['street']) && isset($location['postal_code'])) {
-    return sprintf('http://findvej.dk/%s,%s',
-      urlencode($location['street']),
-      urlencode($location['postal_code'])
-    );
+  if (isset($location['street']) && !empty($location['street']) &&
+      isset($location['postal_code']) && !empty($location['postal_code'])) {
+    return url('http://findvej.dk/' . $location['street'] . ',' . $location['postal_code']);
   }
-  elseif (isset($location['street']) && isset($location['city'])) {
-    return sprintf('http://findvej.dk/%s,%s',
-      urlencode($location['street']),
-      urlencode($location['city'])
-    );
+  elseif (isset($location['street']) && !empty($location['street']) &&
+          isset($location['city']) && !empty($location['city'])) {
+    return url('http://findvej.dk/' . $location['street'] . ',' . $location['city']);
   }
-  elseif (isset($location['latitude']) && isset($location['longitude'])) {
-    return sprintf('http://findvej.dk/?latitude=%s&longitude=%s',
-      urlencode($location['latitude']),
-      urlencode($location['longitude'])
-    );
+  elseif (location_has_coordinates($location)) {
+    return url('http://findvej.dk/', array('query' => array(
+      'latitude' => $location['latitude'],
+      'longitude' => $location['longitude'],
+    )));
   }
   else {
     return NULL;
