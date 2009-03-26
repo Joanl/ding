@@ -339,15 +339,13 @@ function office_hours_field_process($element, $edit, $form_state, $form) {
   $optionday= array(0 => t('Sunday'), 1 => t('Monday'), 2 => t('Tuesday'),3 => t('Wednesday'), 4 => t('Thursday'), 5 => t('Friday'), 6 => t('Saturday'), 7=> t('None'));
   
   if ( $field['multiple'] == '7' || ($field['multiple'] == '14' && !($iteration & 1 )) ) {
- 		$element['day_markup'] = array(
-  		'#value' => '<div class="office-hours-block" style="display:inline">'.t($optionday[$day]),
-  	);
+    $element['#prefix'] = '<div class="office-hours-block" style="display:inline">' . t($optionday[$day]);
   }
   else {
-  	$element['day_markup'] = array(
-  		'#value' => '<div class="office-hours-block" style="display:inline">'.t('Additional hours:'),
-  	);
+    $element['#prefix'] = '<div class="office-hours-block" style="display:inline">' . t('Additional hours:');
   }
+  $element['#suffix'] = '</div>';
+
   $element[$field_day] = array(
     '#type' => 'value',
     '#value' => $day,
