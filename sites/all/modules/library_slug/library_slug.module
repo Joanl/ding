@@ -8,6 +8,52 @@
  */
 
 /**
+ * Implementation of hook_nodeapi().
+ */
+function library_slug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  if ($node->type == 'library') {
+    switch ($op) {
+      case 'update':
+        // Check if node has slug already.
+        $slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d", $node->nid));
+        if ($slug) {
+          break;
+        }
+        // Tricky: No break here, will continue to add slug.
+      case 'insert':
+        // Add a new slug.
+        if (isset($node->library_slug) && strlen($node->library_slug) > 2) {
+          db_query("INSERT INTO {library_slug} (slug, nid) VALUES ('%s', %d);", library_slug_slugify($node->library_slug), $node->nid);
+        }
+        break;
+      case 'load':
+        $node->library_slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d", $node->nid));
+
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function library_slug_form_alter(&$form, $form_state, $form_id) {
+  if ($form['#id'] == 'node-form') {
+    $form['library_slug'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Slug'),
+      '#description' => t('A short name for this node, used in URLs.'),
+      '#attributes' => array(),
+      '#weight' => -4,
+    );
+    if ($form['#node']->library_slug) {
+      $form['library_slug']['#value'] = $form['#node']->library_slug;
+      $form['library_slug']['#attributes']['readonly'] = 'readonly';
+      $form['library_slug']['#attributes']['disabled'] = 'disabled';
+    }
+  }
+}
+
+/**
  * Implementation of hook_ctools_arguments().
  */
 function library_slug_ctools_arguments() {
@@ -58,5 +104,27 @@ function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE)
   }
 
   return ctools_context_create('node', $node);
+}
+
+/**
+ * Slugify a piece of text, ie. make it ready for use in URLs.
+ *
+ * @param string $input
+ *      Text to slugify.
+ */
+function library_slug_slugify($input) {
+  if (module_exists('transliteration')) {
+    // Transliterate all letters down to ASCII
+    $output = transliteration_get($input, '?', 'da');
+  }
+  else {
+    $output = $input;
+  }
+
+  // Remove all characters that are not lowercase alphanumeric.
+  $output = preg_replace('/[^a-z0-9]+/', '-', drupal_strtolower($output));
+  // Remove dashes at the end of the string
+  $output = preg_replace('/-+$/', '', $output);
+  return $output;
 }
 
