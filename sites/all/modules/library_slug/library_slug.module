@@ -35,7 +35,19 @@ function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE)
     return ctools_context_create('node', $arg);
   }
 
-  $nid = db_result(db_query("SELECT nid FROM {library_slug} WHERE slug='%s'", $arg));
+  // Cast argument to an integer to see if it looks like a node ID.
+  $num = intval($arg);
+  if (is_numeric($num) && $num > 0) {
+    $nid = $num;
+  }
+  // Try looking up the argument as a slug
+  elseif (strlen($arg) > 1) {
+    $nid = db_result(db_query("SELECT nid FROM {library_slug} WHERE slug='%s'", $arg));
+  }
+  else {
+    return FALSE;
+  }
+
   if (!$nid || !is_numeric($nid)) {
     return FALSE;
   }
