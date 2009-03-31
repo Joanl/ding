@@ -1,5 +1,5 @@
 <?php
-// $Id: panels.install,v 1.4 2008/11/21 00:05:49 sdboyer Exp $
+// $Id: panels.install,v 1.4.2.4 2009/03/30 19:15:08 merlinofchaos Exp $
 
 /**
  * Implementation of hook_schema().
@@ -12,44 +12,65 @@ function panels_schema() {
 
 /**
  * Schema version 1 for Panels in D6.
+ *
+ * Schema v1 is now LOCKED; any changes should be done via panels_schema_2.
  */
 function panels_schema_1() {
   $schema = array();
 
   $schema['panels_display'] = array(
+    'export' => array(
+      'object' => 'panels_display',
+      'can disable' => FALSE,
+      'identifier' => 'display',
+    ),
     'fields' => array(
       'did' => array(
         'type' => 'serial',
         'not null' => TRUE,
+        'no export' => TRUE,
       ),
       'layout' => array(
         'type' => 'varchar',
         'length' => '32',
+        'default' => '',
       ),
       'layout_settings' => array(
         'type' => 'text',
         'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'panel_settings' => array(
         'type' => 'text',
         'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'cache' => array(
         'type' => 'text',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'title' => array(
         'type' => 'varchar',
         'length' => '255',
+        'default' => '',
       ),
       'hide_title' => array(
         'type' => 'int',
         'size' => 'tiny',
+        'default' => 0,
       ),
     ),
     'primary key' => array('did'),
   );
 
   $schema['panels_pane'] = array(
+    'export' => array(
+      'can disable' => FALSE,
+      'identifier' => 'pane',
+    ),
     'fields' => array(
       'pid' => array(
         'type' => 'serial',
@@ -63,14 +84,17 @@ function panels_schema_1() {
       'panel' => array(
         'type' => 'varchar',
         'length' => '32',
+        'default' => '',
       ),
       'type' => array(
         'type' => 'varchar',
         'length' => '32',
+        'default' => '',
       ),
       'subtype' => array(
         'type' => 'varchar',
         'length' => '64',
+        'default' => '',
       ),
       'shown' => array(
         'type' => 'int',
@@ -78,24 +102,45 @@ function panels_schema_1() {
         'default' => 1,
       ),
       'access' => array(
-        'type' => 'varchar',
-        'length' => '128',
-      ),
-      'visibility' => array(
         'type' => 'text',
         'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'configuration' => array(
         'type' => 'text',
         'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'cache' => array(
         'type' => 'text',
         'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+      'style' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+      'css' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+      'extras' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
       ),
       'position' => array(
         'type' => 'int',
         'size' => 'small',
+        'default' => 0,
       ),
     ),
     'primary key' => array('pid'),
@@ -104,32 +149,6 @@ function panels_schema_1() {
     ),
   );
 
-  $schema['panels_object_cache'] = array(
-    'fields' => array(
-      'sid' => array(
-        'type' => 'varchar',
-        'length' => '64',
-      ),
-      'did' => array(
-        'type' => 'int',
-      ),
-      'obj' => array(
-        'type' => 'varchar',
-        'length' => '255',
-      ),
-      'data' => array(
-        'type' => 'text',
-        'size' => 'big',
-      ),
-      'timestamp' => array(
-        'type' => 'int',
-      ),
-    ),
-    'indexes' => array(
-      'idx' => array('sid', 'obj', 'did'),
-      'time_idx' => array('timestamp')
-    ),
-  );
   return $schema;
 }
 
@@ -137,10 +156,6 @@ function panels_schema_1() {
  * Implementation of hook_install().
  */
 function panels_install() {
-  db_query("UPDATE {system} SET weight = 10 WHERE name = 'panels'");
-  drupal_set_message(st('Please keep in mind that this is an Alpha release of Panels for Drupal 6, and is NOT intended for use on production sites.'));
-  drupal_set_message(st('Additionally, the upgrade path from Drupal 5 has NOT been resolved, and should not be attempted.'));
-  drupal_set_message(st('Bug reports are encouraged, especially when they come with patches! The <a href="@link">Panels project page</a> has details on filing issues.', array('@link' => 'http://drupal.org/project/panels')));
   drupal_install_schema('panels');
 }
 
@@ -151,3 +166,53 @@ function panels_uninstall() {
   drupal_uninstall_schema('panels');
 }
 
+/**
+ * Update from 6.x v2.
+ */
+function panels_update_6290() {
+  // This is currently commented out because we failed to establish proper
+  // baselines in previous versions and we want to re-establish this in alpha3.
+  // It will return.
+
+  $ret = array();
+/*
+  // Fetch schema version 1.
+  $schema = panels_schema_1();
+
+  // @TODO: We probably should detect if these are already serial from previous installations. Not sure how.
+
+  // update pid and did to be serial
+  db_drop_primary_key($ret, 'panels_pane');
+  db_change_field($ret, 'panels_pane', 'pid', 'pid', $schema['panels_pane']['fields']['pid'], array('primary key' => array('pid')));
+
+  db_drop_primary_key($ret, 'panels_display');
+  db_change_field($ret, 'panels_display', 'did', 'did', $schema['panels_display']['fields']['did'], array('primary key' => array('did')));
+
+  // Update size of pane 'access' field.
+  db_change_field($ret, 'panels_pane', 'access', 'access', $schema['panels_pane']['fields']['access']);
+
+  // Add some new fields
+  db_add_field($ret, 'panels_pane', 'style', $schema['panels_pane']['fields']['style']);
+  db_add_field($ret, 'panels_pane', 'css', $schema['panels_pane']['fields']['css']);
+  db_add_field($ret, 'panels_pane', 'extras', $schema['panels_pane']['fields']['extras']);
+  // update contents of various fields:
+  // access
+    // @TODO:
+
+  // style
+  // css
+  // extras
+  // configuration
+
+  // Remove panels_object_cache table
+  db_drop_table($ret, 'panels_object_cache');
+ */
+  return $ret;
+}
+
+/**
+ * Establish a baseline schema version for 6.x-3.x
+ */
+function panels_update_6300() {
+  return array();
+}

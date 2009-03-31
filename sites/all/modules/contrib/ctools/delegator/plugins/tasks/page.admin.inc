@@ -1,5 +1,5 @@
 <?php
-// $Id: page.admin.inc,v 1.10 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: page.admin.inc,v 1.13 2009/03/27 22:22:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -119,6 +119,7 @@ function delegator_page_menu(&$items, $task) {
   // AJAX callbacks for argument modal.
   $items['admin/build/delegator/argument'] = array(
     'page callback' => 'delegator_page_subtask_argument_ajax',
+    'type' => MENU_CALLBACK,
   ) + $base;
 
   // Add menu entries for each subtask
@@ -493,7 +494,7 @@ function delegator_page_form_basic_validate(&$form, &$form_state) {
   }
 
   $path = implode('/', $path);
-  $result = db_query("SELECT * FROM menu_router WHERE path = '%s'", $path);
+  $result = db_query("SELECT * FROM {menu_router} WHERE path = '%s'", $path);
   while ($router = db_fetch_object($result)) {
     if ($router->page_callback != 'delegator_page_execute') {
       form_error($form['path'], t('That path is already in used. This system cannot override existing paths.'));
@@ -1416,6 +1417,8 @@ function delegator_page_clone_subtask_submit(&$form, &$form_state) {
   }
 
   $page->name = $name;
+  unset($page->pid);
+
   delegator_page_set_page_cache($page);
   $form_state['redirect'] = 'admin/build/pages/edit/' . $page->name;
 }

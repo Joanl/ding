@@ -1,5 +1,5 @@
 <?php
-// $Id: delegator.admin.inc,v 1.23 2009/01/29 22:12:04 merlinofchaos Exp $
+// $Id: delegator.admin.inc,v 1.24 2009/03/27 01:57:57 merlinofchaos Exp $
 
 /**
  * @file
@@ -808,7 +808,7 @@ function delegator_admin_list_form_cancel($form, &$form_state) {
   foreach ($form_state['cache']->handlers as $id => $info) {
     if ($info['changed'] & DGA_CHANGED_CACHED) {
       // clear cached version.
-      delegator_admin_clear_task_handler_cache($id);
+      delegator_admin_clear_task_handler_cache($id . '-working');
     }
   }
 
@@ -1199,6 +1199,8 @@ function delegator_admin_edit_task_handler_finish(&$form_state) {
 function delegator_admin_edit_task_handler_cancel(&$form_state) {
   // Remove working copy.
   delegator_admin_clear_task_handler_cache($form_state['task_name'] . '-working');
+  unset($form_state['cache']->working);
+  delegator_admin_set_task_cache($form_state['task'], $form_state['subtask_id'], $form_state['cache']);
 }
 
 /**

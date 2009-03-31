@@ -1,0 +1,8 @@
+; empty file -- module no longer exists
+
+; Information added by drupal.org packaging script on 2009-03-30
+version = "6.x-3.0-alpha3"
+core = "6.x"
+project = "panels"
+datestamp = "1238444751"
+

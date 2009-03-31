@@ -1,4 +1,4 @@
-// $Id: modal.js,v 1.3 2009/01/16 07:29:18 merlinofchaos Exp $
+// $Id: modal.js,v 1.4 2009/03/26 20:17:59 merlinofchaos Exp $
 /**
  * @file 
  *
@@ -132,7 +132,7 @@ Drupal.behaviors.CToolsModal = function(context) {
     $('form:not(.ctools-use-modal-processed)', context)
       .addClass('ctools-use-modal-processed')
       .submit(Drupal.CTools.Modal.submitAjaxForm)
-      .append('<input type="hidden" name="op" value=""');
+      .append('<input type="hidden" name="op" value="">');
     // add click handlers so that we can tell which button was clicked,
     // because the AJAX submit does not set the values properly.
     $('input[type="submit"]:not(.ctools-use-modal-processed)', context)

@@ -1,5 +1,5 @@
 <?php
-// $Id: delegator.module,v 1.21 2009/01/29 22:12:04 merlinofchaos Exp $
+// $Id: delegator.module,v 1.23 2009/02/07 16:50:31 merlinofchaos Exp $
 
 /**
  * @file
@@ -446,7 +446,7 @@ function delegator_export_task_handler($handler, $indent = '') {
     $append = $function($handler, $indent);
   }
 
-  $output = ctools_export_object('delegator_handlers', $handler, 'handler', $indent);
+  $output = ctools_export_object('delegator_handlers', $handler, $indent);
   $output .= $append;
 
   return $output;
@@ -630,12 +630,13 @@ function delegator_get_task_handler($id) {
  */
 function delegator_get_task_handler_plugins($task) {
   $type = isset($task['handler type']) ? $task['handler type'] : $task['name'];
+  $name = $task['name'];
 
   $handlers = array();
   $task_handlers = delegator_get_task_handlers();
   foreach ($task_handlers as $id => $handler) {
     $task_type = is_array($handler['handler type']) ? $handler['handler type'] : array($handler['handler type']);
-    if (in_array($type, $task_type)) {
+    if (in_array($type, $task_type) || in_array($name, $task_type)) {
       $handlers[$id] = $handler;
     }
   }

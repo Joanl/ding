@@ -1,5 +1,5 @@
 <?php
-// $Id: page.inc,v 1.11 2009/01/29 22:33:39 merlinofchaos Exp $
+// $Id: page.inc,v 1.13 2009/02/04 22:32:33 merlinofchaos Exp $
 
 /**
  * @file
@@ -20,7 +20,7 @@
 function delegator_page_delegator_tasks() {
   return array(
     'page' => array(
-      'title' => t('User pages'),
+      'title' => t('Custom pages'),
       'description' => t('Administrator created pages that have a URL path, access control and entries in the Drupal menu system.'),
       'subtasks' => TRUE,
       'subtask callback' => 'delegator_page_subtask',
@@ -409,7 +409,7 @@ function delegator_page_delete($subtask) {
  */
 function delegator_page_export($subtask, $with_handlers = FALSE, $indent = '') {
   ctools_include('export');
-  $output = ctools_export_object('delegator_pages', $subtask, 'page', $indent);
+  $output = ctools_export_object('delegator_pages', $subtask, $indent);
   if ($with_handlers) {
     $handlers = delegator_load_task_handlers(delegator_get_task('page'), $subtask->name);
     $output .= $indent . '$page->default_handlers = array();' . "\n";
