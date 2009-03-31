@@ -54,6 +54,32 @@ function library_slug_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
+ * Implementation of hook_field_formatter_info().
+ */
+function library_slug_field_formatter_info() {
+  // CCK field formatter that links to the library page instead of the
+  // node, if the library has a slug.
+  return array(
+    'library_slug_link' => array(
+      'label' => t('Title (link to library page)'),
+      'field types' => array('nodereference'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function library_slug_theme() {
+  return array(
+    'library_slug_formatter_library_slug_link' => array(
+      'arguments' => array('element'),
+    ),
+  );
+}
+
+/**
  * Implementation of hook_ctools_arguments().
  */
 function library_slug_ctools_arguments() {
@@ -125,6 +151,40 @@ function library_slug_slugify($input) {
   $output = preg_replace('/[^a-z0-9]+/', '-', drupal_strtolower($output));
   // Remove dashes at the end of the string
   $output = preg_replace('/-+$/', '', $output);
+  return $output;
+}
+
+/**
+ * Get a library slug by the corresponding node ID
+ *
+ * @param integer $nid
+ *    The node ID.
+ * @return string
+ *    The slug matching the node.
+ */
+function library_slug_get_by_nid($nid) {
+  $slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d;", $nid));
+  return $slug;
+}
+
+/**
+ * Theme function for 'library_slug_link' field formatter.
+ *
+ * Used with node reference, etc.
+ */
+function theme_library_slug_formatter_library_slug_link($element) {
+  $output = '';
+  if (!empty($element['#item']['nid']) && is_numeric($element['#item']['nid']) && ($title = _nodereference_titles($element['#item']['nid']))) {
+    $slug = library_slug_get_by_nid($element['#item']['nid']);
+    // TODO: 'biblioteker' should not be hardcoded. Make admin
+    // interface for selecting the library page.
+    if ($slug) {
+      $output = l($title, 'biblioteker/' . $slug);
+    }
+    else {
+      $output = l($title, 'biblioteker/'. $element['#item']['nid']);
+    }
+  }
   return $output;
 }
 
