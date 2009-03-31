@@ -115,7 +115,7 @@ function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE)
 function library_slug_slugify($input) {
   if (module_exists('transliteration')) {
     // Transliterate all letters down to ASCII
-    $output = transliteration_get($input, '?', 'da');
+    $output = transliteration_get($input, '-', 'da');
   }
   else {
     $output = $input;
