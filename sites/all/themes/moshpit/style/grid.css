@@ -1,0 +1,91 @@
+/* =====================================
+	Style: grid
+	basic grid definitions for 12 16 24 grids
+	more info can be found at:
+	http://960.gs
+	http://www.blueprintcss.org/	
+* ------------------------------------- */
+
+/* -- 960 grids-- */
+/*12 grid - 10px on each side*/
+.grid12-1 {width: 60px;}
+.grid12-2 {width: 140px;}
+.grid12-3 {width: 220px;}
+.grid12-4 {width: 300px;}
+.grid12-5 {width: 380px;}
+.grid12-6 {width: 460px;}
+.grid12-7 {width: 540px;}
+.grid12-8 {width: 620px;}
+.grid12-9 {width: 700px;}
+.grid12-10{width: 780px;}
+.grid12-11{width: 860px;}
+.grid12-12{width: 940px;}
+
+/*16 grid - 10px on each side*/
+.grid16-1 {width: 40px;}
+.grid16-2 {width: 100px;}
+.grid16-3 {width: 160px;}
+.grid16-4 {width: 220px;}
+.grid16-5 {width: 280px;}
+.grid16-6 {width: 340px;}
+.grid16-7 {width: 400px;}
+.grid16-8 {width: 460px;}
+.grid16-9 {width: 520px;}
+.grid16-10{width: 580px;}
+.grid16-11{width: 640px;}
+.grid16-12{width: 700px;}
+.grid16-13{width: 760px;}
+.grid16-14{width: 820px;}
+.grid16-15{width: 880px;}
+.grid16-16{width: 940px;}
+
+.grid-full{width: 960px; display: inline; float:left;}
+
+.grid12-1,.grid12-2,.grid12-3,.grid12-4,.grid12-5,.grid12-6,.grid12-7,.grid12-8,.grid12-9,.grid12-10,.grid12-11,.grid12-12,
+.grid16-1,.grid16-2,.grid16-3,.grid16-3,.grid16-5,.grid16-6,.grid16-7,.grid16-8,.grid16-9,.grid16-10,.grid16-11,.grid16-12,.grid16-13,.grid16-14,.grid16-15,.grid16-16{
+	display: inline; float:left;margin:0 10px;
+	min-height: 1%;
+	min-height: 1px;
+}
+
+.alpha {margin-left: 0;}
+.omega {margin-right: 0;}
+
+/* 24 grid  - thank you blueprint  :) */
+.grid24-1  {width: 30px;}
+.grid24-2  {width: 70px;}
+.grid24-3  {width: 110px;}
+.grid24-4  {width: 150px;}
+.grid24-5  {width: 190px;}
+.grid24-6  {width: 230px;}
+.grid24-7  {width: 270px;}
+.grid24-8  {width: 310px;}
+.grid24-9  {width: 350px;}
+.grid24-10 {width: 390px;}
+.grid24-11 {width: 430px;}
+.grid24-12 {width: 470px;}
+.grid24-13 {width: 510px;}
+.grid24-14 {width: 550px;}
+.grid24-15 {width: 590px;}
+.grid24-16 {width: 630px;}
+.grid24-17 {width: 670px;}
+.grid24-18 {width: 710px;}
+.grid24-19 {width: 750px;}
+.grid24-20 {width: 790px;}
+.grid24-21 {width: 830px;}
+.grid24-22 {width: 870px;}
+.grid24-23 {width: 910px;}
+.grid24-24 {width: 950px;}
+
+.grid24-1,.grid24-2,.grid24-3,.grid24-4,.grid24-5,.grid24-6,.grid24-7,.grid24-8,.grid24-9,.grid24-10,.grid24-11,.grid24-12,.grid24-13,.grid24-14,.grid24-15,.grid24-16,.grid24-17,.grid24-18,.grid24-19,.grid24-20,.grid24-21,.grid24-22,.grid24-23,.grid24-24 {
+	float: left; margin-right: 10px;
+}
+
+/* =====================================
+	Grid backgrounds
+* ------------------------------------- */
+/* #page{background: url(../images/grid-12.gif) repeat-y;} */
+/* #pageBody{background: url(../images/grid-12.gif) repeat-y;} */
+/* #pageBody{background: url(../images/grid-16.gif) repeat-y;} */
+/* #pageBody{background: url(../images/grid-24.png) repeat;}*/
+/* .test{background: transparent url(../images/bg-50.png);} */

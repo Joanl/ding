@@ -1,0 +1,51 @@
+/* =====================================
+	Style: drupal
+	basic classes for drupals frontend
+* ------------------------------------- */
+
+/*tabs*/
+.tabs ul li {display:inline;;}
+.tabs ul li a{background-color: #ddd; color:#999; }
+.tabs ul li.active a{background-color: #fff; color:#000;}
+
+/*blocks edit*/
+div.block.with-block-editing{position: relative;}
+div.block.with-block-editing div.edit{background-color: #eee; border: 1px solid #ddd; display: none; position: absolute; right: 0; top: 0; z-index: 40; padding: 0 2px; font-size: 9px;}
+div.block.with-block-editing:hover div.edit{display: block; background: #ccc;}
+div.edit a:link, div.edit a:visited {color:#333}
+div.edit a:hover{color: #333;}
+
+/* =====================================
+ 	blocks configuration
+	TODO:this should be durable with the css overwrites in the  infp
+* ------------------------------------- */
+table.sticky-header{background:#606;}
+table.sticky-header th{font-weight:bold; color:#f0f}
+td.region{color:#000; background:#999; text-align:center;}
+#block-admin-display-form td.block{color:#000; font-weight:bold;	}
+.block-region{background-color:#606; text-align:center; color:#f0f;}
+
+.draggable a.tabledrag-handle {
+	cursor:move;
+	float:left;
+	height:1.7em;
+	margin:-0.4em 0 -0.4em -0.5em;
+	padding:0.42em 1.5em 0.42em 0.5em;
+	text-decoration:none;
+}
+
+.section-admin tr.even, .section-admin tr.odd {
+	background-color:#EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	padding:0.1em 0.6em;
+}
+
+.draggable a:link, .draggable a:visited {color:#900; margin:0 10px;}
+.draggable a:hover{color: #900;}
+
+
+/* =====================================
+Views
+* ------------------------------------- */
+div.view div.views-admin-links{}
+div.view div.views-admin-links ul li{float:left; margin:0 10px 0 0;}
