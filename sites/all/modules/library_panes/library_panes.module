@@ -53,15 +53,11 @@ function _library_panes_types() {
  */
 function _library_panes_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
-
   switch($subtype) {
     case 'library_title':
       $block->content = theme('library_panes_title', $context->data);
       break;
   }
-  
-  //dpm($subtype);
-  //dpm($context);
   return $block;
 }
 
@@ -69,6 +65,6 @@ function _library_panes_render($subtype, $conf, $panel_args, $context) {
  * Return the pane titles.
  */
 function _library_panes_title($subtype, $conf, $context) {
-  return 'Hotdog. To stks.';
+  return 'Library title and navigation';
 }
 
