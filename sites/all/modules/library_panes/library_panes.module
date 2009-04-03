@@ -1,0 +1,74 @@
+<?php
+// $Id$
+
+/**
+ * @file library_panes.module
+ * Provides a few library-related panes for the Panels module.
+ */
+
+/**
+ * Implementation of hook_theme().
+ */
+function library_panes_theme($existing, $type, $theme, $path) {
+  return array(
+    'library_panes_title' => array(
+      'arguments' => array('node' => NULL),
+      'file' => 'library_panes.theme.inc',
+      'template' => 'library_panes_title',
+      'preprocess functions' => array('library_panes_preprocess_title'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_panels_content_types().
+ */
+function library_panes_panels_content_types() {
+  $items = array();
+  $items['LIBRARY_PAGE'] = array(
+    'title' => t('Library page'),
+    'content_types' => '_library_panes_types',
+    'render callback' => '_library_panes_render',
+    'title callback' => '_library_panes_title',
+  );
+  return $items;
+}
+
+/**
+ * Return all content types available.
+ */
+function _library_panes_types() {
+  return array(
+    'library_title' => array(
+      'title' => t('Library title and navigation'),
+      'description' => t('The title and navigation for a library page.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
+  );
+}
+
+/**
+ * Return the pane contents.
+ */
+function _library_panes_render($subtype, $conf, $panel_args, $context) {
+  $block = new stdClass();
+
+  switch($subtype) {
+    case 'library_title':
+      $block->content = theme('library_panes_title', $context->data);
+      break;
+  }
+  
+  //dpm($subtype);
+  //dpm($context);
+  return $block;
+}
+
+/**
+ * Return the pane titles.
+ */
+function _library_panes_title($subtype, $conf, $context) {
+  return 'Hotdog. To stks.';
+}
+

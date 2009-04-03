@@ -1,0 +1,7 @@
+; $Id$
+name = Library panes
+description = Provides library-related panes to the Panel module.
+package = Drupal for libraries
+core = 6.x
+dependencies[] = panels
+
