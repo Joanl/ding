@@ -17,8 +17,13 @@ function library_panes_preprocess_title(&$variables) {
 
 function _library_panes_theme_title_navigation($node) {
   $links = array();
-  if (isset($node->library_slug) && !empty($node->library_slug)) {
-    $base_path = 'bibliotek/' . $node->library_slug;
+  if ($node->type == 'library') {
+    if (isset($node->library_slug) && !empty($node->library_slug)) {
+      $base_path = 'bibliotek/' . $node->library_slug;
+    }
+    else {
+      $base_path = 'bibliotek/' . $node->nid;
+    }
 
     $links['front'] = l(t('Front page'), $base_path);
     $links['events'] = l(t('Events'), $base_path . '/arrangementer');
