@@ -1,7 +1,7 @@
 ; $Id$
-name = Library panes
+name = Ding! panes
 description = Provides library-related panes to the Panel module.
-package = Drupal for libraries
+package = Ding!
 core = 6.x
 dependencies[] = panels
 

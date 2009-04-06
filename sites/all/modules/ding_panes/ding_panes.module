@@ -2,20 +2,20 @@
 // $Id$
 
 /**
- * @file library_panes.module
+ * @file ding_panes.module
  * Provides a few library-related panes for the Panels module.
  */
 
 /**
  * Implementation of hook_theme().
  */
-function library_panes_theme($existing, $type, $theme, $path) {
+function ding_panes_theme($existing, $type, $theme, $path) {
   return array(
-    'library_panes_title' => array(
+    'ding_panes_title' => array(
       'arguments' => array('node' => NULL),
-      'file' => 'library_panes.theme.inc',
-      'template' => 'library_panes_title',
-      'preprocess functions' => array('library_panes_preprocess_title'),
+      'file' => 'ding_panes.theme.inc',
+      'template' => 'ding_panes_title',
+      'preprocess functions' => array('ding_panes_preprocess_title'),
     ),
   );
 }
@@ -23,13 +23,13 @@ function library_panes_theme($existing, $type, $theme, $path) {
 /**
  * Implementation of hook_panels_content_types().
  */
-function library_panes_panels_content_types() {
+function ding_panes_panels_content_types() {
   $items = array();
   $items['LIBRARY_PAGE'] = array(
     'title' => t('Library page'),
-    'content_types' => '_library_panes_types',
-    'render callback' => '_library_panes_render',
-    'title callback' => '_library_panes_title',
+    'content_types' => '_ding_panes_types',
+    'render callback' => '_ding_panes_render',
+    'title callback' => '_ding_panes_title',
   );
   return $items;
 }
@@ -37,7 +37,7 @@ function library_panes_panels_content_types() {
 /**
  * Return all content types available.
  */
-function _library_panes_types() {
+function _ding_panes_types() {
   return array(
     'library_title' => array(
       'title' => t('Library title and navigation'),
@@ -51,11 +51,11 @@ function _library_panes_types() {
 /**
  * Return the pane contents.
  */
-function _library_panes_render($subtype, $conf, $panel_args, $context) {
+function _ding_panes_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
   switch($subtype) {
     case 'library_title':
-      $block->content = theme('library_panes_title', $context->data);
+      $block->content = theme('ding_panes_title', $context->data);
       break;
   }
   return $block;
@@ -64,7 +64,7 @@ function _library_panes_render($subtype, $conf, $panel_args, $context) {
 /**
  * Return the pane titles.
  */
-function _library_panes_title($subtype, $conf, $context) {
+function _ding_panes_title($subtype, $conf, $context) {
   return 'Library title and navigation';
 }
 

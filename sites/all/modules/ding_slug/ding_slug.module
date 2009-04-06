@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file library_slug.module
+ * @file ding_slug.module
  * Handles the generation and loading of nodes from "slugs", 
  * small bits of text, suitable for use in URLs.
  */
@@ -10,24 +10,24 @@
 /**
  * Implementation of hook_nodeapi().
  */
-function library_slug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+function ding_slug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if ($node->type == 'library') {
     switch ($op) {
       case 'update':
         // Check if node has slug already.
-        $slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d", $node->nid));
+        $slug = db_result(db_query("SELECT slug FROM {ding_slug} WHERE nid=%d", $node->nid));
         if ($slug) {
           break;
         }
         // Tricky: No break here, will continue to add slug.
       case 'insert':
         // Add a new slug.
-        if (isset($node->library_slug) && strlen($node->library_slug) > 2) {
-          db_query("INSERT INTO {library_slug} (slug, nid) VALUES ('%s', %d);", library_slug_slugify($node->library_slug), $node->nid);
+        if (isset($node->ding_slug) && strlen($node->ding_slug) > 2) {
+          db_query("INSERT INTO {ding_slug} (slug, nid) VALUES ('%s', %d);", ding_slug_slugify($node->ding_slug), $node->nid);
         }
         break;
       case 'load':
-        $node->library_slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d", $node->nid));
+        $node->ding_slug = db_result(db_query("SELECT slug FROM {ding_slug} WHERE nid=%d", $node->nid));
 
     }
   }
@@ -36,19 +36,19 @@ function library_slug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 /**
  * Implementation of hook_form_alter().
  */
-function library_slug_form_alter(&$form, $form_state, $form_id) {
+function ding_slug_form_alter(&$form, $form_state, $form_id) {
   if ($form['#id'] == 'node-form') {
-    $form['library_slug'] = array(
+    $form['ding_slug'] = array(
       '#type' => 'textfield',
       '#title' => t('Slug'),
       '#description' => t('A short name for this node, used in URLs.'),
       '#attributes' => array(),
       '#weight' => -4,
     );
-    if ($form['#node']->library_slug) {
-      $form['library_slug']['#value'] = $form['#node']->library_slug;
-      $form['library_slug']['#attributes']['readonly'] = 'readonly';
-      $form['library_slug']['#attributes']['disabled'] = 'disabled';
+    if ($form['#node']->ding_slug) {
+      $form['ding_slug']['#value'] = $form['#node']->ding_slug;
+      $form['ding_slug']['#attributes']['readonly'] = 'readonly';
+      $form['ding_slug']['#attributes']['disabled'] = 'disabled';
     }
   }
 }
@@ -56,11 +56,11 @@ function library_slug_form_alter(&$form, $form_state, $form_id) {
 /**
  * Implementation of hook_field_formatter_info().
  */
-function library_slug_field_formatter_info() {
+function ding_slug_field_formatter_info() {
   // CCK field formatter that links to the library page instead of the
   // node, if the library has a slug.
   return array(
-    'library_slug_link' => array(
+    'ding_slug_link' => array(
       'label' => t('Title (link to library page)'),
       'field types' => array('nodereference'),
       'multiple values' => CONTENT_HANDLE_CORE,
@@ -71,9 +71,9 @@ function library_slug_field_formatter_info() {
 /**
  * Implementation of hook_theme().
  */
-function library_slug_theme() {
+function ding_slug_theme() {
   return array(
-    'library_slug_formatter_library_slug_link' => array(
+    'ding_slug_formatter_ding_slug_link' => array(
       'arguments' => array('element'),
     ),
   );
@@ -82,13 +82,13 @@ function library_slug_theme() {
 /**
  * Implementation of hook_ctools_arguments().
  */
-function library_slug_ctools_arguments() {
+function ding_slug_ctools_arguments() {
   $args = array();
-  $args['library_slug'] = array(
+  $args['ding_slug'] = array(
     'title' => t('Library slug'),
     'keyword' => 'node', // TODO: What is this?
     'description' => t('Finds the node context based on the "slug" name for a library.'),
-    'context' => 'library_slug_library_context',
+    'context' => 'ding_slug_library_context',
   );
   return $args;
 }
@@ -96,7 +96,7 @@ function library_slug_ctools_arguments() {
 /**
  * Lookup an argument to see if it corresponds to a library.
  */
-function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE) {
+function ding_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE) {
   // If unset it wants a generic, unfilled context.
   if ($empty) {
     return ctools_context_create_empty('node');
@@ -114,7 +114,7 @@ function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE)
   }
   // Try looking up the argument as a slug
   elseif (strlen($arg) > 1) {
-    $nid = db_result(db_query("SELECT nid FROM {library_slug} WHERE slug='%s'", $arg));
+    $nid = db_result(db_query("SELECT nid FROM {ding_slug} WHERE slug='%s'", $arg));
   }
   else {
     return FALSE;
@@ -138,7 +138,7 @@ function library_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE)
  * @param string $input
  *      Text to slugify.
  */
-function library_slug_slugify($input) {
+function ding_slug_slugify($input) {
   if (module_exists('transliteration')) {
     // Transliterate all letters down to ASCII
     $output = transliteration_get($input, '-', 'da');
@@ -162,20 +162,20 @@ function library_slug_slugify($input) {
  * @return string
  *    The slug matching the node.
  */
-function library_slug_get_by_nid($nid) {
-  $slug = db_result(db_query("SELECT slug FROM {library_slug} WHERE nid=%d;", $nid));
+function ding_slug_get_by_nid($nid) {
+  $slug = db_result(db_query("SELECT slug FROM {ding_slug} WHERE nid=%d;", $nid));
   return $slug;
 }
 
 /**
- * Theme function for 'library_slug_link' field formatter.
+ * Theme function for 'ding_slug_link' field formatter.
  *
  * Used with node reference, etc.
  */
-function theme_library_slug_formatter_library_slug_link($element) {
+function theme_ding_slug_formatter_ding_slug_link($element) {
   $output = '';
   if (!empty($element['#item']['nid']) && is_numeric($element['#item']['nid']) && ($title = _nodereference_titles($element['#item']['nid']))) {
-    $slug = library_slug_get_by_nid($element['#item']['nid']);
+    $slug = ding_slug_get_by_nid($element['#item']['nid']);
     // TODO: 'biblioteker' should not be hardcoded. Make admin
     // interface for selecting the library page.
     if ($slug) {

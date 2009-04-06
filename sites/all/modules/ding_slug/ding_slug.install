@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file library_slug.install
+ * @file ding_slug.install
  * Install and uninstall code for the library slug module.
  */
 
@@ -12,14 +12,14 @@
  * This hook should return a SchemaAPI array with a full definition of the most
  * up-to-date version of the module's database tables.
  */
-function library_slug_schema() {
-  $schema['library_slug'] = array(
+function ding_slug_schema() {
+  $schema['ding_slug'] = array(
     'description' => t('Stores custom links to be added to nodes.'),
     'fields' => array(
       'slug' => array(
         'type' => 'varchar',
         'length' => 100,
-        'description' => t('Unique identifier for the {library_slug}.'),
+        'description' => t('Unique identifier for the {ding_slug}.'),
       ),
       'nid' => array(
         'type' => 'int',
@@ -44,14 +44,14 @@ function library_slug_schema() {
 /**
  * Implementation of hook_install().
  */
-function library_slug_install() {
-  drupal_install_schema('library_slug');
+function ding_slug_install() {
+  drupal_install_schema('ding_slug');
 }
 
 /**
  * Implementation of hook_uninstall().
  */
-function library_slug_uninstall() {
-  drupal_uninstall_schema('library_slug');
+function ding_slug_uninstall() {
+  drupal_uninstall_schema('ding_slug');
 }
 

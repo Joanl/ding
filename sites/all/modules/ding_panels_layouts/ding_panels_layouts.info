@@ -1,7 +1,7 @@
 ; $Id$
-name = Library panel layouts
+name = Ding! panel layouts
 description = Provides custom layouts for Panels, used on library pages, etc.
-package = Drupal for libraries
+package = Ding!
 core = 6.x
 dependencies[] = panels
 

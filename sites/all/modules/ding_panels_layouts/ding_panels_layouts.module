@@ -2,14 +2,14 @@
 // $Id$
 
 /**
- * @file library_panel_layouts.module
+ * @file ding_panels_layouts.module
  * Provides a few library-related Panels layouts.
  */
 
 /**
  * Implementation of hook_panels_layouts()
  */
-function library_panels_layouts_panels_layouts() {
+function ding_panels_layouts_panels_layouts() {
   $items = array();
   $items['threecol_left_stacked'] = array(
     'title' => t('Three column left stacked'),
