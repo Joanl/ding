@@ -2,20 +2,20 @@
 // $Id$
 
 /**
- * @file ding_panes.theme.inc
+ * @file ding_panels_content.theme.inc
  * Theming implementation for library panes.
  */
 
 /**
  * Preprocess hook for the library title and navigation pane.
  */
-function ding_panes_preprocess_title(&$variables) {
+function ding_panels_content_preprocess_title(&$variables) {
   $node = $variables['node'];
-  $variables['library_links'] = _ding_panes_theme_title_navigation($node);
+  $variables['library_links'] = _ding_panels_content_theme_title_navigation($node);
   $variables['library_navigation'] = theme('item_list', $variables['library_links']);
 }
 
-function _ding_panes_theme_title_navigation($node) {
+function _ding_panels_content_theme_title_navigation($node) {
   $links = array();
   if ($node->type == 'library') {
     if (isset($node->library_slug) && !empty($node->library_slug)) {

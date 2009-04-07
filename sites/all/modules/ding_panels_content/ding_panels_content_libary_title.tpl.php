@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file library_panes_title.tpl.php
+ * @file ding_panels_content_libary_title.tpl.php
  * The main library page title with navigation, etc.
  */
 ?>
