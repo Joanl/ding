@@ -11,11 +11,17 @@
  */
 function ding_panels_content_theme($existing, $type, $theme, $path) {
   return array(
-    'ding_panels_content_title' => array(
+    'ding_panels_content_library_title' => array(
       'arguments' => array('node' => NULL),
       'file' => 'ding_panels_content.theme.inc',
       'template' => 'ding_panels_content_libary_title',
-      'preprocess functions' => array('ding_panels_content_preprocess_title'),
+      'preprocess functions' => array('ding_panels_content_preprocess_library_title'),
+    ),
+    'ding_panels_content_library_location' => array(
+      'arguments' => array('node' => NULL),
+      'file' => 'ding_panels_content.theme.inc',
+      'template' => 'ding_panels_content_libary_location',
+      'preprocess functions' => array('ding_panels_content_preprocess_library_location'),
     ),
   );
 }
@@ -25,7 +31,7 @@ function ding_panels_content_theme($existing, $type, $theme, $path) {
  */
 function ding_panels_content_panels_content_types() {
   $items = array();
-  $items['LIBRARY_PAGE'] = array(
+  $items['ding_panels_content'] = array(
     'title' => t('Library page'),
     'content_types' => '_ding_panels_content_types',
     'render callback' => '_ding_panels_content_render',
@@ -45,6 +51,18 @@ function _ding_panels_content_types() {
       'required context' => new ctools_context_required(t('Node'), 'node'),
       'category' => array(t('Library page'), -9),
     ),
+    'library_location' => array(
+      'title' => t('Library location'),
+      'description' => t('Shows the address, map and other locative information for the library.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
+    'library_hours' => array(
+      'title' => t('Library opening hours'),
+      'description' => t('Shows the library opening hours.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
   );
 }
 
@@ -55,7 +73,15 @@ function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
   switch($subtype) {
     case 'library_title':
-      $block->content = theme('ding_panels_content_title', $context->data);
+      $block->content = theme('ding_panels_content_library_title', $context->data);
+      break;
+    case 'library_location':
+      $block->content = theme('ding_panels_content_library_location', $context->data);
+      break;
+    case 'library_hours':
+      $block->title = t('Opening hours');
+      // Ask CCK to render the opening hours field for us.
+      $block->content = content_format('field_opening_hours', $context->data->field_opening_hours, 'default', $context->data);
       break;
   }
   return $block;
@@ -65,6 +91,13 @@ function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
  * Return the pane titles.
  */
 function _ding_panels_content_title($subtype, $conf, $context) {
-  return 'Library title and navigation';
+  switch($subtype) {
+    case 'library_title':
+      return t('Library title and navigation');
+    case 'library_location':
+      return t('Library location');
+    case 'library_hours':
+      return t('Library opening hours');
+  }
 }
 
