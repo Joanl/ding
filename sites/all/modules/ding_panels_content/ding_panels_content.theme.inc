@@ -11,25 +11,25 @@
  */
 function ding_panels_content_preprocess_library_title(&$variables) {
   $node = $variables['node'];
-  $variables['library_links'] = _ding_panels_content_theme_library_title_navigation($node);
+  if (isset($node->library_slug) && !empty($node->library_slug)) {
+    $base_path = 'bibliotek/' . $node->library_slug;
+  }
+  else {
+    $base_path = 'bibliotek/' . $node->nid;
+  }
+
+  $variables['library_links'] = _ding_panels_content_theme_library_title_navigation($node, $base_path);
   $variables['library_navigation'] = theme('item_list', $variables['library_links']);
+  $variables['library_title'] = l($node->title, $base_path);
 }
 
-function _ding_panels_content_theme_library_title_navigation($node) {
+function _ding_panels_content_theme_library_title_navigation($node, $base_path) {
   $links = array();
   if ($node->type == 'library') {
-    if (isset($node->library_slug) && !empty($node->library_slug)) {
-      $base_path = 'bibliotek/' . $node->library_slug;
-    }
-    else {
-      $base_path = 'bibliotek/' . $node->nid;
-    }
-
-    $links['front'] = l(t('Front page'), $base_path);
+    $links['blog'] = l(t('Blog'), $base_path . '/blog');
     $links['events'] = l(t('Events'), $base_path . '/arrangementer');
     $links['facilities'] = l(t('Facilities'), $base_path . '/faciliteter');
-    $links['about'] = l(t('About'), $base_path . '/os');
-    $links['locally'] = l(t('Locally'), $base_path . '/lokalt');
+    $links['about'] = l(t('About'), $base_path . '/om');
   }
   return $links;
 }
