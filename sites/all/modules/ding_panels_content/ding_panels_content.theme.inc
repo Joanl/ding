@@ -11,11 +11,11 @@
  */
 function ding_panels_content_preprocess_library_title(&$variables) {
   $node = $variables['node'];
-  if (isset($node->library_slug) && !empty($node->library_slug)) {
-    $base_path = 'bibliotek/' . $node->library_slug;
+  if (isset($node->ding_slug) && !empty($node->ding_slug)) {
+    $base_path = 'biblioteker/' . $node->ding_slug;
   }
   else {
-    $base_path = 'bibliotek/' . $node->nid;
+    $base_path = 'biblioteker/' . $node->nid;
   }
 
   $variables['library_links'] = _ding_panels_content_theme_library_title_navigation($node, $base_path);
