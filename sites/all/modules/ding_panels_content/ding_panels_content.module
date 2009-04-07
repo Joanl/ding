@@ -63,6 +63,12 @@ function _ding_panels_content_types() {
       'required context' => new ctools_context_required(t('Node'), 'node'),
       'category' => array(t('Library page'), -9),
     ),
+    'library_about' => array(
+      'title' => t('Library about text'),
+      'description' => t('Shows the main library description text in its full length.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
   );
 }
 
@@ -71,17 +77,22 @@ function _ding_panels_content_types() {
  */
 function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
+  $node = $context->data;
   switch($subtype) {
     case 'library_title':
-      $block->content = theme('ding_panels_content_library_title', $context->data);
+      $block->content = theme('ding_panels_content_library_title', $node);
       break;
     case 'library_location':
-      $block->content = theme('ding_panels_content_library_location', $context->data);
+      $block->content = theme('ding_panels_content_library_location', $node);
       break;
     case 'library_hours':
       $block->title = t('Opening hours');
       // Ask CCK to render the opening hours field for us.
-      $block->content = content_format('field_opening_hours', $context->data->field_opening_hours, 'default', $context->data);
+      $block->content = content_format('field_opening_hours', $node->field_opening_hours, 'default', $node);
+      break;
+    case 'library_about':
+      // Render the node body as block content.
+      $block->content = check_markup($node->body, $node->format, $node->language);
       break;
   }
   return $block;
@@ -98,6 +109,8 @@ function _ding_panels_content_title($subtype, $conf, $context) {
       return t('Library location');
     case 'library_hours':
       return t('Library opening hours');
+    case 'library_about':
+      return t('Library about text');
   }
 }
 
