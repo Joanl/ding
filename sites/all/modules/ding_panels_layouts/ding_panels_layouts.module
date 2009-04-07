@@ -24,6 +24,18 @@ function ding_panels_layouts_panels_layouts() {
       'bottom' => t('Bottom'),
     ),
   );
+  $items['twocol_left_stacked'] = array(
+    'title' => t('Two column left stacked'),
+    'icon' => 'twocol_left_stacked.png',
+    'theme' => 'panels_twocol_left_stacked',
+    'css' => 'twocol_left_stacked.css',
+    'panels' => array(
+      'top' => t('Top'),
+      'left' => t('Left side'),
+      'right' => t('Right side'),
+      'bottom' => t('Bottom'),
+    ),
+  );
   return $items;
 }
 
