@@ -1,3 +1,8 @@
 h1. Copenhagen public libraries on Drupal
 
 We're working on creating a new web site for "Københavns Biblioteker":http://bibliotek.kk.dk/ using Drupal and other open source components. Stay tuned. 
+
+We have a couple of websites related to this project:
+* "Blog":http://ding.gnit.dk/
+* "Bugtracker":http://kkb.lighthouseapp.com/
+
