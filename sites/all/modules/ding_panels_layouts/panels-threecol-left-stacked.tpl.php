@@ -27,7 +27,6 @@
   </div>
 <?php endif; ?>
 
-
 <?php if (!empty($content['top']) || !empty($content['left']) || !empty($content['middle']) || !empty($content['bottom'])): ?>
   <div class="left-wrapper">
   <?php if (!empty($content['top'])): ?>
