@@ -27,4 +27,3 @@
   </div>
 </div>
 <?php print $library_map; ?>
-

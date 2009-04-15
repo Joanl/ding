@@ -41,7 +41,7 @@ function ding_panels_content_preprocess_library_location(&$variables) {
   $node = $variables['node'];
 
   // Add a static Google map to the location information.
-  if (function_exists(location_has_coordinates) && location_has_coordinates($node->location)) {
+  if (function_exists('location_has_coordinates') && location_has_coordinates($node->location)) {
     $map_url = url('http://maps.google.com/staticmap', array('query' => array(
       'zoom' => 14,
       'size' => '194x140',
