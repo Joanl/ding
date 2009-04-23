@@ -1,0 +1,157 @@
+/* =====================================
+	Dynamo style.css
+	------------------------------------
+	site specific styles
+	sets all the local design elements 
+/*--------------------------------------*/
+body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
+	body.admin-menu{background:#e5e5e5 url(../images/bg.png) repeat-x 0 21px;}
+
+#container{background:transparent url(../images/bg-header.png) no-repeat center 0;}
+	body.admin-menu #container{background:transparent url(../images/bg-header.png) no-repeat center 0;}
+#page{width:994px; margin: 0 auto;}
+
+/* sitename */	
+#site-name {text-indent: -9999em; margin: 0px 17px 0 720px; padding:17px 0 0 0; height:22px;}
+	body.admin-menu #site-name {margin: 12px 17px 0 720px;}
+	#site-name a{height:24px; width:252px; display: block; overflow:hidden; background:transparent url(../images/logo.png) no-repeat 0 0;}
+/* header */
+#pageheader{background:transparent url(../images/bg-header.png) no-repeat center -39px; margin:0 0 0 1px;}
+	#top{height:145px;}
+		#search{width:600px; height:100px; overflow:hidden; margin:26px 0 0 56px; color:#fff;}
+		#account{width:260px;height:110px;  overflow:hidden; margin:30px 0 0 77px;}
+	#navigation{height:30px;}
+		#navigation-inner{margin:0 37px;}
+	#path{margin:5px 37px 0;}
+
+/* body */
+#pagebody{background:transparent url(../images/bg-page.png) repeat-y 0 0;}
+	#pagebody-inner{background:transparent url(../images/bg-page-top.png) no-repeat 0px 0px; padding:0 32px 0 17px; /*37*/}
+
+	#content-left{width:130px;float:left;}
+	
+	#content{width:560px; float:left;}
+	body.no-sidebars #content{width:960px;}
+	#content-right{width:230px;float:left;}
+/* footer */	
+#pagefooter{background:transparent url(../images/bg-footer.png) no-repeat 0 bottom; padding:0 0 20px 0;}
+	#pagefooter-inner{padding:0px 32px 0 17px; background:transparent url(../images/bg-footer.png) no-repeat 0 top;}	
+		#pagefooter-inner div{width:196px; min-height:200px; padding:20px 20px 0 20px; background:transparent url(../images/bg-footer-divider.png) no-repeat left 0;}
+		#pagefooter-inner div.first{background-image:none;}
+		
+.minheight{min-height:500px; height:auto !important; height:500px;}
+
+/* =====================================
+Fonts
+/*--------------------------------------*/
+h1,h2,h3{font: 2.5em sans-serif; padding:0 0 0.5em 0; color:#000}
+
+/* =====================================
+colours
+/*--------------------------------------*/
+body{color:#666666}
+a, a:link, a:visited, a:active {color:#006a87;}
+a:hover, a:focus {color:#006a87;}
+
+tr.odd{}
+tr.odd td{padding:5px;}
+tr.odd a{color:#000;}
+tr.even{}
+
+/* =====================================
+Menu top
+/*--------------------------------------*/
+#navigation{margin:0; overflow:hidden; height:30px; font-family: "Gill Sans",  sans-serif; text-transform: uppercase;}
+	#navigation li {padding:0 0px 0 10px; margin:0 20px; height:30px; list-style: none; float:left; position: relative;}
+	#navigation li.first{margin:0 20px 0 0;}
+	#navigation li.active {background:url(../images/menu-left.png) no-repeat left top; }
+	#navigation li a{margin:0; padding:6px 10px 0 0; height:30px; display: block; float:left; }
+	#navigation li.active a{color:#eee; background: url(../images/menu-right.png) no-repeat right top;}
+	#navigation a {color:#fff;}
+
+/* left navigation */	
+#content-left{border-right: 1px solid #d1d9d7;}
+#content-left li{border: 1px solid #d1d9d7;  height:20px; margin:0 0 4px 0; padding:4px 0 0 10px;}
+#content-left li.active{background:#f1f5f4;}
+
+#path ul.breadcrumb li {margin:0;}
+#path ul.breadcrumb {display: inline;}
+/* =====================================
+node
+/*--------------------------------------*/
+.node .meta{width:55px; overflow:hidden;}
+.node .meta span{display:block; font-size:0.8em;}
+
+/* =====================================
+comment -see moshpit  style/interface.css
+/*--------------------------------------*/
+
+/* =====================================
+forum  -see moshpit  style/interface.css
+/*--------------------------------------*/
+
+/* =====================================
+block
+/*--------------------------------------*/
+.block h3{font-size:1.5em;}
+
+/* =====================================
+Account
+/*--------------------------------------*/
+/*login*/
+#account h3{text-indent: -9999em; height:21px; background:transparent url(../images/logind.png) no-repeat 0 0; margin:10px 0 0 0; padding:0;}
+#account a{color:#fff;font-size:0.9em; text-decoration: underline;}
+#user-login-form input{ height:17px; margin:0; padding:0; background-color: #fff; border-top: 1px solid #ddd; border-left: 1px solid #ddd; }
+#user-login-form label{font-size:0.8em; color:#000;}
+/*overlabel*/
+#edit-name-wrapper,
+#edit-pass-wrapper{
+	position:relative;margin:0 0 5px 0;
+}
+#edit-name-wrapper label.overlabel-apply, 
+#edit-pass-wrapper label.overlabel-apply {
+	position:absolute; top:2px;	left:5px;	z-index:1; color:#888;
+}
+#edit-name-wrapper{width:220px;}
+#edit-name-wrapper input{width:220px;}
+#edit-pass-wrapper{width:160px; float:left;}
+	#edit-pass-wrapper input{width:160px;}
+#user-login-form span.button{width:60px;height:20px; display:block; float:left;overflow:hidden; padding:0; margin:1px 0 0 3px; background:transparent url(../images/accountlogin.png) no-repeat right center;}
+	#user-login-form span.button span {background:transparent url(../images/accountlogin.png) no-repeat left center;}
+	#user-login-form span.button span input{background:transparent; border: 0px solid #999; color:#fff;}
+
+#user-login-form ul{clear:both;}
+#user-login-form ul li{float:left; margin:0 10px 0 0;}
+
+/*
+search
+*/
+#search p{font-size:0.8em; color:#eccdd3;}
+#search h3{text-indent: -9999em; height:55px; margin:0; padding:0; background:transparent url(../images/search.png) no-repeat 0 0; }
+	#edit-search-block-form-1-wrapper input{height:20px; width:465px; background:#fff url(../images/magnifier.png) no-repeat 9px 5px; border: 1px solid #999; margin:0; padding:4px 0 0 25px; font-size:1.2em; color:#929292;}
+	/*overlabel*/
+	#edit-search-block-form-1-wrapper{position:relative; width:506px; float:left;}
+	#edit-search-block-form-1-wrapper label.overlabel-apply {position:absolute; top:3px;	left:30px;	z-index:1; color:#929292;;}
+	#edit-search-block-form-1-wrapper input.submit{width:80px; height:25px;}
+	#edit-search-block-form-1-wrapper p{font-size:0.9em; color:#dfa1ab;}
+	#search span.button{float:left; display:block; height:29px; width:94px; background:transparent url(../images/searchbutton.png) no-repeat 0 0;;}
+	#search span.button input{ border:0; background:transparent; margin:5px 10px; color:transparent; font-weight:bold; text-indent: -9999em; }
+
+/* =====================================
+teaser
+/*--------------------------------------*/
+ .node-teaser.node-library{background:transparent url(../images/bg-divider.png) no-repeat left top; padding:10px 0 0 0;}
+
+/* =====================================
+Biblotek
+/*--------------------------------------*/
+
+
+
+/* =====================================
+test
+/*--------------------------------------*/
+
+#page.pagetest{background:transparent url(../images/test.png) no-repeat 0 0; border: 1px solid #f0f;}
+.test{background:transparent url(../images/bg-trans-50.png) repeat 0 0;}
+*.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}

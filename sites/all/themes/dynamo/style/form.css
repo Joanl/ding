@@ -1,0 +1,77 @@
+/* =====================================
+* FORM
+	This sets the form elements to be BIG and right aligned yeah web 2 dot oooh!
+/*--------------------------------------*/
+.form-required{color:#f0f;}
+form {width:520px;}
+form > div{padding:5px 0;}
+form div > div > div{margin:0 0 5px 0; }
+form div > div > fieldset{display:block; margin:10px 0 5px 0;}
+
+input{background:#fff; border: 1px solid #CCD9E2; padding:7px 0 0 7px;}
+input:focus, textarea:focus{background:#DAE7EF}
+
+form label{width:170px;float:left; display:block; padding:10px 5px 0 0; font-size:1.5em; text-align:right;}
+form  a {font-size:1.5em; padding:10px 5px 0 0; display:block;}
+form .form-text{width:320px; height:30px; display:inline; font-size:1.5em;}
+form .form-file{width:300px; height:30px; display:inline; font-size:1.5em;}
+form .description{display:none;}
+form label.option{width:280px;}
+
+/*radio*/
+form .form-radios{display:block; margin: 0 0 0 180px;}
+form .form-radios label{float:none; display:inline; text-align:left; font-size:1em;}
+
+/*checkbox*/
+div > label{}
+form .form-checkboxes div{margin:0 0 0 200px;  border-bottom: 1px solid #ddd;}
+form .form-checkboxes div label{display:inline; float:none; } 
+form .form-checkboxes div label input{float:left;}
+
+
+/*password*/
+form .password-field,
+form .password-confirm{
+	width:150px;
+}
+span.password-strength,
+span.password-confirm{
+
+}
+.password-description.error{margin:0 0 0 177px; width:320px;}
+
+/*fieldset*/
+fieldset{margin:0 0 10px 0;}
+	fieldset div{padding:5px 0;}
+	fieldset legend{font-weight:bold; }
+	fieldset.collapsible{min-height:30px}
+	fieldset.collapsible legend{display:block; float:none;}
+
+	/*collabsible*/
+	html.js fieldset.collapsible legend a {}
+	html.js fieldset.collapsed legend a {}
+	fieldset.collapsible .fieldset-wrapper{border-left: 1px solid #DAE7EF; border-right: 1px solid #DAE7EF;border-bottom: 1px solid #DAE7EF;}
+	fieldset.collapsible label.option{float:none; display:block; text-align:left; padding:0 0 0 50px;}
+	html.js input.form-autocomplete {background:url(../../misc/throbber.gif) no-repeat 100% 13px;}
+
+	/*picture*/
+	fieldset.picture{padding:0 10px;}
+		fieldset.picture img{float:left;margin:0 20px 0 0; } 
+		#edit-picture-delete-wrapper{float:left;}
+		#edit-picture-upload-wrapper{float:left;}
+		#edit-picture-upload-wrapper label{}
+		fieldset.picture label {width:auto;margin:0 0 0 10px; padding:0; text-align:left; float:none;}
+
+	/*signature*/
+	fieldset.signature_settings label{text-align:left;}
+
+	/*theme select*/
+	fieldset.theme_select tr{border-bottom: 1px solid #999; }
+		fieldset.theme_select label{text-align:left; font-size:1em; font-weight:bold; padding:0 30px 0 0; width:100px;}
+		fieldset.theme_select label.option{width:50px;}
+
+/*textarea*/
+form #edit-comment label{text-align:left;}
+textarea{height:200px; width:650px; border: 1px solid #CCD9E2}
+	.node-form .body-field-wrapper label{display: block; float:none; text-align:left;}
+	.resizable-textarea {width:100%;display:block; clear:both;}
