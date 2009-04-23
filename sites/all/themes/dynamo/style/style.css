@@ -44,6 +44,7 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 /* =====================================
 Fonts
 /*--------------------------------------*/
+body{font-size:0.7em;}
 h1,h2,h3{font: 2.5em sans-serif; padding:0 0 0.5em 0; color:#000}
 
 /* =====================================
@@ -80,7 +81,7 @@ Menu top
 node
 /*--------------------------------------*/
 .node .meta{width:55px; overflow:hidden;}
-.node .meta span{display:block; font-size:0.8em;}
+.node .meta span{display:block; }
 
 /* =====================================
 comment -see moshpit  style/interface.css
@@ -126,7 +127,7 @@ Account
 /*
 search
 */
-#search p{font-size:0.8em; color:#eccdd3;}
+#search p{font-size:0.7em; color:#eccdd3;}
 #search h3{text-indent: -9999em; height:55px; margin:0; padding:0; background:transparent url(../images/search.png) no-repeat 0 0; }
 	#edit-search-block-form-1-wrapper input{height:20px; width:465px; background:#fff url(../images/magnifier.png) no-repeat 9px 5px; border: 1px solid #999; margin:0; padding:4px 0 0 25px; font-size:1.2em; color:#929292;}
 	/*overlabel*/
@@ -146,27 +147,47 @@ teaser
 Biblotek
 /*--------------------------------------*/
 #threecol-left{width:710px; float:left; }
-#threecol-left-left {width:470px; float:left;}
-#threecol-left-middle {width:240px; float:left;}
+	#threecol-left-left {width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top;}
+	#threecol-left-middle {width:240px; float:left;}
+#threecol-right{width:250px; float:left;}
 
+/*biblo top*/
 #threecol-left-top{margin:20px 0 0 20px;}
 #threecol-left-top h1 a{color:#000}
-#threecol-left-top ul.item-list li {float:left;}
+#threecol-left-top ul.item-list li {float:left; margin:0 30px 0 0;}
 #threecol-left-top {background:transparent url(../images/bg-divider.png) no-repeat left bottom; height:300px}
 
+/*biblo teasers*/
 #threecol-left-left .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 0 20px ;}
 #threecol-left-left .view .tid a{background:#b41630; color:#fff; padding:2px;}
 #threecol-left-left .view .title{color:#000; font-size:1.2em;}
-#threecol-left-left .view .field-library-ref-nid{color:#999999; font-size:0.8em; display:inline;}
-#threecol-left-left .view .created{color:#999999; font-size:0.8em; display:inline;}
-#threecol-left-left .view .name{color:#999999; font-size:0.8em; display:inline;}
+#threecol-left-left .view .field-library-ref-nid,
+#threecol-left-left .view .created, 
+#threecol-left-left .view .name{
+	color:#999999; display:inline;
+}
 #threecol-left-left .view .field-teaser-value{}
 #threecol-left-left .view .view-node{display:inline;}
 
+/*calender*/
+#threecol-left-middle  .panel-pane{margin:0 5px;}
+#threecol-left-middle .view-event-list{}
+/*.view-event-list li{ background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top;} TODO Flere time elementer ind så dato felter kan genereres*/
+#threecol-left-middle .view-event-list li{background:transparent url(../images/bg-calender.png) no-repeat 0 0; padding:0 0 0 55px;}
+#threecol-left-middle .view-event-list .title{color:#000; font-weight:bold;}
+#threecol-left-middle .view-event-list .field-datetime-value{background:transparent url(../images/ok.png) no-repeat 0 0; padding:0 0 0 15px;}
+#threecol-left-middle .view-event-list .field-library-ref-nid{}
+#threecol-left-middle .view-event-list .field-entry-price-value{}
+/*features*/
+#threecol-left-middle .view-feature-list{background:transparent url(../images/bg-box.png) no-repeat left bottom; } /*todo bottom fixes*/
+#threecol-left-middle .view-feature-list ul{padding:40px 15px 50px 15px; margin:0 0 30px 0; background:transparent url(../images/bg-box.png) no-repeat left top;}
+#threecol-left-middle .view-feature-list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;;}
 
+#threecol-right div.content {background:transparent url(../images/bg-bibloinfo.png) no-repeat 0 0;padding:15px; margin:0 0 0 15px;}
+#threecol-right .vcard{color:#000;}
+#threecol-right .vcard .fn{font-weight:bold;}
+#threecol-right div.content img{margin:20px 0;}
 
-
-#threecol-right{width:250px; float:left;}
 
 
 
