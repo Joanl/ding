@@ -1,31 +1,29 @@
-  <div id="three-col-left">
-  
+  <div id="threecol-left">
+
     <?php if (!empty($content['top'])): ?>
-      <div class="top">
+      <div id="threecol-left-top">
         <?php print $content['top']; ?>
       </div>
     <?php endif; ?>
 
-    <div id="left">
+    <div id="threecol-left-left">
       <?php print $content['left']; ?>      
     </div>
 
-    <div id="middle">
-      <h3>arrangementer</h3>
+    <div id="threecol-left-middle">
       <?php print $content['middle']; ?>        
     </div>
   
   </div>
 
-
-  <div id="three-col-right">
+  <div id="threecol-right">
 
     <?php if (!empty($content['right'])): ?>
       <?php print $content['right']; ?>
     <?php endif; ?>
 
     <?php if (!empty($content['bottom'])): ?>
-      <div id="bottom">
+      <div id="threecol-right-bottom">
       <?php print $content['bottom']; ?>        
       </div>
     <?php endif; ?>
