@@ -60,12 +60,12 @@
           <div id="pagebody-inner" class="clearfix">
 
             <?php if ($left) { ?>
-              <div id="content-left" class="left">
+              <div id="content-left">
                 <?php print $left; ?>
               </div>
             <?php } ?>
 
-          	<div id="content" class="left">
+          	<div id="content">
               <div id="content-inner">
 
             		<?php if ($help OR $messages OR $tabs) { ?>
@@ -100,7 +100,7 @@
           	</div>
 
             <?php if ($right) { ?>
-              <div id="content-right" class="">
+              <div id="content-right">
                 <?php print $right; ?>
               </div>
             <?php } ?>

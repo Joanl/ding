@@ -26,13 +26,18 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 
 /* body */
 #pagebody{background:transparent url(../images/bg-page.png) repeat-y 0 0;}
-	#pagebody-inner{background:transparent url(../images/bg-page-top.png) no-repeat 0px 0px; padding:0 32px 0 17px; /*37*/}
+	#pagebody-inner{background:transparent url(../images/bg-page-top.png) no-repeat 0px 0px; padding:0 17px 0 17px; /*32*/ /*37*/}
 
 	#content-left{width:130px;float:left;}
 	
 	#content{width:560px; float:left;}
-	body.no-sidebars #content{width:960px;}
+	body.no-sidebars #content{width:960px; float:left;}
+	body.sidebar-right #content{width:730px; float:left;}
 	#content-right{width:230px;float:left;}
+
+
+
+
 /* footer */	
 #pagefooter{background:transparent url(../images/bg-footer.png) no-repeat 0 bottom; padding:0 0 20px 0;}
 	#pagefooter-inner{padding:0px 32px 0 17px; background:transparent url(../images/bg-footer.png) no-repeat 0 top;}	
@@ -44,7 +49,7 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 /* =====================================
 Fonts
 /*--------------------------------------*/
-body{font-size:0.7em;}
+body{font-size:0.8em;}
 h1,h2,h3{font: 2.5em sans-serif; padding:0 0 0.5em 0; color:#000}
 
 /* =====================================
@@ -175,7 +180,7 @@ Bibloteks siden
 /*biblo teasers*/
 #threecol-left-left .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 0 20px ;}
 #threecol-left-left .view .tid a{background:#b41630; color:#fff; padding:2px;}
-#threecol-left-left .view .title{color:#000; font-size:1.2em;}
+#threecol-left-left .view .title{color:#000; font-size:2em; line-height:1em;}
 #threecol-left-left .view .field-library-ref-nid,
 #threecol-left-left .view .created, 
 #threecol-left-left .view .name{
