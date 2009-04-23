@@ -1,5 +1,5 @@
 <?php
-// $Id: page.tpl.php,v 1.23.2.6 2008/10/25 18:25:50 sign Exp $
+// $Id: page.tpl.php,v 1.23.2.9 2009/03/09 00:00:43 sign Exp $
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -35,7 +35,7 @@
         <div id="admin-links">
           <?php print _rootcandy_admin_links() ?>
         </div>
-        <div id="header-title">
+        <div id="header-title" class="clearfix">
           <?php print check_plain($site_name) ?>
         </div>
       </div>
@@ -43,14 +43,14 @@
       <?php print $header ?>
       <div id="navigation">
         <?php print _rootcandy_admin_navigation() ?>
-  
+
       <?php
       if ($logo) {
         print '<img src="'. check_url($logo) .'" alt="'. $site_name .'" id="logo" />';
       }
       ?>
       </div>
-  
+
       <div id="breadcrumb" class="alone">
         <?php if ($title): print '<h2 id="title">'. $title .'</h2>'; endif; ?>
         <?php print $breadcrumb; ?>
@@ -87,13 +87,14 @@
                 //dashboard
                 if (isset($dashboard)) {
               ?>
-                <div id="dashboard-left">
-                  <?php print $dashboard_left ?>
+                <div id="dashboard" class="clearfix">
+                  <div id="dashboard-left">
+                    <?php print $dashboard_left ?>
+                  </div>
+                  <div id="dashboard-right">
+                    <?php print $dashboard_right ?>
+                  </div>
                 </div>
-                <div id="dashboard-right">
-                  <?php print $dashboard_right ?>
-                </div>
-                <br class="clear" />
               <?php
                 }
                 else {

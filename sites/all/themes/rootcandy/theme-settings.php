@@ -1,5 +1,5 @@
 <?php
-// $Id: theme-settings.php,v 1.6.2.8 2008/10/23 05:36:33 sign Exp $
+// $Id: theme-settings.php,v 1.6.2.9 2009/02/18 15:31:19 sign Exp $
 
 /**
  * Implementation of THEMEHOOK_settings() function.
@@ -108,6 +108,24 @@ function rootcandy_settings($saved_settings, $subtheme_defaults = array()) {
       '#options' => $primary_options,
       '#tree' => FALSE,
       '#description' => t('Select what should be displayed as the navigation menu for role @role.', array('@role' => $role)),
+    );
+  }
+
+  $form['navigation']['role-weight'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Role weight'),
+    '#weight' => 1,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  foreach ($roles as $rid => $role) {
+    $form['navigation']['role-weight'][$rid] = array(
+      '#type' => 'weight',
+      '#delta' => 5,
+      '#title' => $role,
+      '#default_value' => $settings['role-weight'][$rid],
     );
   }
 

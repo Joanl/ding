@@ -1,6 +1,6 @@
 <?php
 
-// $Id: color.inc,v 1.7.2.2 2008/10/23 05:48:32 sign Exp $
+// $Id: color.inc,v 1.7.2.4 2009/03/07 23:23:39 sign Exp $
 
 $info = array(
 
@@ -39,11 +39,14 @@ $info = array(
   'slices' => array(
     'images/header_bg.png'                      => array(40, 0, 1, 28),
     'images/navigation_bg.png'                    => array(10, 29, 1, 64),
-    'images/tabs/tableft.png'                    => array(61, 31, 5, 62),
-    'images/tabs/tabright.png'                    => array(65, 31, 360, 62),
+    'images/tabs/tableft_big.png'                    => array(61, 31, 5, 62),
+    'images/tabs/tabright_big.png'                    => array(65, 31, 360, 62),
+    'images/tabs/tableft.png'                    => array(451, 45, 5, 48),
+    'images/tabs/tabright.png'                    => array(455, 45, 360, 48),
+    'images/tabs/tableft_small.png'                    => array(451, 143, 5, 26),
+    'images/tabs/tabright_small.png'                    => array(455, 143, 360, 26),
     'images/buttons/blue-button.png'          => array(97, 236, 369, 80),
-    'images/oxygen/signout.png'                    => array(860, 4, 35, 23),
-    'images/oxygen/gohome.png'                    => array(5, 5, 22, 18),
+    'images/gohome.png'                    => array(7, 6, 18, 21),
     'images/window/tl.gif'                    => array(246, 133, 10, 10),
     'images/window/tr.gif'                    => array(256, 133, 10, 10),
     'images/window/bl.gif'                    => array(246, 143, 10, 10),
