@@ -11,6 +11,7 @@
  * http://microformats.org/wiki/hcard for more information.
  */
 ?>
+
 <div class="vcard">
   <span class="fn org"><?php print $node->title; ?></span>
   <div class="adr">
@@ -26,4 +27,7 @@
     <span class="type"><?php print t('Fax'); ?></span> <?php print $node->location['fax']; ?>
   </div>
 </div>
+
+<hr/>
 <?php print $library_map; ?>
+fooo

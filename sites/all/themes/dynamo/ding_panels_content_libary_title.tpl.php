@@ -6,6 +6,6 @@
  * The main library page title with navigation, etc.
  */
 ?>
+
   <h1><?php print $library_title; ?></h1>
   <?php print $library_navigation; ?>
-

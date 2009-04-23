@@ -1,38 +1,34 @@
-  <div id="biblo-left" class="">
+  <div id="three-col-left">
   
     <?php if (!empty($content['top'])): ?>
-      <div class="">
+      <div class="top">
         <?php print $content['top']; ?>
       </div>
     <?php endif; ?>
-  
 
-    <?php if (!empty($content['left'])): ?>
-    <div id="biblo-content">
+    <div id="left">
       <?php print $content['left']; ?>      
     </div>
-    <?php endif; ?>
 
-    <?php if (!empty($content['middle'])): ?>
-      <div id="biblo-events">
+    <div id="middle">
+      <h3>arrangementer</h3>
       <?php print $content['middle']; ?>        
-      </div>
-    <?php endif; ?>
+    </div>
   
   </div>
 
 
-  <div id="biblo-right" class="">
+  <div id="three-col-right">
 
     <?php if (!empty($content['right'])): ?>
       <?php print $content['right']; ?>
     <?php endif; ?>
 
-  </div>  
+    <?php if (!empty($content['bottom'])): ?>
+      <div id="bottom">
+      <?php print $content['bottom']; ?>        
+      </div>
+    <?php endif; ?>
 
-  <?php if (!empty($content['bottom'])): ?>
-    <div id="bottom">
-    <?php print $content['bottom']; ?>        
-    </div>
-  <?php endif; ?>
+  </div>  
 
