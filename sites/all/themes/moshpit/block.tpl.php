@@ -13,8 +13,8 @@
  * - $block->delta: This is a numeric id connected to each module.
  * - $block->region: The block region embedding the current block.
  * - $classes: A set of CSS classes for the DIV wrapping the block.
-     Possible values are: block-MODULE, region-odd, region-even, odd, even,
-     region-count-X, and count-X.
+ *    Possible values are: block-MODULE, region-odd, region-even, odd, even,
+ *    region-count-X, and count-X.
  *
  * Helper variables:
  * - $block_zebra: Outputs 'odd' and 'even' dependent on each block region.
@@ -34,7 +34,7 @@
   <div class="block-inner">
 
   <?php if ($block->subject): ?>
-    <h2><?php print $block->subject; ?></h2>
+    <h3><?php print $block->subject; ?></h3>
   <?php endif; ?>
 
   <div class="block-content">
