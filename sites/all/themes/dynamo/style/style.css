@@ -175,7 +175,7 @@ Biblotek
 /*.view-event-list li{ background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top;} TODO Flere time elementer ind så dato felter kan genereres*/
 #threecol-left-middle .view-event-list li{background:transparent url(../images/bg-calender.png) no-repeat 0 0; padding:0 0 0 55px;}
 #threecol-left-middle .view-event-list .title{color:#000; font-weight:bold;}
-#threecol-left-middle .view-event-list .field-datetime-value{background:transparent url(../images/ok.png) no-repeat 0 0; padding:0 0 0 15px;}
+#threecol-left-middle .view-event-list .field-datetime-value{}
 #threecol-left-middle .view-event-list .field-library-ref-nid{}
 #threecol-left-middle .view-event-list .field-entry-price-value{}
 /*features*/
