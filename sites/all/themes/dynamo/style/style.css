@@ -145,7 +145,10 @@ teaser
 /* =====================================
 Biblotek
 /*--------------------------------------*/
+#biblo-left{width:700px; float:left;}
+#biblo-left ul.item-list li {float:left;}
 
+#biblo-right{width:260px; float:left;}
 
 
 /* =====================================
