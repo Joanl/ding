@@ -33,11 +33,33 @@ Drupal.dingLibraryMap = function(mapId, options)
 			var info = this;
 			this.getMap().bind('mouseovermarker', function(object)
 			{
-				info.show(object);
+				info.showInfo(object);
+			});
+			
+			//triggers for hiding info: mouseout, resize, zoom, move
+			$('#library-info').bind('mouseleave', function()
+			{
+				info.hideInfo();
+			});
+			this.getMap().bind('widthchange', function()
+			{
+				info.hideInfo();				
+			});
+			this.getMap().bind('heightchange', function()
+			{
+				info.hideInfo();				
+			});
+			this.getMap().bind('zoom', function()
+			{
+				info.hideInfo();				
+			});
+			this.getMap().bind('move', function()
+			{
+				info.hideInfo();				
 			});
 		};
 	
-		this.show = function(object)
+		this.showInfo = function(object)
 		{
 			//Add address attributes
 			attributes = ['name', 'street', 'postal-code', 'city'];
@@ -89,6 +111,11 @@ Drupal.dingLibraryMap = function(mapId, options)
 			$('#library-info').css({ 'left': (point.x-5)+'px', 'top': (point.y- $('#library-info').outerHeight())+'px' }).show();		
 		};
 		
+		this.hideInfo = function()
+		{
+			$('#library-info').hide();
+		};
+		
 		this.init();
 	};
 	
@@ -105,17 +132,18 @@ Drupal.dingLibraryMap = function(mapId, options)
 			var resize = this;		
 			$('a.resize').toggle(function(event)
 			{
-				resize.resize(450);
+				resize.resizeMap(450);
 				$(event.target).toggleClass('expand').toggleClass('contract');			
 			}, function(event)
 			{
-				resize.resize(200);
+				resize.resizeMap(200);
 				$(event.target).toggleClass('expand').toggleClass('contract');						
 			});
 		};
 	
-		this.resize = function(size)
+		this.resizeMap = function(size)
 		{
+			this.hideInfo();
 			var resize = this;		
 			var center = this.getMap().map.getCenter();
 			$('.gmap-'+this.mapId+'-gmap').animate({ 'height' : size+'px' }, 1000, 'swing', function()
