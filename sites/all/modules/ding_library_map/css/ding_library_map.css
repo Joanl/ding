@@ -15,3 +15,10 @@
 #library-info.closed { background-image: url(../img/anchor-closed.png); }
 #library-info.closed .inner { border-color: #620037; }
 #library-info h3 { font-size: 100%; font-weight: bold; }
+#library-info .opening-hours { background:  url(../img/opening-hours-background.png) no-repeat top left; margin: 8px 0 0 -7px; padding: 6px 0 0 7px; }
+#library-info .opening-hours dt,
+#library-info .opening-hours dd { margin: 0; padding: 0; }
+#library-info .opening-hours dt,
+#library-info .opening-hours dd { width: 50%; }
+#library-info .opening-hours dt { float: left; }
+#library-info .opening-hours dd { margin-left: 50%; }
