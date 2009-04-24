@@ -1,5 +1,5 @@
 <?php
-// $Id: theme-settings.php,v 1.1.2.1 2008/10/25 18:00:50 sign Exp $
+// $Id: theme-settings.php,v 1.1.2.3 2009/03/09 00:00:43 sign Exp $
 
 /**
  * Implementation of THEMEHOOK_settings() function.
@@ -101,17 +101,31 @@ function rootcandy_dark_settings($saved_settings, $subtheme_defaults = array()) 
   $primary_options = array_merge($primary_options, menu_get_menus());
   $roles = user_roles(FALSE);
   foreach ($roles as $rid => $role) {
-    $default = '';
-    if (isset($settings['rootcandy_navigation_source_'. $rid])) {
-      $default = $settings['rootcandy_navigation_source_'. $rid];
-    }
     $form['navigation']['nav-by-role']['rootcandy_navigation_source_'. $rid] = array(
       '#type' => 'select',
       '#title' => t('@role navigation', array('@role' => $role)),
-      '#default_value' => $default,
+      '#default_value' => $settings['rootcandy_navigation_source_'. $rid],
       '#options' => $primary_options,
       '#tree' => FALSE,
       '#description' => t('Select what should be displayed as the navigation menu for role @role.', array('@role' => $role)),
+    );
+  }
+
+  $form['navigation']['role-weight'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Role weight'),
+    '#weight' => 1,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  foreach ($roles as $rid => $role) {
+    $form['navigation']['role-weight'][$rid] = array(
+      '#type' => 'weight',
+      '#delta' => 5,
+      '#title' => $role,
+      '#default_value' => $settings['role-weight'][$rid],
     );
   }
 

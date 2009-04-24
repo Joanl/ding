@@ -1,8 +1,8 @@
 /* =====================================
 	Style: drupal
-	basic classes for drupals frontend
+	block configuration page
+	overwrites to get drupal to behave like a normal html page
 * ------------------------------------- */
-
 /*tabs*/
 .tabs ul li {display:inline;;}
 .tabs ul li a{background-color: #ddd; color:#999; }
@@ -43,9 +43,17 @@ td.region{color:#000; background:#999; text-align:center;}
 .draggable a:link, .draggable a:visited {color:#900; margin:0 10px;}
 .draggable a:hover{color: #900;}
 
-
 /* =====================================
 Views
 * ------------------------------------- */
-div.view div.views-admin-links{}
+div.view div.views-admin-links{ background:#fff;}
 div.view div.views-admin-links ul li{float:left; margin:0 10px 0 0;}
+
+/* =====================================
+tables
+* ------------------------------------- */
+tr.even, tr.odd {background-color:transparent; border-bottom:0px solid #CCCCCC; padding:0;}
+tbody {border-top: 0px solid #ccc;}
+tbody th {border-bottom: 0px solid #ccc;}
+thead th {border-bottom: 0px solid #ccc;  padding: 0;}
+td.active{background:transparent;}

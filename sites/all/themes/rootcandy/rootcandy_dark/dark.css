@@ -1,4 +1,4 @@
-/* $Id: dark.css,v 1.1.2.2 2008/10/25 18:25:50 sign Exp $ */
+/* $Id: dark.css,v 1.1.2.7 2009/03/09 00:10:38 sign Exp $ */
 
 body {
   background: #f4f4f4;
@@ -19,6 +19,12 @@ a:hover {
   color: #ffffff;
   background: #313332 url(images/header_bg.png) repeat-x bottom;
   text-align: center;
+}
+
+#go-home {
+  float: left;
+  padding: 4px 0 0 32px;
+  background: url(images/gohome.png) no-repeat 6px 6px;
 }
 
 #navigation {
@@ -49,10 +55,46 @@ a:hover {
   padding-bottom: 2px;
 }
 
+
+#navigation #current-32 {
+  background: url(images/tabs/tableft.png) no-repeat left top;
+  position: relative;
+  top: 1px;
+}
+
+#navigation #current-32 a {
+  background: url(images/tabs/tabright.png) no-repeat right top;
+  color: #fff;
+  padding-bottom: 2px;
+}
+
+#navigation #current-24, #navigation #current-16 {
+  background: url(images/tabs/tableft.png) no-repeat left top;
+  position: relative;
+  top: 1px;
+}
+
+#navigation #current-24 a, #navigation #current-16 a {
+  background: url(images/tabs/tabright.png) no-repeat right top;
+  color: #fff;
+  padding-bottom: 3px;
+}
+
+#navigation ul.i16 #current-16 a {
+  padding-bottom: 8px;
+}
+
+#navigation ul.i32 #current-32 a {
+  padding-bottom: 0px;
+}
+
 div#breadcrumb {
   clear: both;
   background: url(images/breadcrumb_bg.png) repeat-x;
-  height: 10px;
+  padding-top: 15px;
+}
+
+* html div#breadcrumb {
   padding-top: 8px;
 }
 
@@ -119,7 +161,7 @@ input.teaser-button,
 
 
 tr.odd, tr.info {
-  background-color: #6c6c6c;
+  background-color: #b1b1b1;
 }
 
 tr.even {

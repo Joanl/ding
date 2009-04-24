@@ -1,0 +1,24 @@
+/* resize button for expanding and contracting map */
+.block-ding_library_map .content { position: relative; }
+.block-ding_library_map .resize { position: absolute; left: 49%; bottom: -13px; display: block; width: 21px; height: 24px; background: url(../img/resize-button.png) no-repeat top left; text-indent: -9999px; }
+.block-ding_library_map .resize.expand { background-position: left top; }
+.block-ding_library_map .resize.contract { background-position: left -24px; }
+.block-ding_library_map .resize,
+.block-ding_library_map .resize:active { outline: 0 none; }
+
+/* library information box */
+#library-info { position: absolute; width: 174px; font: 10px verdana, sans-serif; padding-bottom: 7px; background-position: left bottom; background-repeat: no-repeat; }
+#library-info .frame { border: 1px solid #fff; border-width: 1px 1px 0 1px; }
+#library-info .inner { border-width: 4px; border-style: solid; padding: 7px; background: #fff; }
+#library-info.open { background-image: url(../img/anchor-open.png); }
+#library-info.open .inner { border-color: #3fba27; }
+#library-info.closed { background-image: url(../img/anchor-closed.png); }
+#library-info.closed .inner { border-color: #620037; }
+#library-info h3 { font-size: 100%; font-weight: bold; }
+#library-info .opening-hours { background:  url(../img/opening-hours-background.png) no-repeat top left; margin: 8px 0 0 -7px; padding: 6px 0 0 7px; }
+#library-info .opening-hours dt,
+#library-info .opening-hours dd { margin: 0; padding: 0; }
+#library-info .opening-hours dt,
+#library-info .opening-hours dd { width: 50%; }
+#library-info .opening-hours dt { float: left; }
+#library-info .opening-hours dd { margin-left: 50%; }

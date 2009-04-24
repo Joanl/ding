@@ -1,0 +1,34 @@
+name        = mothership
+description = Theme for cleaning up that drupal html, and provide as a super super clean "theme"
+screenshot  = screenshot.png
+core        = 6.x
+engine      = phptemplate
+
+;--------------------- regions -----------------------------
+regions[header]         = header
+regions[content_top]    = content top
+regions[content_bottom] = content bottom
+regions[node_region_one] = node region one
+regions[node_region_two] = node region two
+regions[left]           = left sidebar
+regions[right]          = right sidebar
+regions[footer]         = footer
+   
+;--------------------- features ----------------------------
+features[] = logo
+features[] = name
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = search
+features[] = favicon
+features[] = slogan
+features[] = primary_links
+features[] = secondary_links
+
+;--------------------- drupal.org packaging  ----------------------------
+; Information added by drupal.org packaging script on 2009-04-23
+version = "6.x-1.0-beta1"
+core = "6.x"
+project = "mothership"
+datestamp = "1240500389"
+
