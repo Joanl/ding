@@ -22,7 +22,8 @@ foreach ($nodes as $node)
 									'name' => $node->title,
 									'street' => $node->location['street'], 
 									'city' => $node->location['city'], 
-									'postal-code' => $node->location['postal_code'], 
+									'postal-code' => $node->location['postal_code'],
+									'state' => 'open', 
 									'url' => url('node/'.$node->nid),
 									'text' => FALSE);
 	$map['markers'][] = $marker;
@@ -30,7 +31,7 @@ foreach ($nodes as $node)
 
 ?>
 <?php echo theme('gmap', $map) ?>
-<div id="map-info" style="display: none;">
+<div id="library-info" style="display: none;">
 	<div class="frame">
 		<div class="inner">
 		  <h3 class="name"></h3>
@@ -53,17 +54,18 @@ foreach ($nodes as $node)
 		map = Drupal.gmap.getMap('<?php echo $mapId ?>');
 		map.bind('mouseovermarker', function(object)
 		{
+			$('#library-info').removeClass('open').removeClass('closed').addClass(object.state);
 			attributes = ['name', 'street', 'postal-code', 'city'];
 			for (i in attributes)
 			{
-				$('#map-info .'+attributes[i]).text(object[attributes[i]]);
+				$('#library-info .'+attributes[i]).text(object[attributes[i]]);
 			}
 			point = Drupal.gmap.getMap('<?php echo $mapId ?>').map.fromLatLngToContainerPixel(object.marker.getLatLng());
-			$('#map-info').css({ 'left': (point.x-5)+'px', 'top': (point.y- $('#map-info').outerHeight())+'px' }).show();						
+			$('#library-info').css({ 'left': (point.x-5)+'px', 'top': (point.y- $('#library-info').outerHeight())+'px' }).show();						
 		});
-		$('#map-info').bind('mouseleave', function()
+		$('#library-info').bind('mouseleave', function()
 		{
-			$('#map-info').hide();
+			$('#library-info').hide();
 		});		
 		map.bind('click', function(object) {
 			//TODO: Remove default binding for click event
