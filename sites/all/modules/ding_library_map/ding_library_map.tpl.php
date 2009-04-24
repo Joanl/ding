@@ -89,7 +89,8 @@ foreach ($nodes as $node)
 				endTime = object.opening_hours[days[day]+'_end'];
 				
 				nextDay = day + 1;
-				while ((startTime == object.opening_hours[days[nextDay]+'_start']) &&
+				while ((startTime != null) && (endTime != null) && 
+								(startTime == object.opening_hours[days[nextDay]+'_start']) &&
 								(endTime == object.opening_hours[days[nextDay]+'_end'])) {
 					sectionDays.push(days[nextDay]); //if following days have same hours as current day then add these days to section
 					nextDay++;
@@ -101,12 +102,13 @@ foreach ($nodes as $node)
 					sectionDays = fullDayNames[sectionDays.shift()]; //use full day name for section spanning a single day
 				}
 				
+				startTime = (startTime != null) ? startTime.substr(0, startTime.lastIndexOf(':')) : '';
+				endTime = (endTime != null) ? endTime.substr(0, endTime.lastIndexOf(':')) : '';
+				
 				//add section to opening hours container
 				section.append('<dt>'+sectionDays+'</dt>');
 				section.append(	'<dd>'+
-													startTime.substr(0, startTime.lastIndexOf(':'))+
-													' - '+
-													endTime.substr(0, endTime.lastIndexOf(':'))+
+													startTime +' - '+endTime+
 												'</dd>');
 				
 				day = nextDay; //step to day after last day in current section
