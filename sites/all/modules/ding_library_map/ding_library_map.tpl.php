@@ -74,14 +74,18 @@ foreach ($nodes as $node)
 		
 		$('.block-ding_library_map .resize').toggle(function(event)
 		{
-			$('.gmap-library_map-gmap').animate({ 'height' : '400px' }, 1500, 'swing');
-			Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();
+			$('.gmap-library_map-gmap').animate({ 'height' : '400px' }, 1000, 'swing', function()
+			{
+				Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();				
+			});
 			$(event.target).toggleClass('expand').toggleClass('contract');
 			return false;
 		}, function(event)
 		{
-			$('.gmap-library_map-gmap').animate({ 'height' : '200px' }, 1500, 'swing');
-			Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();			
+			$('.gmap-library_map-gmap').animate({ 'height' : '200px' }, 1000, 'swing', function()
+			{
+				Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();							
+			});
 			$(event.target).toggleClass('expand').toggleClass('contract');
 			return false;
 		});
