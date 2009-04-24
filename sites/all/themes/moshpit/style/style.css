@@ -2,23 +2,17 @@
 	site specific styles
 	sets all the local design elements 
 /*--------------------------------------*/
-
-#page{margin: 0 auto;}
-/*
-move the header above the content by using  float left + negative margin
-the  same trick applies to reordering of the contents so the left bar (content2)
-*/
+#page{width:960px; margin: 0 auto;}
 .pageWidth{width:960px;}
-#pageHeader{margin-left:-960px; height:160px}  /*margin-left = page-width */
-#pageHeaderSub{margin-left:-960px; height:20px; margin-top: 160px;}  /*margin-left = page-width */
-#pageBody{margin-top: 180px} /* margintop =  total of elements above*/
-  #content {width: 540px; margin:0 0 0 250px;} /* margin-left = col2 with + 30*/
-  #content2 {width: 220px; margin:0 0 0 -780px; } /* margin negative left:  width of #content + #content-2 + 20*/
-  #content3 {width: 140px; margin:0 0 0 20px;}
-
-#content,#content2,#content3,#content4{min-height:250px;} /*TODO is this nessesary*/
-*#content,*#content2,*#content3,*#content4{height:auto}
 
 #site-name {text-indent: -9999em;}
-	#site-name a{background: transparent url(images/logo.gif) no-repeat; display: block;}
+	#site-name a{height:50px;background: transparent url(../logo.png) no-repeat; display: block;}
+
+body{background:#f9f9f7}
+#page{background:#fff;}
+#page-inner{border: 1px solid #eee;}
+
+#navigation{clear: both;}
+#navigation ul li{float:left; margin:0 10px; border: 1px solid #999;}
+
 

@@ -1,0 +1,5 @@
+; $Id: hs_content_taxonomy_views.info,v 1.2 2008/07/15 22:09:44 wimleers Exp $
+name = Hierarchical Select Content Taxonomy Views
+description = Use Hierarchical Select for Content Taxonomy exposed filters in Views.
+dependencies = hierarchical_select content_taxonomy_views
+package = Form Elements

@@ -1,19 +1,24 @@
 <?php // krumo($node);	?>	
+<?php // krumo($node->content);	?>	
+<?php // print_r(get_defined_vars());  ?> 
+<?php //print $FIELD_NAME_rendered ?>
 <?php if ($page == 0){ ?>
-<div id="node-<?php print $node->nid; ?>" class="node node-teaser <?php print $classes ?> clearfix">
+<div id="node-<?php print $node->nid; ?>" class="<?php print $classes ?>">
 
 	<?php if($node->title){	?>	
-    <h2 class="title"><a href="<?php print $node_url ?>" title="<?php print $title ?>"><?php print $title ?></a></h2>
+    <h2><?php print l($node->title, 'node/'.$node->nid); ?></h2>
 	<?php } ?>
 
-	<div class="node-meta clearfix">
-	  	<?php if ($node->picture) { ;?>
-			<span class="user-picture blockElm">
-          <?php //print theme('imagecache', 'preset_namespace', $node->picture, $alt, $title, $attributes); ?>
-			</span>
-		<?php } ?>
+	<div class="meta">
 
-		<span class="user-name blockElm">
+    <?php
+      if($node->picture){
+        $image = theme('imagecache', 'user-thumbnail', $node->picture); 
+        print l($image, 'user/'.$node->uid, $options= array('html'=>TRUE));
+      }
+    ?>
+
+		<span class="author">
 			<?php print theme('username', $node); ?>
 		</span>	
 
@@ -21,71 +26,55 @@
 			<?php print format_date($node->created, 'custom', "j F Y") ?> 
 		</span>	
 
+    <?php if($node->comment_count){ ?>
+  		<span class="comments">
+        <?php print $node->comment_count; ?> comments
+  		</span>  
+    <?php } ?>
 	</div>
 
-	<div class="content clearfix">
+	<div class="content">
 		<?php  print $content;?>	
-		<a href="<?php print $node_url ?>" title="<?php print $title ?>"><?php print t('read more') ?> - </a>
-	</div>
+  </div>
 
-  <?php if ($links){ ?>
-    <div class="links">
-      <?php print $links; ?>
-    </div>
-  <?php }; ?>
-	  
 </div>
-	
 <?php }else{ 
 //Content
 ?>
+<div id="node-<?php print $node->nid; ?>" class="<?php print $classes ?> clearfix">
 
-<div id="node-<?php print $node->nid; ?>" class="node <?php print $classes ?> clearfix">
-
-	<h1 class="title"><?php print $title;?></h1>
+	<h1><?php print $title;?></h1>
 		
-	<div class="node-meta clearfix">
-		<?php if ($submitted){ ?>
-
-		  	<?php if ($picture) { ;?>
-				<span class="user-picture blockElm">
-			  		<?php print $picture; ?>  
-				</span>
-			<?php } ?>
-
-			<span class="user-name blockElm">
-				<?php print theme('username', $node); ?>
-			</span>	
-
-			<span class="date">
-				<?php print format_date($node->created, 'custom', "j F Y") ?> 
-			</span>	
-
+	<div class="meta">
+  	<?php if ($picture) { ;?>
+			<span class="author-picture">
+		  		<?php print $picture; ?>  
+			</span>
 		<?php } ?>
 
+		<span class="author">
+			<?php print theme('username', $node); ?>
+		</span>	
+
+		<span class="date">
+			<?php print format_date($node->created, 'custom', "j F Y") ?> 
+		</span>	
 
 		<?php if (count($taxonomy)){ ?>
-			<div class="taxonomy">
-			   	<?php print $terms ?> 
-			</div>
+		  <div class="taxanomy">
+	   	  <?php print $terms ?> 
+		  </div>  
 		<?php } ?>
 	</div>
 
-	<div class="content clearfix">
-
-		<?php print $node_top;?>	
-
+	<div class="content">
 		<?php print $content ?>
-
-		<?php print $node_bottom;?>
+  	<?php print $node_region_two;?>	
+  	<?php print $node_region_one;?>
 	</div>
 		
 	<?php if ($links){ ?>
-	    <div class="links">
-	      <?php  print $links; ?>
-	    </div>
+    <?php  print $links; ?>
 	<?php } ?>
-
 </div>
-
 <?php } ?>

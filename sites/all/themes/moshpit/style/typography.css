@@ -1,11 +1,11 @@
-/* =====================================
+/* ===================================== 
 	Style: Typography
 	basic font size's etc
 
   Based at 12 / 18 px
   http://www.alistapart.com/articles/howtosizetextincss
 
-	orig_pix * em_value = wanted_pix
+	  orig_pix * em_value = wanted_pix
 	wanted_pix /  orig_pix = em_value
 * ------------------------------------- */
 
@@ -50,6 +50,10 @@ h6 {
 }
 p {
 	margin-bottom: 0.5em;
+}
+/*-- form --*/
+textarea{
+	font-size:0.916667em;
 }
 
 /*-- code --*/

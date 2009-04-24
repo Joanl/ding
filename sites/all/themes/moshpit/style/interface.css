@@ -1,0 +1,60 @@
+/* =======================================
+  style interface.css
+	resets the browser & specific drupal annoiances ;)
+* ------------------------------------- */
+
+/* =======================================
+	tabs 
+/* ------------------------------------- */
+#tabs{clear:both; width:100%;}
+ul.tabs.primary{background:#fff; padding:10px; height:20px;clear:both;}
+ul.tabs.primary{border:0px; margin:0px;}
+ul.tabs.primary li{margin:0 10px; display:block; float:left;}
+ul.tabs.primary li span{}
+ul.tabs.primary li a{color:#a4d7e6; background:transparent url(../images/icon/view.png) no-repeat;; padding:0 0 5px 20px; margin:0; border:0;}
+ul.tabs.primary li.active a {border:0px; font-weight:bold;}
+ul.tabs.primary li a:hover{border-bottom: 2px solid #eee; border-top: 2px solid #eee;}
+	ul.tabs.primary li a.view{background:transparent url(../images/icon/view.png) no-repeat;}
+	ul.tabs.primary li a.edit{background:transparent url(../images/icon/edit.png) no-repeat;}
+	ul.tabs.primary li a.dev-load{background:transparent url(../images/icon/devel.png) no-repeat;}
+	ul.tabs.primary li a.dev-render{background:transparent url(../images/icon/devel.png) no-repeat;}
+
+/*user*/
+body.page-user ul.tabs.primary{background:transparent; padding:10px; height:20px;}
+body.page-user ul.tabs.primary li{background:#eee; padding:10px;}
+body.page-user ul.tabs.primary li.active{font-weight:bold;}
+body.page-user ul.tabs.primary li:hover{border-bottom: 1px solid #999;}
+body.page-user ul.tabs.primary li a:hover{border-bottom: 0; border-top: 0;}
+	ul.tabs.primary li a.create-new-account{background:transparent url(../images/icon/devel.png) no-repeat;}
+	ul.tabs.primary li a.log-in{background:transparent url(../images/icon/devel.png) no-repeat;}
+	ul.tabs.primary li a.request-new-password{background:transparent url(../images/icon/devel.png) no-repeat;}
+	
+/* =======================================
+	comment
+/* ------------------------------------- */
+div.indented{margin:0 0 0 30px;}
+div.comment {width: auto; margin:0 0 10px 0;}
+div.comment blockquote {border: 1px solid #dedede; background:#fff;}
+div.comment blockquote h4{margin: 10px 10px 5px 10px; font-size:1.2em;}
+div.comment blockquote h4.new a{color:#000;}
+div.comment blockquote p {margin: 0 10px;}
+div.comment ul.links{text-align:right; margin: 5px 10px}
+div.comment ul.links li{display:inline;}
+div.comment .meta {position:relative; margin:-1px 0 0 10px; padding:10px 0 0 30px ;background: transparent  url(../images/tip.gif) no-repeat 35px 0; font-style:normal;}
+div.comment .meta .author{color:#999;}
+div.comment .meta .date{color:#999;}
+
+/* =======================================
+	pager
+/* ------------------------------------- */
+ul.pager{margin:10px auto 0 auto; width:300px;}
+ul.pager li{display:inline; margin:0 5px;}
+ul.pager li.pager-item,
+ul.pager li.pager-current{
+	border: 1px solid #ccc; padding:0 5px;
+}
+
+/*node*/
+.node-meta{}
+.author-picture{}
+.author{}

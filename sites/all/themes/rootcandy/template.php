@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.36.2.11 2008/10/23 05:36:33 sign Exp $
+// $Id: template.php,v 1.36.2.19 2009/03/31 13:06:15 sign Exp $
 
 function _rootcandy_admin_links() {
   global $user;
@@ -30,7 +30,6 @@ function rootcandy_body_class($left = NULL, $right = NULL) {
   if (isset($class)) {
     print ' class="'. $class .'"';
   }
-
 }
 
 function _rootcandy_admin_navigation() {
@@ -42,16 +41,28 @@ function _rootcandy_admin_navigation() {
    */
   // get users role
   global $user;
+
   if ($user->uid != 1) {
-    $role = end(array_keys($user->roles));
-    $rootcandy_navigation = theme_get_setting('rootcandy_navigation_source_'.$role);
+    // get sorted roles
+    $role_weights = theme_get_setting('role-weight');
+    if ($role_weights) {
+      $filter_out = array_keys($user->roles);
+      $roles = array_intersect(array_flip($role_weights), $filter_out);
+      ksort($roles);
+      $keys = array_keys($roles);
+      $role = $roles[$keys[0]];
+
+      $rootcandy_navigation = theme_get_setting('rootcandy_navigation_source_'.$role);
+    }
   }
   else {
     $rootcandy_navigation = '_rootcandy_default_navigation';
   }
 
   if (!$rootcandy_navigation) {
-    $menu_tree[] = array('href' => 'user/login', 'title' => t('User login'));
+    if (!$user->uid) {
+      $menu_tree[] = array('href' => 'user/login', 'title' => t('User login'));
+    }
   }
   elseif ($rootcandy_navigation == '_rootcandy_default_navigation') {
     // build default menu
@@ -71,7 +82,10 @@ function _rootcandy_admin_navigation() {
   }
 
   if ($menu_tree) {
-    $output = '<ul>';
+    $size = theme_get_setting('rootcandy_navigation_icons_size');
+    $icons_disabled = theme_get_setting('rootcandy_navigation_icons');
+    $class = ' class = i'.$size;
+    $output = '<ul'.$class.'>';
 
     $custom_icons = rootcandy_custom_icons();
     if (!isset($custom_icons)) {
@@ -81,8 +95,10 @@ function _rootcandy_admin_navigation() {
     $match = _rootcandy_besturlmatch($_GET['q'],$menu_tree);
     foreach ($menu_tree as $key => $item) {
       $id = '';
+      $icon = '';
+      $class= '';
       // icons
-      if (!theme_get_setting('rootcandy_navigation_icons')) {
+      if (!$icons_disabled) {
         $size = theme_get_setting('rootcandy_navigation_icons_size');
         if (!isset($size)) $size = 24;
         $arg = explode("/", $item['href']);
@@ -91,8 +107,11 @@ function _rootcandy_admin_navigation() {
       }
       if ($key == $match) {
         $id = ' id="current"';
+        if (!$icons_disabled && $size) {
+          $id = ' id="current-'. $size .'"';
+        }
       }
-      $output .= '<li'. $id .'><a href="'. url($item['href']) .'">'. $icon . $item['title'] .'</a>';
+      $output .= '<li'. $id . $class .'><a href="'. url($item['href']) .'">'. $icon . $item['title'] .'</a>';
       $output .= '</li>';
     }
     $output .= '</ul>';
@@ -132,7 +151,7 @@ function rootcandy_preprocess_page(&$vars) {
   }
 
   if (arg(0) == 'admin' || (variable_get('test',1) AND ((arg(0) == 'node' AND is_numeric(arg(1)) AND arg(2) == 'edit') || (arg(0) == 'node' AND arg(1) == 'add')))) {
-    $vars['go_home'] = '<a href="'.base_path().'">'.t('Go Back to Homepage').'</a>';
+    $vars['go_home'] = '<a href="'.url().'">'.t('Go Back to Homepage').'</a>';
   }
 
   // get theme settings
@@ -297,14 +316,14 @@ function rootcandy_get_page_classes($path = NULL) {
 }
 
 function rootcandy_breadcrumb($breadcrumb) {
-  global $language;
   if (!empty($breadcrumb)) {
-    if ($language->direction) {
-      return '<div class="breadcrumb">'. implode(' « ', array_reverse($breadcrumb)) .'</div>';
-    }
-    else {
-      return '<div class="breadcrumb">'. implode(' » ', $breadcrumb) .'</div>';
-    }
+    /*
+     * Modern browsers (Firefox 1.5 and above, Internet Explorer 5.0 and above,
+     * Safari not checked) would automatically change the double-arrows (») to
+     * the other direction once it detects a right-to-left page. So no need to
+     * reverse the array, and no need to use reversed-direction arrows.
+     */
+    return '<div class="breadcrumb">'. str_replace(t('Administer'), t('Dashboard'), implode(' » ', $breadcrumb)) .'</div>';
   }
 }
 
@@ -360,6 +379,14 @@ function _rootcandy_links($links, $attributes = array('class' => 'links')) {
   }
 
   return $output;
+}
+
+function rootcandy_menu_item_link($link) {
+  if($link['href'] == 'admin'){
+    $link['title'] = t('Dashboard');
+  }
+
+  return theme_menu_item_link($link);
 }
 
 function _rootcandy_countmatches($arrayone, $arraytwo) {

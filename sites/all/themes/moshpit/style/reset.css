@@ -22,23 +22,29 @@ a img {border:none;}
 
 /* ----- content blocks ----- */
 /*TODO is both left & inline nesessary - min- height? is it 1% instead*/
+
 .clear {clear: both; display: block; overflow: hidden; visibility: hidden; width: 0; height: 0;}
 .left{float:left; display:inline; min-height: 1px; background-color: transparent;} 
 .right{float:right; display:inline; min-height: 1px; background-color: transparent;} 
-
+.clean{overflow:hidden; display:block;}
 
 :focus{outline:0}
 
 /* =======================================
  * Drupal6 overwrites
 * ------------------------------------- */
+
 ul, ul li, .item-list ul li{list-style: none; margin:0; padding:0;}
 ul, .item-list ul{margin:0; padding:0;}
 
 li.leaf{list-style: none}
 
 .block ul{padding:0;}
-.node .content ul{margin-bottom: 0.833333em; list-style-position: inside; list-style-type: square;}
+.node ol {margin: 0 0 0 5em; }
+.node ul {margin: 0 0 0.833333em 3em;}
+.node ul li {list-style: square inside}
+
+
 
 .breadcrumb {margin:0;}
 ul.breadcrumb li{display:inline; margin:0 0 0 10px;}
