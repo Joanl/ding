@@ -11,7 +11,7 @@ drupal_add_js(drupal_get_path('module', 'ding_library_map') .'/js/gmap_unbind.js
 
 //setup map
 $mapId = 'library_map';
-$map = array('id' => $mapId, 'type' => 'map', 'zoom' => 11, 'minzoom' => 9, 'maxzoom' => 14, 'height' => '200px', 'width' => '100%', 'controltype' => 'Small', 'longitude' => '12.573448', 'latitude' => '55.680908', 'behavior' => array('extramarkerevents' => 1));
+$map = array('id' => $mapId, 'type' => 'map', 'zoom' => 12, 'minzoom' => 9, 'maxzoom' => 14, 'height' => '200px', 'width' => '100%', 'controltype' => 'Small', 'longitude' => '12.573448', 'latitude' => '55.680908', 'behavior' => array('extramarkerevents' => 1));
 
 //add markers for libraries
 foreach ($nodes as $node)
@@ -23,7 +23,7 @@ foreach ($nodes as $node)
 									'street' => $node->location['street'], 
 									'city' => $node->location['city'], 
 									'postal-code' => $node->location['postal_code'],
-									'opening_hours' => $node->field_opening_hours[0],
+									'opening_hours' => $node->field_opening_hours[0], //TODO replace with active opening hours
 									'state' => 'open', 
 									'url' => url('node/'.$node->nid),
 									'text' => FALSE);
@@ -133,17 +133,23 @@ foreach ($nodes as $node)
 		
 		$('.block-ding_library_map .resize').toggle(function(event)
 		{
-			$('.gmap-library_map-gmap').animate({ 'height' : '400px' }, 1000, 'swing', function()
+			var map = Drupal.gmap.getMap('<?php echo $mapId ?>').map;
+			var center = map.getCenter();
+			$('.gmap-library_map-gmap').animate({ 'height' : '450px' }, 1000, 'swing', function()
 			{
-				Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();				
+				map.checkResize();				
+				map.panTo(center);				
 			});
 			$(event.target).toggleClass('expand').toggleClass('contract');
 			return false;
 		}, function(event)
 		{
+			var map = Drupal.gmap.getMap('<?php echo $mapId ?>').map;
+			var center = map.getCenter();
 			$('.gmap-library_map-gmap').animate({ 'height' : '200px' }, 1000, 'swing', function()
 			{
-				Drupal.gmap.getMap('<?php echo $mapId ?>').map.checkResize();							
+				map.checkResize();				
+				map.panTo(center);				
 			});
 			$(event.target).toggleClass('expand').toggleClass('contract');
 			return false;
