@@ -1,0 +1,8 @@
+; $Id$
+name = Ding! library map 
+description = Map of libraries with additional info shown on on mouseover
+package = Ding!
+core = 6.x
+dependencies[] = transliteration
+dependencies[] = gmap
+
