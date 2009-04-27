@@ -35,4 +35,5 @@
 <?php print $fields['field_entry_price_value']->raw; ?>
 <?php print $fields['field_entry_price_value']->content; ?>
 
-nemt4Absolut%_+Arsberetning
+$date = strtotime($row->node_data_field_datetime_field_datetime_value);
+print date("D M dmy", $date);

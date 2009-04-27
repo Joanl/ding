@@ -30,7 +30,7 @@ function dynamo_panels_pane($content, $pane, $display) {
     if (!empty($content->css_id)) {
       $idstr = ' id="' . $content->css_id . '"';
     }
-    if (!empty($content->css_class)) {1
+    if (!empty($content->css_class)) {
       $classstr = ' ' . $content->css_class;
     }
 //    $output = "<div class=\"panel-pane$classstr\"$idstr>\n";
