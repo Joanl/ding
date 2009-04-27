@@ -69,6 +69,18 @@ function _ding_panels_content_types() {
       'required context' => new ctools_context_required(t('Node'), 'node'),
       'category' => array(t('Library page'), -9),
     ),
+    'library_feature_list' => array(
+      'title' => t('Library feature list'),
+      'description' => t('Simple list of library features, containing only the title.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
+    'library_feature_detail_list' => array(
+      'title' => t('Library detailed feature list'),
+      'description' => t('More detailed view of library features with pictures and description.'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+      'category' => array(t('Library page'), -9),
+    ),
   );
 }
 
@@ -94,6 +106,10 @@ function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
       // Render the node body as block content.
       $block->content = check_markup($node->body, $node->format, $node->language);
       break;
+    case 'library_feature_list':
+    case 'library_feature_detail_list':
+      $block->title = t('Services and facilities');
+      $block->content = theme_item_list(_ding_panels_content_features_by_library($node));
   }
   return $block;
 }
@@ -111,6 +127,36 @@ function _ding_panels_content_title($subtype, $conf, $context) {
       return t('Library opening hours');
     case 'library_about':
       return t('Library about text');
+    case 'library_feature_list':
+    case 'library_feature_detail_list':
+      return t('Services and facilities');
   }
+}
+
+/**
+ * Find all features related to a library node.
+ *
+ * @param object $node
+ *    The library node we want features for.
+ * @return array
+ *    Array of feature titles, keyed by node id.
+ */
+function _ding_panels_content_features_by_library($node) {
+  // First, get the feature with a nice bit of SQL.
+  $query = db_query("
+    SELECT n.nid, n.title
+    FROM content_field_feature_ref AS fr
+    LEFT JOIN node AS n ON ( n.nid = fr.field_feature_ref_nid )
+    WHERE fr.field_feature_ref_nid IS NOT NULL
+    AND fr.nid = %d
+    ORDER BY fr.delta ASC;
+  ", $node->nid);
+
+  // And stick them in a nice little array.
+  $features = array();
+  while ($row = db_fetch_array($query)) {
+    $features[$row['nid']] = $row['title'];
+  }
+  return $features;
 }
 
