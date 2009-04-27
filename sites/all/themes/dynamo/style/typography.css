@@ -111,7 +111,14 @@ h1,
 
 .view li div.tid a{color:#fff; background-color: #b41630;}
 
+/*calender*/
 .view-event-list .title{color:#000; font-weight:bold;}
+.view-event-list li div.leaf{font-family: Georgia, serif; text-align: center;}
+	.view-event-list li div.leaf .day{color:#fff; font-size:10px; line-height:15px;}
+	.view-event-list li div.leaf .date{font-size:32px; line-height:26px;}
+	.view-event-list li div.leaf .month{font-size:11px; line-height:15px;}
+	.view-event-list li div a{color:#999;}
+	.view-event-list li div h4 a{color:#050505;}
 .vcard .fn{font-weight:bold;}
 
 #pagefooter{font-size:10px; line-height:13px;}

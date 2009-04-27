@@ -1,39 +1,24 @@
-<?php
-// $Id: views-view-fields.tpl.php,v 1.6 2008/09/24 22:48:21 merlinofchaos Exp $
-/**
- * @file views-view-fields.tpl.php
- * Default simple view template to all the fields as a row.
- *
- * - $view: The view in use.
- * - $fields: an array of $field objects. Each one contains:
- *   - $field->content: The output of the field.
- *   - $field->raw: The raw data for the field, if it exists. This is NOT output safe.
- *   - $field->class: The safe class id to use.
- *   - $field->handler: The Views field handler object controlling this field. Do not use
- *     var_export to dump this object, as it can't handle the recursion.
- *   - $field->inline: Whether or not the field should be inline.
- *   - $field->inline_html: either div or span based on the above flag.
- *   - $field->separator: an optional separator that may appear before a field.
- * - $row: The raw result object from the query, with all data it fetched.
- *
- * @ingroup views_templates
- */
+<?php 
+  //converts the date value to time
+  $date = strtotime($fields['field_datetime_value']->raw);
 ?>
+<div class="leaf">
+  <div class="day"><?php print date("l", $date);?></div>
+  <div class="date"><?php print date("j", $date);?></div>
+  <div class="month"><?php print date("M", $date);?></div>
+</div>
+
+<div>
+  <?php print $fields['field_library_ref_nid']->content; ?>
+  <h4><?php print $fields['title']->content; ?></h4>
+  <?php print date("h:i", $date); ?>  -   <?php print $fields['field_entry_price_value']->content; ?>
+</div>  
 
 
 
-<?php print $fields['field_datetime_value']->raw; ?>
-<?php print $fields['field_library_ref_nid']->content; ?>
-
-<?php print $fields['title']->raw; ?>
-<?php print $fields['title']->content; ?>
 
 
-<?php print $fields['field_library_ref_nid']->raw; ?>
-<?php print $fields['field_library_ref_nid']->content; ?>
 
-<?php print $fields['field_entry_price_value']->raw; ?>
-<?php print $fields['field_entry_price_value']->content; ?>
 
-$date = strtotime($row->node_data_field_datetime_field_datetime_value);
-print date("D M dmy", $date);
+
+

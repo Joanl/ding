@@ -182,8 +182,10 @@ Bibloteks siden
 /*calender*/
 #threecol-left-middle .panel-pane{margin:0 5px;}
 #threecol-left-middle .view-event-list{}
-.view-event-list li{ background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px;} 
-/*#threecol-left-middle .view-event-list li{background:transparent url(../images/bg-calender.png) no-repeat 0 0; padding:0 0 0 55px;}*/
+.view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px; height:70px; clear:both;} 
+.view-event-list li div.leaf{height:65px; width:55px; float:left;padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
+
+
 /*features*/
 #threecol-left-middle .view-feature-list{background:transparent url(../images/bg-box.png) no-repeat left bottom; } /*todo bottom fixes*/
 #threecol-left-middle .view-feature-list ul{padding:40px 15px 50px 15px; margin:0 0 30px 0; background:transparent url(../images/bg-box.png) no-repeat left top;}
