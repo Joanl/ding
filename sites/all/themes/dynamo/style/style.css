@@ -14,7 +14,7 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 /* sitename */	
 #site-name {text-indent: -9999em; margin: 0px 17px 0 720px; padding:17px 0 0 0; height:22px;}
 	body.admin-menu #site-name {margin: 12px 17px 0 720px;}
-	#site-name a{height:24px; width:252px; display: block; overflow:hidden; background:transparent url(../images/logo.png) no-repeat 0 0;}
+	#site-name a{height:24px; width:252px; display: block; overflow:hidden; background:transparent url(../images/logo-temp.png) no-repeat 0 0;}
 
 /* header */
 #pageheader{background:transparent url(../images/bg-header.png) no-repeat center -39px; margin:0 0 0 1px;}
@@ -182,9 +182,9 @@ Bibloteks siden
 /*calender*/
 #threecol-left-middle .panel-pane{margin:0 5px;}
 #threecol-left-middle .view-event-list{}
-.view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px; height:70px; clear:both;} 
-.view-event-list li div.leaf{height:65px; width:55px; float:left;padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
-
+.view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px; clear:both;} 
+.view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
+.view-event-list li div.data{float:left;}
 
 /*features*/
 #threecol-left-middle .view-feature-list{background:transparent url(../images/bg-box.png) no-repeat left bottom; } /*todo bottom fixes*/

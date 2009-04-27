@@ -127,6 +127,15 @@ function mothership_preprocess_views_view_list(&$vars){
    // $vars['classes'][$id] .= ' last';
   }
 
+  function mothership_content_view_multiple_field($items, $field, $values) {
+    $output = '';
+    foreach ($items as $item) {
+      if (!empty($item) || $item == '0') {
+        $output .= '<div>'. $item .'</div>';
+      }
+    }
+    return $output;
+  }
 
 /* =====================================
   Breadcrumb
