@@ -1,0 +1,131 @@
+<?php
+// $Id$
+
+/**
+ * @file ding_feature_ref.module
+ * Provides a few library-related panes for the Panels module.
+ */
+
+/**
+ * Implementation of hook_theme().
+ */
+function ding_feature_ref_theme() {
+  return array(
+    'ding_feature_ref_feature' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function ding_feature_ref_widget_info() {
+  return array(
+    'ding_feature_ref_feature' => array(
+      'label' => t('Feature selector for libraries'),
+      'field types' => array('nodereference'),
+      'multiple values' => CONTENT_HANDLE_MODULE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_DEFAULT,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_widget().
+ */
+function ding_feature_ref_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  switch ($field['widget']['type']) {
+    case 'ding_feature_ref_feature':
+      $node = $form['#node'];
+
+      // Take the items from CCK and make a nid => weight array,
+      // that can be used by draggable checkboxes as values.
+      $values = array();
+      foreach ($items as $delta => $val) {
+        $values[$val['nid']] = $delta;
+      }
+
+      $element = array(
+        '#type' => 'draggable_checkboxes',
+        // We can't use #options, since that confuses Drupals built-in 
+        // option validator, since this element returns a different 
+        // structure than it expects.
+        '#checkbox_options' => _ding_feature_ref_feature_options($node->nid, $items),
+        '#default_value' => $values,
+        '#element_validate' => array('ding_feature_ref_feature_widget_validate'),
+      );
+      break;
+
+    case 'ding_feature_ref_library':
+      $element = array(
+        '#type' => 'select',
+        '#default_value' => $items,
+      );
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Validate the feature selection widget and prepare its values for saving.
+ */
+function ding_feature_ref_feature_widget_validate($element, &$form_state, $form) {
+  $name = $element['#field_name'];
+  $values = array();
+
+  foreach ($form_state['values'][$name] as $nid => $val) {
+    if (is_numeric($val['check']) && $val['check'] > 0) {
+      $values[$nid]['nid'] = $nid;
+      $values[$nid]['delta'] = $val['weight'];
+    }
+  }
+  usort($values, '_ding_feature_ref_values_sort');
+  form_set_value($element, $values, $form_state);
+}
+
+/**
+ * Helper function to select the features available for a node.
+ */
+function _ding_feature_ref_feature_options($nid = NULL) {
+  $options = array();
+  if (!empty($nid) && $nid > 0) {
+    $query = db_query("
+SELECT n.nid, n.vid, n.title
+FROM {node} AS n
+LEFT JOIN {content_field_library_ref} AS lr ON ( lr.vid = n.vid )
+LEFT JOIN {content_field_feature_ref} AS fr ON ( fr.field_feature_ref_nid = n.nid )
+WHERE n.type = 'feature'
+AND (
+  lr.field_library_ref_nid = %d
+  OR lr.field_library_ref_nid IS NULL
+)
+ORDER BY fr.delta ASC", $nid);
+  }
+  else {
+    $query = db_query("
+SELECT n.nid, n.vid, n.title
+FROM {node} AS n
+LEFT JOIN {content_field_library_ref} AS lr ON ( lr.vid = n.vid ) 
+WHERE n.type = 'feature'
+AND field_library_ref_nid IS NULL");
+  }
+  while ($row = db_fetch_array($query)) {
+    $options[$row['nid']] = $row['title'];
+  }
+  return $options;
+}
+
+/**
+ * Helper function to sort the values from the sortable checkboxes, so 
+ * they get saved in the correct order in the database.
+ */
+function _ding_feature_ref_values_sort($a, $b) {
+  if ($a['delta'] == $b['delta']) {
+      return 0;
+  }
+  return ($a['delta'] < $b['delta']) ? -1 : 1;
+}
+

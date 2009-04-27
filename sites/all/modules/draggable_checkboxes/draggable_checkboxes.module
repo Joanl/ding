@@ -1,0 +1,93 @@
+<?php // $Id$
+
+/**
+ * @file draggable_checkboxes.module
+ * Exposes a draggable checkboxes form element to other modules.
+ */
+
+/**
+ * Implementation of FAPI hook_elements().
+ */
+function draggable_checkboxes_elements() {
+  return array(
+    'draggable_checkboxes' => array(
+      '#input' => TRUE,
+      '#process' => array('draggable_checkboxes_process'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function draggable_checkboxes_theme() {
+  return array(
+    'draggable_checkboxes' => array(
+      'arguments' => array('element' => NULL),
+      'template' => 'draggable_checkboxes',
+    ),
+  );
+}
+
+/**
+ * Process the draggable checkboxes form element.
+ */
+function draggable_checkboxes_process($element) {
+  foreach($element['#checkbox_options'] as $value => $title) {
+    $element[$value] = array(
+      '#weight' => $element['#value'][$value],
+    );
+    $element[$value]['nid'] = array(
+      '#type' => 'value',
+      '#value' => $value,
+    );
+
+    $element[$value]['check'] = array(
+      '#type' => 'checkbox',
+      '#title' => $title,
+      '#prefix' => '<td class="check">',
+      '#suffix' => '</td>',
+    );
+
+    $element[$value]['weight'] = array(
+      '#type' => 'weight',
+      '#attributes' => array('class' => 'draggable-weight'),
+      '#prefix' => '<td class="weight">',
+      '#suffix' => '</td>',
+    );
+
+    // If #value or #default_value is provided, set it on our two elements.
+    // #value takes precedence.
+    if (isset($element['#value'][$value]) && is_numeric($element['#value'][$value])) {
+      // Value of a checkbox is the one it provides to the form API when 
+      // it's checked.
+      $element[$value]['check']['#value'] = $value;
+      $element[$value]['weight']['#value'] = $element['#value'][$value];
+    }
+    elseif (isset($element['#default_value'][$value]) && is_numeric($element['#default_value'][$value])) {
+      $element[$value]['check']['#default_value'] = $value;
+      $element[$value]['weight']['#default_value'] = $element['#default_value'][$value];
+    }
+  }
+  // Finally, remove #value and #default_value from the main element, 
+  // since it causes troubles in form_set_value.
+  unset($element['#value']);
+  unset($element['#default_value']);
+  return $element;
+}
+
+/**
+ * Template preprocessing for the draggable checkboxes form element.
+ */
+function draggable_checkboxes_preprocess_draggable_checkboxes($vars) {
+  $vars['table_id'] = 'dragcheck-' . $vars['element']['#id'];
+  drupal_add_tabledrag($vars['table_id'], 'order', 'sibling', 'draggable-weight');
+  drupal_add_css(drupal_get_path('module', 'draggable_checkboxes') . '/draggable_checkboxes.css');
+
+  $vars['checkboxes'] = array();
+
+  foreach ($vars['element']['#checkbox_options'] as $nid => $title) {
+    $vars['checkboxes'][$nid] = $vars['element'][$nid]['#children'];
+  }
+}
+
