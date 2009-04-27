@@ -34,6 +34,7 @@ features[] = secondary_links
 ;stylesheets[all][]  = style/grid.css
 
 stylesheets[all][]  = style/style.css
+stylesheets[all][]  = style/typography.css
 stylesheets[all][]  = style.css
 
 ;stylesheets[print][]  = style/print.css 
