@@ -11,7 +11,7 @@
  * http://microformats.org/wiki/hcard for more information.
  */
 ?>
-foooo
+
 <div class="vcard">
   <span class="fn org"><?php print $node->title; ?></span>
   <div class="adr">
@@ -30,4 +30,3 @@ foooo
 
 <hr/>
 <?php print $library_map; ?>
-fooo
