@@ -1,3 +1,0 @@
-[submodule "sites/all/modules/office_hours"]
-	path = sites/all/modules/office_hours
-	url = git://github.com/mikl/drupal-office_hours.git
