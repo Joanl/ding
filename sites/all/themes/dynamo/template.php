@@ -7,6 +7,20 @@ drupal_rebuild_theme_registry(); /*TODO: add a theme setting for this*/
 
 
 /**
+* Implementation of hook_theme().
+*/
+function dynamo_theme($existing, $type, $theme, $path) {
+ return array(
+   'ding_panels_content_library_title' => array(
+     'template' => 'ding_panels_content_libary_title',
+   ),
+   'ding_panels_content_library_location' => array(
+     'template' => 'ding_panels_content_libary_location',
+   ),
+ );
+}
+
+/**
  * Render a panel pane like a block.
  *
  * A panel pane can have the following fields:
@@ -25,6 +39,7 @@ drupal_rebuild_theme_registry(); /*TODO: add a theme setting for this*/
  * $content->delta -- A legacy setting for block compatibility
  */
 function dynamo_panels_pane($content, $pane, $display) {
+ // dsm($pane);
   if (!empty($content->content)) {
     $idstr = $classstr = '';
     if (!empty($content->css_id)) {
@@ -33,8 +48,8 @@ function dynamo_panels_pane($content, $pane, $display) {
     if (!empty($content->css_class)) {
       $classstr = ' ' . $content->css_class;
     }
-//    $output = "<div class=\"panel-pane$classstr\"$idstr>\n";
-
+//    $output = "<div class=\"panel-pane $classstr\"$idstr>\n";
+    $output = "<div class=\"pane-$pane->subtype\">\n";
     if (user_access('view pane admin links') && !empty($content->admin_links)) {
       $output .= "<div class=\"admin-links panel-hide\">" . theme('links', $content->admin_links) . "</div>\n";
     }
@@ -60,7 +75,27 @@ function dynamo_panels_pane($content, $pane, $display) {
       $output .= "<div class=\"panels more-link\">" . l($content->more['title'], $content->more['href']) . "</div>\n";
     }
 
-   // $output .= "</div>\n";
+    $output .= "</div>\n";
     return $output;
   }
+}
+
+
+function dynamo_panels_default_style_render_panel($display, $panel_id, $panes, $settings) {
+  $output = '';
+
+  $print_separator = FALSE;
+  foreach ($panes as $pane_id => $content) {
+    // Add the separator if we've already displayed a pane.
+    if ($print_separator) {
+     // $output .= '<div class="panel-separator"></div>';
+    }
+    $output .= $text = panels_render_pane($content, $display->content[$pane_id], $display);
+
+    // If we displayed a pane, this will become true; if not, it will become
+    // false.
+    $print_separator = (bool) $text;
+  }
+
+  return $output;
 }

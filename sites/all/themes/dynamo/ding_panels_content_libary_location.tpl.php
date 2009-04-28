@@ -28,5 +28,9 @@
   </div>
 </div>
 
-<hr/>
-<?php print $library_map; ?>
+<div class="library-map">
+  <div class="library-map-inner">
+  <?php print $library_map; ?>  
+  </div>
+</div>
+

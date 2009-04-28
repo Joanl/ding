@@ -99,6 +99,7 @@ h1,
 	font-size:10px; line-height:15px;
 }
 
+#path,
 .view a, 
 .view li div.tid a,
 .more-link a,
@@ -109,6 +110,17 @@ h1,
 }
 
 
+
+.office-hours-week{
+	font-size:11px; line-height:20px;
+}
+.vcard{
+	font-size:11px; line-height:17px;
+}
+
+.pane-library_hours h3{
+	font-size:11px; line-height:20px; font-weight:bold;
+}
 .view li div.tid a{color:#fff; background-color: #b41630;}
 
 /*calender*/
@@ -121,7 +133,11 @@ h1,
 	.view-event-list li div h4 a{color:#050505;}
 .vcard .fn{font-weight:bold;}
 
+
+
+
 #pagefooter{font-size:10px; line-height:13px;}
 #pagefooter h3{font-size:12px; line-height:17px;
   font-family: "Gills sans", Verdana, Arial, sans-serif; text-transform: uppercase;
 }
+
