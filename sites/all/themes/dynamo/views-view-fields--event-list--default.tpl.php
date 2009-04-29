@@ -17,13 +17,5 @@
     
 
     <?php print $fields['edit_node']->content; ?>  
+  </div>
 </div>  
-
-
-
-
-
-
-
-
-

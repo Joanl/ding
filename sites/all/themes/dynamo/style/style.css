@@ -272,13 +272,13 @@ span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:
 
 /*features*/
 .pane-library_feature_list{background-repeat: repeat-y; margin:0 0 0 10px;}
-.pane-library_feature_list h3{background-position:-230px -30px; padding:10px 0 0 10px; height:19px; }
+.pane-library_feature_list h3{background-position:-230px -30px; padding:10px 0 0 10px; height:18px; }
 .pane-library_feature_list .item-list{background-position:-700px bottom; padding:0px 0px 10px 20px; min-height:30px;}
 .pane-library_feature_list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;}
 
 /*åbningstider*/
 .pane-feature_list-block_1{background-repeat: repeat-y;}
-.pane-library_hours h3{background-position:-230px -30px; padding:6px 0 0 20px; height:24px; }
+.pane-library_hours h3{background-position:-230px -30px; padding:6px 0 0 20px; height:21px;}
 .pane-library_hours .office-hours-week{background-position:-700px bottom; padding:0 0 10px 0; }
 
 .pane-library_hours .office-hours-week .even,
