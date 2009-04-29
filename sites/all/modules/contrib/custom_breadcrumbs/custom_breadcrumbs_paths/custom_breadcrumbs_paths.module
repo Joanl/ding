@@ -1,0 +1,111 @@
+<?php
+// $Id: custom_breadcrumbs_paths.module,v 1.1.2.3 2009/04/25 01:05:03 mgn Exp $
+require_once(drupal_get_path('module', 'custom_breadcrumbs') .'/custom_breadcrumbs.admin.inc');
+
+/**
+ * Implementation of hook_cb_breadcrumb_info().
+ *   @return an array with elements 
+ *     'table' indicating the db_table to load the breadcrumb from,
+ *     'field' a unique field of the database table used to identify the breadcrumb
+ *     'type' a string used for indicating the breadcrumb type on the admin list
+ */
+function custom_breadcrumbs_paths_cb_breadcrumb_info() {
+  return array('table' => 'custom_breadcrumbs_paths', 'field' => 'specific_path', 'type' => 'path');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function custom_breadcrumbs_paths_menu() {
+  $items = array();
+  $items['admin/build/custom_breadcrumbs/path/add'] = array(
+    'title'            => 'Specific Path',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('custom_breadcrumbs_paths_form', 'path'),
+    'access arguments' => array('administer custom breadcrumbs'),
+    'type'             => MENU_LOCAL_TASK,
+    'weight'           => 5,
+  );
+  $items['admin/build/custom_breadcrumbs/path/edit'] = array(
+    'title'            => 'Edit custom breadcrumb for path',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('custom_breadcrumbs_paths_form', 'path'),
+    'access arguments' => array('administer custom breadcrumbs'),
+    'type'             => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ *  Implementation of hook_nodeapi().
+ */
+function custom_breadcrumbs_paths_nodeapi($node, $op, $teaser, $page) {
+  if ($op == 'alter' && empty($teaser) && !empty($page)) {
+    $curpath = $_REQUEST['q'];
+    // check for breadcrumb for this path
+    $breadcrumbs = custom_breadcrumbs_load_breadcrumbs('custom_breadcrumbs_paths', array('specific_path' => $curpath));
+    while ($breadcrumb = array_pop($breadcrumbs)) {
+      if (custom_breadcrumbs_is_visible($breadcrumb, $node)) {
+        custom_breadcrumbs_set_breadcrumb($breadcrumb, $node);
+        return;  // don't check any others once a visible breadcrumb is found...
+      }
+    }
+  }
+}
+
+/**
+ *  Implementation of hook_views_pre_view().
+ */
+// TODO: create a common helper function for these hooks to avoid code duplication
+// TODO: pass $this into custom_breadcrumbs_is_visible to allow use of the views object in
+//       determining visibility. Needs some modification of that function to check for the
+//       object type.
+function custom_breadcrumbs_views_pre_view($this, $display_id, $args) {
+  // Don't really do anything with the view. This is just a pretense to insert a breadcrumb
+  $curpath = $_REQUEST['q'];
+  // check for breadcrumb for this path
+  $breadcrumbs = custom_breadcrumbs_load_breadcrumbs('custom_breadcrumbs_paths', array('specific_path' => $curpath));
+  while ($breadcrumb = array_pop($breadcrumbs)) {
+    if (custom_breadcrumbs_is_visible($breadcrumb, $this)) {
+      custom_breadcrumbs_set_breadcrumb($breadcrumb);
+      return;  // don't check any others once a visible breadcrumb is found...
+    }
+  }
+}
+
+// Displays an edit form for a custom breadcrumb record.
+function custom_breadcrumbs_paths_form(&$form_state, $type) {
+  $form = array();
+  $bid = arg(5);
+  if (isset($bid)) {
+    drupal_set_title('Edit Custom Breadcrumb for Path');
+    $breadcrumb = array_pop(custom_breadcrumbs_load_breadcrumbs_bid('custom_breadcrumbs_paths', $bid));
+  }
+  else {
+    drupal_set_title('Add Custom Breadcrumb for Path');
+  }
+  $form['specific_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Specific Path'),
+    '#required' => TRUE,
+    '#description' => t('The drupal path that this custom breadcrumb trail will apply to.'),
+    '#default_value' => $bid ?  $breadcrumb->specific_path : NULL,
+    '#weight' => -10,
+  );
+  $form += custom_breadcrumbs_common_form_elements($bid, $breadcrumb);
+  // store the function to call to save this breadcrumb
+  $form['#table'] = 'custom_breadcrumbs_paths';
+  $form['#submit'][] = 'custom_breadcrumbs_form_submit';
+  $form['#validate'][] = 'custom_breadcrumbs_form_validate';
+  
+  return $form;
+}
+
+function custom_breadcrumbs_paths_form_validate($form, &$form_state) {
+  // make sure specific path does not already have a custom breadcrumb
+  $specific_path = trim($form_state['values']['specific_path']);
+  $breadcrumb = custom_breadcrumbs_load_breadcrumbs('custom_breadcrumbs_paths', array('specific_path' => $specific_path));
+  if ($breadcrumb) {
+    form_set_error('specific_path', t('This path already has a custom breadcrumb. You can edit it from the custom breadcrumbs list.'));
+  }
+}
