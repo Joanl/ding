@@ -155,7 +155,7 @@ bibloteks oversigtsiden
 .view-library-list .office-hours-week .week-info{background:#d1d9d7}
 .view-library-list .office-hours-week .odd, 
 .view-library-list .office-hours-week .even{
-padding:0 5px;
+	padding:0 5px;
 } 
 /* =====================================
 Panels
@@ -212,54 +212,59 @@ Bibloteks siden
 #threecol-left-left .more-link{margin:0 20px 0 20px;}
 
 /*calender*/
-#threecol-left-middle .panel-pane{margin:0 5px;}
-#threecol-left-middle .view-event-list{}
-.view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px; clear:both;} 
-.view-event-list li.first{background:none; padding-top:0px; clear:both;} 
-.view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
-.view-event-list li div.data{float:left;}
+.pane-event_list-block_1 .panel-pane{margin:0 5px;}
+.pane-event_list-block_1 h3{background:#d1d9d7; padding:3px 10px; margin:0 10px 0 14px;}
+.pane-event_list-block_1 .view-event-list{margin:10px 0 0 0;}
+.pane-event_list-block_1 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
+.pane-event_list-block_1 .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
+.pane-event_list-block_1 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
+.pane-event_list-block_1 .view-event-list li div.data{float:left; }
+.pane-event_list-block_1 .view-event-list li span{background:transparent url(../images/ur.png) no-repeat left center; padding:0 0 0 14px;}
+.pane-event_list-block_1 .view-empty{margin:0 0 0 20px;}
 
 /*BOX sprite*/
 .box, 
 .box .vcard,
 .box .library-map,
-.pane-feature_list-block_1,
-.pane-feature_list-block_1  h3,
-.pane-feature_list-block_1 .view-feature-list ul,
+.pane-library_feature_list,
+.pane-library_feature_list  h3,
+.pane-library_feature_list .item-list,
 .pane-library_hours,
 .pane-library_hours h3,
 .pane-library_hours .office-hours-week
 {
-	background:transparent url(../images/sprite-box.png) no-repeat -700px 0; width:228px; overflow:hidden;
+	background:transparent url(../images/sprite-box.png) no-repeat 0px 0; width:228px; overflow:hidden;
 }
 /*biblo adresse*/
 .box{background-repeat: repeat-y;}
-.box .vcard{background-position:0px 0px; padding:15px; min-height:170px;}
-.box .library-map{background-position:-930px bottom;}
+.box .vcard{background-position:-460px 0px; padding:15px; min-height:170px;}
+.box .library-map{background-position:-700px bottom;}
+
 .library-map{padding:15px 15px 10px 15px;}
 .library-map-inner{width:194px; height:140px; background:#f0f;}
 
 /*features*/
-.pane-feature_list-block_1{background-repeat: repeat-y; margin:0 0 0 10px;}
-.pane-feature_list-block_1  h3{padding:6px 0 0 20px; height:24px; background-position:-230px 0px;}
-.pane-feature_list-block_1 .view-feature-list ul{background-position:-930px bottom; padding:0px 0px 10px 20px; } /*TODO test*/
-.pane-feature_list-block_1 .view-feature-list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;;}
+.pane-library_feature_list{background-repeat: repeat-y; margin:0 0 0 10px;}
+.pane-library_feature_list h3{background-position:-230px -30px; padding:10px 0 0 10px; height:19px; }
+.pane-library_feature_list .item-list{background-position:-700px bottom; padding:0px 0px 10px 20px; min-height:30px;}
+.pane-library_feature_list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;}
 
 /*åbningstider*/
 .pane-feature_list-block_1{background-repeat: repeat-y;}
-.pane-library_hours h3{padding:6px 0 0 20px; height:24px; background-position:-460px 0;}
-.pane-library_hours .office-hours-week{background-position:-930px bottom; padding:0 0 10px 0; }
+.pane-library_hours h3{background-position:-230px -30px; padding:6px 0 0 20px; height:24px; }
+.pane-library_hours .office-hours-week{background-position:-700px bottom; padding:0 0 10px 0; }
 
 .pane-library_hours .office-hours-week .even,
 .pane-library_hours .office-hours-week .odd{
 	width:190px; padding:0 10px; margin:0 10px;
 }
 .pane-library_hours .office-hours-week .week-info{margin:0 0 0 20px;}
-
 .week-info a.prev{ color:#757575;}
 .week-info a.next{color:#757575;}
 .office-hours-week .odd{background:#f3f5f5;}
 .office-hours-week .even{background:#fff;}
+
+
 
 /* =====================================
 test
