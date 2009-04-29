@@ -143,7 +143,11 @@ teaser
 /* =====================================
 bibloteks oversigtsiden
 /*--------------------------------------*/
-.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:5px 0 5px 20px;}
+.libary-status{padding:0 5px; display:inline;}
+.libary-status.open{background:#71bf44;}
+.libary-status.close{background:#6b0046;}
+
+.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
 .view-library-list li.first{background:none;}
 .view-library-list .picture{width:120px; height:120px; margin:0 20px 0 0; float:left;}
 .view-library-list .info{width:320px; ; margin:0 20px 0 0; float:left; }
@@ -153,9 +157,6 @@ bibloteks oversigtsiden
 .view-library-list .office-hours-week .even{
 padding:0 5px;
 } 
-.libary-status{padding:0 5px; display:inline;}
-.open{background:#71bf44;}
-.close{background:#6b0046;}
 /* =====================================
 Panels
 /*--------------------------------------*/
@@ -199,7 +200,7 @@ Bibloteks siden
 /*biblo teasers*/
 #threecol-left-left .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
 #threecol-left-left .view li.first{background:none; padding-top:0;}
-#threecol-left-left .view .tid a{background:#b41630; color:#fff; padding:2px;}
+
 #threecol-left-left .view .field-library-ref-nid,
 #threecol-left-left .view .created, 
 #threecol-left-left .view .name{

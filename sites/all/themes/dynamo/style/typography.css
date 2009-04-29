@@ -8,8 +8,7 @@
 	  orig_pix * em_value = wanted_pix
 	wanted_pix /  orig_pix = em_value
 * ------------------------------------- */
-
-body {
+body{
   font-size: 13px;
 	line-height:17px;
   color: #333333;
@@ -101,12 +100,12 @@ h1,
 }
 
 #path,
-.view a, 
+.view a,
 .view li div.tid a,
 .more-link a,
 .view-feature-list li div.title,
 .view-feature-list li div.title a,
-.view-event-list li div,
+.view-event-list li div
 {
 	font-size:10px; line-height:17px;
 }
@@ -121,7 +120,7 @@ h1,
 .pane-library_hours h3{
 	font-size:11px; line-height:20px; font-weight:bold;
 }
-.view li div.tid a{color:#fff; background-color: #b41630;}
+.view li div.tid a{color:#fff; background-color: #b41630; padding:2px;}
 
 /*calender*/
 .view-event-list .title{color:#000; font-weight:bold;}
@@ -140,4 +139,5 @@ h1,
 #pagefooter h3{font-size:12px; line-height:17px;
   font-family: "Gills sans", Verdana, Arial, sans-serif; text-transform: uppercase;
 }
+
 
