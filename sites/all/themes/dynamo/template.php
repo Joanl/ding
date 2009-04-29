@@ -20,6 +20,28 @@ function dynamo_theme($existing, $type, $theme, $path) {
  );
 }
 
+
+function dynamo_preprocess_views_view_list(&$vars){
+  dynamo_preprocess_views_view_unformatted($vars);  
+}
+
+  function dynamo_preprocess_views_view_unformatted(&$vars) {
+    $view     = $vars['view'];
+    $rows     = $vars['rows'];
+
+    $vars['classes'] = array();
+    // Set up striping values.
+     foreach ($rows as $id => $row) {
+    //  $vars['classes'][$id] = 'views-row-' . ($id + 1);
+    //    $vars['classes'][$id] .= ' views-row-' . ($id % 2 ? 'even' : 'odd');
+      if ($id == 0) {
+        $vars['classes'][$id] .= ' first';
+      }
+    }
+    $vars['classes'][$id] .= ' last';
+  }
+
+
 /**
  * Render a panel pane like a block.
  *
@@ -39,7 +61,6 @@ function dynamo_theme($existing, $type, $theme, $path) {
  * $content->delta -- A legacy setting for block compatibility
  */
 function dynamo_panels_pane($content, $pane, $display) {
- // dsm($pane);
   if (!empty($content->content)) {
     $idstr = $classstr = '';
     if (!empty($content->css_id)) {
@@ -47,8 +68,8 @@ function dynamo_panels_pane($content, $pane, $display) {
     }
     if (!empty($content->css_class)) {
       $classstr = ' ' . $content->css_class;
-    }
-//    $output = "<div class=\"panel-pane $classstr\"$idstr>\n";
+    } 
+    //  $output = "<div class=\"panel-pane $classstr\"$idstr>\n";
     $output = "<div class=\"pane-$pane->subtype\">\n";
     if (user_access('view pane admin links') && !empty($content->admin_links)) {
       $output .= "<div class=\"admin-links panel-hide\">" . theme('links', $content->admin_links) . "</div>\n";
@@ -61,7 +82,7 @@ function dynamo_panels_pane($content, $pane, $display) {
       $output .= "<div class=\"feed\">" . implode(' ', $content->feeds) . "</div>\n";
     }
 
-//    $output .= "<div class=\"content\">$content->content</div>\n";
+    //  $output .= "<div class=\"content\">$content->content</div>\n";
     $output .= $content->content;
 
     if (!empty($content->links)) {
