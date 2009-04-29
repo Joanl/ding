@@ -1,4 +1,3 @@
-location...
 <div class="location vcard">
   <div class="adr">
     <?php echo $name; ?>

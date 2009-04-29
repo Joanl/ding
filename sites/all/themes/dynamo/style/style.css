@@ -141,14 +141,21 @@ teaser
  .node-teaser.node-library{background:transparent url(../images/bg-divider.png) no-repeat left top; padding:10px 0 0 0;}
 
 /* =====================================
-views
+bibloteks oversigtsiden
 /*--------------------------------------*/
-.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both;}
-.view-library-list li > div{margin:0 20px;}
-.view-library-list li div.title a{} 
-.view-library-list li div.address{float:left;}
-.view-library-list li div.field-opening-hours-scope{float:right;}
-
+.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:5px 0 5px 20px;}
+.view-library-list li.first{background:none;}
+.view-library-list .picture{width:120px; height:120px; margin:0 20px 0 0; float:left;}
+.view-library-list .info{width:320px; ; margin:0 20px 0 0; float:left; }
+.view-library-list .office-hours-week{width:175px; float:left;}
+.view-library-list .office-hours-week .week-info{background:#d1d9d7}
+.view-library-list .office-hours-week .odd, 
+.view-library-list .office-hours-week .even{
+padding:0 5px;
+} 
+.libary-status{padding:0 5px; display:inline;}
+.open{background:#71bf44;}
+.close{background:#6b0046;}
 /* =====================================
 Panels
 /*--------------------------------------*/
@@ -186,11 +193,12 @@ Bibloteks siden
 }
 #twocol-left-top, 
 #threecol-left-top {
-	background:transparent url(../images/bg-divider.png) no-repeat left bottom; height:310px
+	background:transparent url(../images/bg-divider.png) no-repeat left bottom; min-height:314px;
 }
 
 /*biblo teasers*/
 #threecol-left-left .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
+#threecol-left-left .view li.first{background:none; padding-top:0;}
 #threecol-left-left .view .tid a{background:#b41630; color:#fff; padding:2px;}
 #threecol-left-left .view .field-library-ref-nid,
 #threecol-left-left .view .created, 
@@ -206,46 +214,56 @@ Bibloteks siden
 #threecol-left-middle .panel-pane{margin:0 5px;}
 #threecol-left-middle .view-event-list{}
 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 10px; clear:both;} 
+.view-event-list li.first{background:none; padding-top:0px; clear:both;} 
 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
 .view-event-list li div.data{float:left;}
 
-/*features*/
-/*TODO */
-#threecol-left-middle .pane-feature_list-block_1{background:transparent url(../images/bg-boxbg.png) repeat-y 5px top;}
-#threecol-left-middle .pane-library_hours h3{height:30px; background:transparent url(../images/bg-box.png) no-repeat left top; padding:10px 0 0 20px;}
-#threecol-left-middle .view-feature-list{background:transparent url(../images/bg-box.png) no-repeat 5px top;} 
-#threecol-left-middle .view-feature-list ul{padding:40px 15px 50px 15px; margin:0 0 30px 0; background:transparent url(../images/bg-box.png) no-repeat 5px bottom;;}
-#threecol-left-middle .view-feature-list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;;}
-
-#threecol-right-inner {}
-/*libary location*/
-#threecol-right .pane-library_location{background:transparent url(../images/bg-boxbg.png) repeat-y left top; } /*margin:0 0 0 15px;*/
-#threecol-right .vcard{background:transparent url(../images/bg-box-gradient.png) no-repeat left top; min-height:150px;padding:15px 15px 10px 15px;}
-#threecol-right .library-map{color:#000; background:transparent url(../images/bg-box-gradient.png) no-repeat left bottom; padding:15px 15px 10px 15px;}
-#threecol-right .vcard .fn{}
-#threecol-right div.content img{margin:20px 0;}
-
+/*BOX sprite*/
+.box, 
+.box .vcard,
+.box .library-map,
+.pane-feature_list-block_1,
+.pane-feature_list-block_1  h3,
+.pane-feature_list-block_1 .view-feature-list ul,
+.pane-library_hours,
+.pane-library_hours h3,
+.pane-library_hours .office-hours-week
+{
+	background:transparent url(../images/sprite-box.png) no-repeat -700px 0; width:228px; overflow:hidden;
+}
 /*biblo adresse*/
-#threecol-right .library-map-inner{width:194px; height:140px;}
+.box{background-repeat: repeat-y;}
+.box .vcard{background-position:0px 0px; padding:15px; min-height:170px;}
+.box .library-map{background-position:-930px bottom;}
+.library-map{padding:15px 15px 10px 15px;}
+.library-map-inner{width:194px; height:140px; background:#f0f;}
+
+/*features*/
+.pane-feature_list-block_1{background-repeat: repeat-y; margin:0 0 0 10px;}
+.pane-feature_list-block_1  h3{padding:6px 0 0 20px; height:24px; background-position:-230px 0px;}
+.pane-feature_list-block_1 .view-feature-list ul{background-position:-930px bottom; padding:0px 0px 10px 20px; } /*TODO test*/
+.pane-feature_list-block_1 .view-feature-list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;;}
 
 /*åbningstider*/
+.pane-feature_list-block_1{background-repeat: repeat-y;}
+.pane-library_hours h3{padding:6px 0 0 20px; height:24px; background-position:-460px 0;}
+.pane-library_hours .office-hours-week{background-position:-930px bottom; padding:0 0 10px 0; }
 
-#threecol-right .pane-library_hours{background:transparent url(../images/bg-boxbg.png) repeat-y left top;}
-#threecol-right .pane-library_hours h3{height:30px; background:transparent url(../images/bg-box.png) no-repeat left top; padding:10px 0 0 20px;}
-.office-hours-week{ background:transparent url(../images/bg-box.png) no-repeat left bottom; padding:0 0 15px 0;}
-.office-hours-week .even,
-.office-hours-week .odd{
+.pane-library_hours .office-hours-week .even,
+.pane-library_hours .office-hours-week .odd{
 	width:190px; padding:0 10px; margin:0 10px;
 }
-.office-hours-week .even{background:#f3f5f5;}
-.office-hours-week .odd{background:#fff;}
-.week-info{margin:0 0 0 20px;}
+.pane-library_hours .office-hours-week .week-info{margin:0 0 0 20px;}
+
 .week-info a.prev{ color:#757575;}
 .week-info a.next{color:#757575;}
+.office-hours-week .odd{background:#f3f5f5;}
+.office-hours-week .even{background:#fff;}
+
 /* =====================================
 test
 /*--------------------------------------*/
 
 #page.pagetest{background:transparent url(../images/test.png) no-repeat 0 0; border: 1px solid #f0f;}
-.test{background:transparent url(../images/bg-trans-50.png) repeat 0 0;}
+.test{background:#f0f url(../images/bg-trans-50.png) repeat 0 0;}
 *.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}

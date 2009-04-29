@@ -83,7 +83,9 @@ a:hover, a:focus {
 /*headers*/
 h1,
 .view li div.title, 
-.view li div.title a{
+.view li div.title a,
+.view-library-list h3 a
+{
 	font-size:21px; line-height:25px; color:#050505;
 }
 
@@ -91,7 +93,6 @@ h1,
 .view-event-list li div.title a{
 	font-size:11px; line-height:15px; font-weight:bold;
 }
-
 
 .view .field-library-ref-nid,
 .view .created, 
@@ -105,11 +106,10 @@ h1,
 .more-link a,
 .view-feature-list li div.title,
 .view-feature-list li div.title a,
-.view-event-list li div{
+.view-event-list li div,
+{
 	font-size:10px; line-height:17px;
 }
-
-
 
 .office-hours-week{
 	font-size:11px; line-height:20px;
@@ -117,7 +117,7 @@ h1,
 .vcard{
 	font-size:11px; line-height:17px;
 }
-
+.pane-feature_list-block_1 h3,
 .pane-library_hours h3{
 	font-size:11px; line-height:20px; font-weight:bold;
 }
@@ -133,7 +133,7 @@ h1,
 	.view-event-list li div h4 a{color:#050505;}
 .vcard .fn{font-weight:bold;}
 
-
+.libary-status{	font-size:10px; line-height:17px; text-transform: uppercase; color:#fff;}
 
 
 #pagefooter{font-size:10px; line-height:13px;}
