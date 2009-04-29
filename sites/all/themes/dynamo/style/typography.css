@@ -95,6 +95,7 @@ h1,
 	font-size:11px; line-height:15px; font-weight:bold;
 }
 
+.node .meta,
 .view .view-empty,
 .view-event-list .libary-tag,
 .view .field-library-ref-nid,

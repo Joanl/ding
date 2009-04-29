@@ -80,9 +80,9 @@ Menu top
 node
 /*--------------------------------------*/
 .node .meta{}
-.node .meta span{display:block; }
+.node .meta span{}
 .node{margin:0 0 0 20px;}
-
+.node ul{margin:0;}
 
 /* =====================================
 comment -see moshpit  style/interface.css
