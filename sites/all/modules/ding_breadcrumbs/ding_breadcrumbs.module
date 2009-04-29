@@ -7,3 +7,52 @@
  * small bits of text, suitable for use in URLs.
  */
 
+/**
+ * Set breadcrumbs for library-related pages.
+ *
+ * @param object $library
+ *    The library node.
+ */
+function ding_breadcrumbs_set_library($library) {
+  $path_copy = $path = arg(); // Get all URL components from Drupal's arg function.
+
+  $trail = array(
+    l(t('Front page'), '<front>'),
+    l('Biblioteker', array_shift($path_copy)),
+  );
+
+  // Lets take all the path components before the last one.
+  while (count($path_copy) > 1) {
+    $piece = array_shift($path_copy);
+    $index = array_search($piece, $path);
+    if ($index == 1) {
+      $trail[] = l($library->title, $library->ding_slug);
+    }
+    else {
+      $trail[] = l(implode('/', array_slice($path, 0, $index)), _ding_breadcrumbs_get_name($path, $piece, $index));
+    }
+  }
+
+  // For the last component, we do mostly the same, besides the link.
+  $piece = array_shift($path_copy);
+  $index = array_search($piece, $path);
+  if ($index == 1) {
+    $trail[] = $library->title;
+  }
+  else {
+    $trail[] = _ding_breadcrumbs_get_name($path, $piece, $index);
+  }
+
+  drupal_set_breadcrumb($trail);
+}
+
+/**
+ * Try to figure out the real name of a path component.
+ */
+function _ding_breadcrumbs_get_name($path, $piece, $index) {
+  if ($index == 2) {
+    return drupal_ucfirst($piece);
+  }
+  return t('Unknown');
+}
+
