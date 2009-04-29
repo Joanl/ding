@@ -1,5 +1,5 @@
 ; $Id$
-name = Ding! slugs. 
+name = Ding! slugs
 description = Handles "slugs" for nodes, short names to be referenced in URLs
 package = Ding!
 core = 6.x
