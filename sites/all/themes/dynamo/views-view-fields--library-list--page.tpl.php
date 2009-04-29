@@ -1,4 +1,3 @@
-
 <div class="clearfix">
   <div class="picture">
     <?php print $fields['field_image_fid']->content; ?>  

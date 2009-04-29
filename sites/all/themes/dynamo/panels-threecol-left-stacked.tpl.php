@@ -1,3 +1,8 @@
+<?php
+/* =====================================
+
+* ------------------------------------- */
+?>
 <div id="threecol-left">
 
     <?php if (!empty($content['top'])): ?>
@@ -23,13 +28,7 @@
 </div>
 
 <div id="threecol-right">
-  <div id="threecol-right-inner">
-
     <?php if (!empty($content['right'])): ?>
       <?php print $content['right']; ?>
     <?php endif; ?>
-
-    
-  </div>
-</div>  
-
+</div>

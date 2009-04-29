@@ -4,22 +4,16 @@
 <?php if ($page == 0){ ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes ?> clearfix">
 
-  <div class="picture left grid12-2">
-    img goes here  
-  </div>
+  <div>
 
-  <div class="biblotek left grid12-3">
-    <div class="status"> test åbent</div>
   	<?php if($node->title){	?>	
       <h2><?php print l($node->title, 'node/'.$node->nid); ?></h2>
   	<?php } ?>
-    <?php  print_r($node->content['locations']['#value']); ?>
+
+    <?php print $content ?>
 
   </div>
 
-  <div id="openinghours left grid12-1">
-    åbningstider...
-  </div>
 
 </div>
 <?php }else{ 

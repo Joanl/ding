@@ -1,3 +1,4 @@
+
 <div id="twocol-left">
 
   <?php if (!empty($content['top'])): ?>
@@ -10,12 +11,6 @@
     <?php print $content['left']; ?>      
   </div>
 
-  <?php if (!empty($content['bottom'])): ?>
-    <div id="twocol-left-bottom">
-    <?php print $content['bottom']; ?>        
-    </div>
-  <?php endif; ?>
-
 
 </div>
 
@@ -27,3 +22,10 @@
 
 
 </div>  
+
+
+<?php if (!empty($content['bottom'])): ?>
+  <div id="twocol-bottom">
+  <?php print $content['bottom']; ?>        
+  </div>
+<?php endif; ?>
