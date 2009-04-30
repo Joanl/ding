@@ -166,6 +166,7 @@ bibloteks oversigtsiden
 
 .view-event-list .libary-tag div{display:inline;margin:0 5px 0 0;}
 
+
 /* =====================================
 Panels
 /*--------------------------------------*/
@@ -245,8 +246,11 @@ Bibloteks siden
 .pane-event_list-block_1 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
 .pane-event_list-block_1 .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
 .pane-event_list-block_1 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
-.pane-event_list-block_1 .view-event-list li div.info{}
+.pane-event_list-block_1 .view-event-list li div.info{float:left;}
 span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:0 0 0 14px;}
+
+.view-filters{width:690px;}
+.views-exposed-form .views-exposed-widget{float:right;}
 
 .view-empty{margin:0 0 0 20px;}
 
@@ -308,3 +312,6 @@ Cowboy
 
 #block-ding_library_map-0 h3{display:none;}
 #block-ding_library_map-0 {width:690px; margin:0 0 0 20px;}
+
+.pane-event_list-page_1 h3, 
+.pane-event_list-page_1 .view-filters{display:none;}
