@@ -18,13 +18,13 @@ foreach ($nodes as $node)
 {
 	$marker = array('latitude' => $node->location['latitude'], 
 									'longitude' => $node->location['longitude'], 
-									'markername' => 'ding_library_map_'.(($node->field_opening_hours_processed->status) ? $node->field_opening_hours_processed->status : 'open'),
+									'markername' => 'ding_library_map_'.$node->field_opening_hours_processed['status'],
 									'name' => $node->title,
 									'street' => $node->location['street'], 
 									'city' => $node->location['city'], 
 									'postal-code' => $node->location['postal_code'],
 									'opening_hours' => $node->field_opening_hours_processed['week'],
-									'state' => (($node->field_opening_hours_processed->status) ? $node->field_opening_hours_processed->status : 'open'), 
+									'state' => $node->field_opening_hours_processed['status'], 
 									'url' => url('node/'.$node->nid),
 									'text' => FALSE);
 	$map['markers'][] = $marker;
