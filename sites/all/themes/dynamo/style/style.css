@@ -145,7 +145,7 @@ bibloteks oversigtsiden
 /*--------------------------------------*/
 .libary-status{padding:0 5px; display:inline;}
 .libary-status.open{background:#71bf44;}
-.libary-status.close{background:#6b0046;}
+.libary-status.closed{background:#6b0046;}
 
 .view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
 .view-library-list li.first{background:none;}
@@ -154,7 +154,7 @@ bibloteks oversigtsiden
 .view-library-list .picture{
 	width:120px; height:120px; margin:0 20px 0 0; float:left;
 }
-.view-library-list .info{width:320px; ; margin:0 20px 0 0; float:left; }
+.view-library-list .info{width:355px; ; margin:0 20px 0 0; float:left; }
 .view-library-list .office-hours-week{width:175px; float:left;}
 .view-library-list .office-hours-week .week-info{background:#d1d9d7}
 .view-library-list .office-hours-week .odd, 
@@ -299,3 +299,11 @@ test
 #page.pagetest{background:transparent url(../images/test.png) no-repeat 0 0; border: 1px solid #f0f;}
 .test{background:#f0f url(../images/bg-trans-50.png) repeat 0 0;}
 *.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}
+
+
+/* =====================================
+Cowboy
+/*--------------------------------------*/
+
+#block-ding_library_map-0 h3{display:none;}
+#block-ding_library_map-0 {width:690px; margin:0 0 0 20px;}
