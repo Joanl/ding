@@ -148,7 +148,10 @@ bibloteks oversigtsiden
 .libary-status.open{background:#71bf44;}
 .libary-status.closed{background:#6b0046;}
 
+.view-event-list  li,
 .view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
+
+.view-event-list li.first
 .view-library-list li.first{background:none;}
 
 .view-event-list .picture,
@@ -246,7 +249,7 @@ Bibloteks siden
 .pane-event_list-block_1 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
 .pane-event_list-block_1 .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
 .pane-event_list-block_1 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
-.pane-event_list-block_1 .view-event-list li div.info{float:left;}
+.pane-event_list-block_1 .view-event-list li div.info{float:left; overflow:hidden; width:154px;}
 span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:0 0 0 14px;}
 
 .view-filters{width:690px;}
