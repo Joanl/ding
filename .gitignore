@@ -12,3 +12,6 @@ themes/bluemarine
 themes/chameleon
 themes/pushbutton
 *.tmproj
+.cache
+.project
+.settings
