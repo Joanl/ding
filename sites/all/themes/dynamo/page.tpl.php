@@ -81,9 +81,6 @@
                   <?php print $content_top; ?>
                 <?php } ?>
 
-                <?php if ($title){ ?>
-                  <h1><?php print $title; ?></h1>
-                <?php } ?>
                 
                 <?php print $content; ?>
 

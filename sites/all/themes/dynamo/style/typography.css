@@ -8,8 +8,7 @@
 	  orig_pix * em_value = wanted_pix
 	wanted_pix /  orig_pix = em_value
 * ------------------------------------- */
-
-body {
+body{
   font-size: 13px;
 	line-height:17px;
   color: #333333;
@@ -84,16 +83,21 @@ a:hover, a:focus {
 h1,
 .view li div.title, 
 .view li div.title a,
-.view-library-list h3 a
+.view-library-list h3 a,
+.view-event-list h2 a
 {
 	font-size:21px; line-height:25px; color:#050505;
 }
 
 .view-event-list li div.title,
+.view-event-list .time,
 .view-event-list li div.title a{
 	font-size:11px; line-height:15px; font-weight:bold;
 }
 
+.node .meta,
+.view .view-empty,
+.view-event-list .libary-tag,
 .view .field-library-ref-nid,
 .view .created, 
 .view .name{
@@ -101,12 +105,13 @@ h1,
 }
 
 #path,
-.view a, 
 .view li div.tid a,
 .more-link a,
-.view-feature-list li div.title,
-.view-feature-list li div.title a,
-.view-event-list li div,
+.pane-event_list-block_1 li div,
+.pane-event_list-block_1 h4 a,
+.pane-library_feature_list ul li,
+.view-feature-list li div.title a
+
 {
 	font-size:10px; line-height:17px;
 }
@@ -117,27 +122,40 @@ h1,
 .vcard{
 	font-size:11px; line-height:17px;
 }
-.pane-feature_list-block_1 h3,
-.pane-library_hours h3{
+
+.pane-library_feature_list h3,
+.pane-library_hours h3
+{
 	font-size:11px; line-height:20px; font-weight:bold;
 }
-.view li div.tid a{color:#fff; background-color: #b41630;}
+.view li div.tid a{color:#fff; background-color: #b41630; padding:2px;}
 
-/*calender*/
-.view-event-list .title{color:#000; font-weight:bold;}
-.view-event-list li div.leaf{font-family: Georgia, serif; text-align: center;}
-	.view-event-list li div.leaf .day{color:#fff; font-size:10px; line-height:15px;}
-	.view-event-list li div.leaf .date{font-size:32px; line-height:26px;}
-	.view-event-list li div.leaf .month{font-size:11px; line-height:15px;}
-	.view-event-list li div a{color:#666;}
-	.view-event-list li div h4 a{color:#050505;}
+/*calender block*/
+.pane-event_list-block_1 .title{color:#000; font-weight:bold;}
+.pane-event_list-block_1 li div.leaf{font-family: Georgia, serif; text-align: center;}
+	.pane-event_list-block_1 li div.leaf .day{color:#fff; font-size:10px; line-height:15px;}
+	.pane-event_list-block_1 li div.leaf .date{font-size:32px; line-height:26px;}
+	.pane-event_list-block_1 li div.leaf .month{font-size:11px; line-height:15px;}
+	.pane-event_list-block_1 li div a{color:#666;}
+	.pane-event_list-block_1 .view-event-list li div h4 a{color:#050505;line-height:8px;}
+	.pane-event_list-block_1 .view-event-list li div h4{line-height:8px;}
+
 .vcard .fn{font-weight:bold;}
 
 .libary-status{	font-size:10px; line-height:17px; text-transform: uppercase; color:#fff;}
 
 
 #pagefooter{font-size:10px; line-height:13px;}
-#pagefooter h3{font-size:12px; line-height:17px;
-  font-family: "Gills sans", Verdana, Arial, sans-serif; text-transform: uppercase;
+
+
+
+#pagefooter h3,
+.pane-event_list-block_1 h3,
+.pane-library_feature_list h3
+{
+	font-size:10px; line-height:17px;
+  font-family: "Gills sans light", Verdana, Arial, sans-serif; text-transform: uppercase;
+	font-weight: normal;
 }
+
 
