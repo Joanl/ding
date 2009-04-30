@@ -14,9 +14,10 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 /* sitename */	
 #site-name {text-indent: -9999em; margin: 0px 17px 0 720px; padding:17px 0 0 0; height:22px;}
 	body.admin-menu #site-name {margin: 12px 17px 0 720px;}
-	#site-name a{height:24px; width:252px; display: block; overflow:hidden; background:transparent url(../images/logo.png) no-repeat 0 0;}
+	#site-name a{height:24px; width:252px; display: block; overflow:hidden; background:transparent url(../images/logo-temp.png) no-repeat 0 0;}
+
 /* header */
-#pageheader{background:transparent url(../images/bg-header.png) no-repeat center -39px; margin:0 0 0 1px;}
+#pageheader{background:transparent url(../images/bg-header.png) no-repeat center -40px; margin:0 0 0 0px; min-height:200px;}
 	#top{height:145px;}
 		#search{width:600px; height:100px; overflow:hidden; margin:26px 0 0 56px; color:#fff;}
 		#account{width:260px;height:110px;  overflow:hidden; margin:30px 0 0 77px;}
@@ -35,29 +36,22 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 	body.sidebar-right #content{width:730px; float:left;}
 	#content-right{width:230px;float:left;}
 
-
-
-
 /* footer */	
 #pagefooter{background:transparent url(../images/bg-footer.png) no-repeat 0 bottom; padding:0 0 20px 0;}
 	#pagefooter-inner{padding:0px 32px 0 17px; background:transparent url(../images/bg-footer.png) no-repeat 0 top;}	
-		#pagefooter-inner div{width:196px; min-height:200px; padding:20px 20px 0 20px; background:transparent url(../images/bg-footer-divider.png) no-repeat left 0;}
+		#pagefooter-inner div{width:196px; min-height:200px; padding:10px 20px 0 20px; background:transparent url(../images/bg-footer-divider.png) no-repeat left 0;}
 		#pagefooter-inner div.first{background-image:none;}
-		
-.minheight{min-height:500px; height:auto !important; height:500px;}
+		#pagefooter ul li a{background:transparent url(../images/pil.png) no-repeat left center; padding:0 0 0 10px;}		
 
-/* =====================================
-Fonts
-/*--------------------------------------*/
-body{font-size:0.8em;}
-h1,h2,h3{font: 2.5em sans-serif; padding:0 0 0.5em 0; color:#000}
+.minheight{min-height:500px; height:auto !important; height:500px;}
 
 /* =====================================
 colours
 /*--------------------------------------*/
-body{color:#666666}
+body{color:#666}
 a, a:link, a:visited, a:active {color:#006a87;}
 a:hover, a:focus {color:#006a87;}
+li a.active{color:#006a87;}
 
 tr.odd{}
 tr.odd td{padding:5px;}
@@ -85,8 +79,10 @@ Menu top
 /* =====================================
 node
 /*--------------------------------------*/
-.node .meta{width:55px; overflow:hidden;}
-.node .meta span{display:block; }
+.node .meta{}
+.node .meta span{}
+.node{margin:0 0 0 20px;}
+.node ul{margin:0;}
 
 /* =====================================
 comment -see moshpit  style/interface.css
@@ -99,16 +95,14 @@ forum  -see moshpit  style/interface.css
 /* =====================================
 block
 /*--------------------------------------*/
-.block h3{font-size:1.5em;}
 
 /* =====================================
 Account
 /*--------------------------------------*/
 /*login*/
 #account h3{text-indent: -9999em; height:21px; background:transparent url(../images/logind.png) no-repeat 0 0; margin:10px 0 0 0; padding:0;}
-#account a{color:#fff;font-size:0.9em; text-decoration: underline;}
 #user-login-form input{ height:17px; margin:0; padding:0; background-color: #fff; border-top: 1px solid #ddd; border-left: 1px solid #ddd; }
-#user-login-form label{font-size:0.8em; color:#000;}
+
 /*overlabel*/
 #edit-name-wrapper,
 #edit-pass-wrapper{
@@ -132,14 +126,12 @@ Account
 /*
 search
 */
-#search p{font-size:0.7em; color:#eccdd3;}
 #search h3{text-indent: -9999em; height:55px; margin:0; padding:0; background:transparent url(../images/search.png) no-repeat 0 0; }
 	#edit-search-block-form-1-wrapper input{height:20px; width:465px; background:#fff url(../images/magnifier.png) no-repeat 9px 5px; border: 1px solid #999; margin:0; padding:4px 0 0 25px; font-size:1.2em; color:#929292;}
 	/*overlabel*/
 	#edit-search-block-form-1-wrapper{position:relative; width:506px; float:left;}
 	#edit-search-block-form-1-wrapper label.overlabel-apply {position:absolute; top:3px;	left:30px;	z-index:1; color:#929292;;}
 	#edit-search-block-form-1-wrapper input.submit{width:80px; height:25px;}
-	#edit-search-block-form-1-wrapper p{font-size:0.9em; color:#dfa1ab;}
 	#search span.button{float:left; display:block; height:29px; width:94px; background:transparent url(../images/searchbutton.png) no-repeat 0 0;;}
 	#search span.button input{ border:0; background:transparent; margin:5px 10px; color:transparent; font-weight:bold; text-indent: -9999em; }
 
@@ -149,67 +141,155 @@ teaser
  .node-teaser.node-library{background:transparent url(../images/bg-divider.png) no-repeat left top; padding:10px 0 0 0;}
 
 /* =====================================
-views
+bibloteks oversigtsiden
 /*--------------------------------------*/
-.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both;}
-.view-library-list li > div{margin:0 20px;}
-.view-library-list li div.title a{font-size:1.4em; color:#000;} 
-.view-library-list li div.address{float:left;}
-.view-library-list li div.field-opening-hours-scope{float:right;}
+.libary-status{padding:0 5px; display:inline;}
+.libary-status.open{background:#71bf44;}
+.libary-status.close{background:#6b0046;}
+
+.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
+.view-library-list li.first{background:none;}
+
+.view-event-list .picture,
+.view-library-list .picture{
+	width:120px; height:120px; margin:0 20px 0 0; float:left;
+}
+.view-library-list .info{width:320px; ; margin:0 20px 0 0; float:left; }
+.view-library-list .office-hours-week{width:175px; float:left;}
+.view-library-list .office-hours-week .week-info{background:#d1d9d7}
+.view-library-list .office-hours-week .odd, 
+.view-library-list .office-hours-week .even{
+	padding:0 5px;
+} 
+
+
+.view-event-list .libary-tag div{display:inline;margin:0 5px 0 0;}
+
 /* =====================================
 Panels
 /*--------------------------------------*/
+#front-top{width:960px; display:block; height:300px;}
+#front-bottom{width:960px;}
+#front-left{width:470px;float:left;}
+#front-middle {width:240px; float:left;}
 #twocol-left{width:710px; float:left; }
-#threecol-right{width:250px; float:left;}
 
-#threecol-left{width:710px; float:left; }
-	#threecol-left-left {width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top;}
-	#threecol-left-middle {width:240px; float:left;}
-#twocol-right{width:250px; float:left;}
+#twocol-right,
+#threecol-right{
+	width:250px; float:left;
+}
+
+#threecol-left{width:710px; float:left;}
+
+#twocol-left-left,
+#threecol-left-left, 
+#front-left {
+	width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px;
+}
 
 
+#twocol-left-left{width:710px}
+
+#threecol-left-middle {width:240px; float:left;}
 /* =====================================
 Bibloteks siden
 /*--------------------------------------*/
 /*biblo top*/
-#twocol-left-top h1 a, #threecol-left-top h1 a{color:#000;margin:20px 0 0 20px; }
-#twocol-left-top ul.item-list, #threecol-left-top ul.item-list{margin:0px 0 0 20px; }
-#twocol-left-top ul.item-list li, #threecol-left-top ul.item-list li {float:left; margin:0 30px 0 0;}
-#twocol-left-top, #threecol-left-top {background:transparent url(../images/bg-divider.png) no-repeat left bottom; height:300px}
+#twocol-left-top .picture,
+#threecol-left-top .picture{
+	margin:8px 0 20px 20px; 
+}
+#twocol-left-top .picture-inner,
+#threecol-left-top .picture-inner{
+	width:680px; height:200px; overflow:hidden; background:#eee;
+}	
+#twocol-left-top h1 a, 
+#threecol-left-top h1 a{
+	color:#000;margin:20px 0 0 20px; 
+}
+#twocol-left-top ul.item-list, 
+#threecol-left-top ul.item-list{
+	margin:10px 0 0 20px;
+}
+#twocol-left-top ul.item-list li, 
+#threecol-left-top ul.item-list li {
+	float:left; margin:0 30px 0 0;
+}
+#twocol-left-top, 
+#threecol-left-top {
+	background:transparent url(../images/bg-divider.png) no-repeat left bottom; min-height:314px;
+}
 
 /*biblo teasers*/
-#threecol-left-left .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 0 20px ;}
-#threecol-left-left .view .tid a{background:#b41630; color:#fff; padding:2px;}
-#threecol-left-left .view .title{color:#000; font-size:2em; line-height:1em;}
-#threecol-left-left .view .field-library-ref-nid,
-#threecol-left-left .view .created, 
-#threecol-left-left .view .name{
+#twocol-left-left .view li,
+#twocol-left-left .item-list li,
+#twocol-left-left .pane-library_about
+{background:transparent url(../images/bg-divider-small.png) no-repeat left bottom; padding:0px 20px 20px 20px;}
+
+.pane-article_list-block_1 .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
+.pane-article_list-block_1 .view li.first{background:none; padding-top:0;}
+.pane-article_list-block_1 .view .view-node{display:inline;}
+.pane-article_list-block_1 .view-empty{margin:20px 0 0 20px;}
+.pane-article_list-block_1 .more-link{margin:0 20px 0 20px;}
+.pane-article_list-block_1 .view .field-library-ref-nid,
+.pane-article_list-block_1 .view .created, 
+.pane-article_list-block_1 .view .name{
 	color:#999999; display:inline;
 }
-#threecol-left-left .view .field-teaser-value{}
-#threecol-left-left .view .view-node{display:inline;}
-#threecol-left-left .view-empty{margin:20px 0 0 20px;}
-#threecol-left-left .more-link{margin:0 20px 0 20px;}
+
 /*calender*/
-#threecol-left-middle  .panel-pane{margin:0 5px;}
-#threecol-left-middle .view-event-list{}
-/*.view-event-list li{ background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top;} TODO Flere time elementer ind så dato felter kan genereres*/
-#threecol-left-middle .view-event-list li{background:transparent url(../images/bg-calender.png) no-repeat 0 0; padding:0 0 0 55px;}
-#threecol-left-middle .view-event-list .title{color:#000; font-weight:bold;}
-#threecol-left-middle .view-event-list .field-datetime-value{}
-#threecol-left-middle .view-event-list .field-library-ref-nid{}
-#threecol-left-middle .view-event-list .field-entry-price-value{}
+.pane-event_list-block_1 .panel-pane{margin:0 5px;}
+.pane-event_list-block_1 h3{background:#d1d9d7; padding:3px 10px; margin:0 10px 0 14px;}
+.pane-event_list-block_1 .view-event-list{margin:10px 0 0 0;}
+.pane-event_list-block_1 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
+.pane-event_list-block_1 .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
+.pane-event_list-block_1 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
+.pane-event_list-block_1 .view-event-list li div.info{}
+span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:0 0 0 14px;}
+
+.view-empty{margin:0 0 0 20px;}
+
+
+/*BOX sprite*/
+.box, 
+.box .vcard,
+.box .library-map,
+.pane-library_feature_list,
+.pane-library_feature_list  h3,
+.pane-library_feature_list .item-list,
+.pane-library_hours,
+.pane-library_hours h3,
+.pane-library_hours .office-hours-week
+{
+	background:transparent url(../images/sprite-box.png) no-repeat 0px 0; width:228px; overflow:hidden;
+}
+/*biblo adresse*/
+.box{background-repeat: repeat-y;}
+.box .vcard{background-position:-460px 0px; padding:15px; min-height:170px;}
+.box .library-map{background-position:-700px bottom;}
+.box .library-map{padding:15px 15px 10px 15px;}
+.box .library-map-inner{width:194px; height:140px;}
+
 /*features*/
-#threecol-left-middle .view-feature-list{background:transparent url(../images/bg-box.png) no-repeat left bottom; } /*todo bottom fixes*/
-#threecol-left-middle .view-feature-list ul{padding:40px 15px 50px 15px; margin:0 0 30px 0; background:transparent url(../images/bg-box.png) no-repeat left top;}
-#threecol-left-middle .view-feature-list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;;}
+.pane-library_feature_list{background-repeat: repeat-y; margin:0 0 0 10px;}
+.pane-library_feature_list h3{background-position:-230px -30px; padding:10px 0 0 10px; height:18px; }
+.pane-library_feature_list .item-list{background-position:-700px bottom; padding:0px 0px 10px 20px; min-height:30px;}
+.pane-library_feature_list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;}
 
-#threecol-right div.content {background:transparent url(../images/bg-bibloinfo.png) no-repeat 0 0;padding:15px; margin:0 0 0 15px;}
-#threecol-right .vcard{color:#000;}
-#threecol-right .vcard .fn{font-weight:bold;}
-#threecol-right div.content img{margin:20px 0;}
+/*åbningstider*/
+.pane-feature_list-block_1{background-repeat: repeat-y;}
+.pane-library_hours h3{background-position:-230px -30px; padding:6px 0 0 20px; height:21px;}
+.pane-library_hours .office-hours-week{background-position:-700px bottom; padding:0 0 10px 0; }
 
-
+.pane-library_hours .office-hours-week .even,
+.pane-library_hours .office-hours-week .odd{
+	width:190px; padding:0 10px; margin:0 10px;
+}
+.pane-library_hours .office-hours-week .week-info{margin:0 0 0 20px;}
+.week-info a.prev{ color:#757575;}
+.week-info a.next{color:#757575;}
+.office-hours-week .odd{background:#f3f5f5;}
+.office-hours-week .even{background:#fff;}
 
 
 /* =====================================
@@ -217,5 +297,5 @@ test
 /*--------------------------------------*/
 
 #page.pagetest{background:transparent url(../images/test.png) no-repeat 0 0; border: 1px solid #f0f;}
-.test{background:transparent url(../images/bg-trans-50.png) repeat 0 0;}
+.test{background:#f0f url(../images/bg-trans-50.png) repeat 0 0;}
 *.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}

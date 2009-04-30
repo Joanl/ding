@@ -1,0 +1,15 @@
+/* $Id$ */
+
+/**
+ * @file draggable_checkboxes.css
+ * CSS tweaks for the draggable checkboxes module.
+ */
+
+/* Prevent form items from messing up our nice layout with their
+ * blockiness and margin. */
+table.draggable-checkboxes tr.draggable td div.form-item {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+

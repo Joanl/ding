@@ -81,9 +81,6 @@
                   <?php print $content_top; ?>
                 <?php } ?>
 
-                <?php if ($title){ ?>
-                  <h1><?php print $title; ?></h1>
-                <?php } ?>
                 
                 <?php print $content; ?>
 
@@ -113,29 +110,41 @@
 
             <div class="left first">
               <?php print $footer_one; ?>
+              <h3>metainformation</h3>
+              <ul>
+                <li><a href="http://some-site.com/">om websitet</a></li>
+                <li><a href="http://some-site.com/">om websitet</a></li>
+                <li><a href="http://some-site.com/">om websitet</a></li>
+                <li><a href="http://some-site.com/">om websitet</a></li>                
+              </ul>
               footer Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  
             </div>
 
             <div class="left">
               <?php print $footer_two; ?>
+              <h3>e-resourcer</h3>
               footer Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.    
             </div>
 
             <div class="left">
-              <?php print $footer_three; ?>              
+              <?php print $footer_three; ?>             
+              <h3>bibliotekerne tilbyder</h3> 
               footer Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.    
             </div>
 
             <div class="left">
               <?php print $footer_four; ?>              
+              <h3>om biblotekerne</h3>
               footer Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  
+            	<?php if ($footer_message) { ?>
+            	  <?php print $footer_message; ?>
+            	<?php } ?>
+
+              <?php print $footer; ?>
+
+
             </div>
 
-          	<?php if ($footer_message) { ?>
-          	  <?php print $footer_message; ?>
-          	<?php } ?>
-  
-            <?php print $footer; ?>
   
       
           </div>

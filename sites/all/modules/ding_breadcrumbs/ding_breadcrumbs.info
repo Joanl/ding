@@ -1,0 +1,7 @@
+; $Id$
+name = Ding! breadcrumbs 
+description = Provides customised breadcrumb navigation for libraries, search, etc.
+package = Ding!
+core = 6.x
+dependencies[] = custom_breadcrumbs
+
