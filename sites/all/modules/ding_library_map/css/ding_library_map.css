@@ -7,14 +7,15 @@
 .block-ding_library_map .resize:active { outline: 0 none; }
 
 /* library information box */
-#library-info { position: absolute; width: 174px; font: 10px verdana, sans-serif; padding-bottom: 7px; background-position: left bottom; background-repeat: no-repeat; }
+#library-info { position: absolute; width: 174px; padding-bottom: 7px; background-position: left bottom; background-repeat: no-repeat; }
+#library-info * { font: 10px verdana, sans-serif; }
 #library-info .frame { border: 1px solid #fff; border-width: 1px 1px 0 1px; }
 #library-info .inner { border-width: 4px; border-style: solid; padding: 7px; background: #fff; }
 #library-info.open { background-image: url(../img/anchor-open.png); }
 #library-info.open .inner { border-color: #3fba27; }
 #library-info.closed { background-image: url(../img/anchor-closed.png); }
 #library-info.closed .inner { border-color: #620037; }
-#library-info h3 { font-size: 100%; font-weight: bold; }
+#library-info h3 { display: block; margin: 0; font-size: 100%; font-weight: bold; }
 #library-info .opening-hours { background:  url(../img/opening-hours-background.png) no-repeat top left; margin: 8px 0 0 -7px; padding: 6px 0 0 7px; }
 #library-info .opening-hours dt,
 #library-info .opening-hours dd { margin: 0; padding: 0; }

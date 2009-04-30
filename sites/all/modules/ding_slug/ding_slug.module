@@ -129,6 +129,7 @@ function ding_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE) {
     return FALSE;
   }
 
+  ding_breadcrumbs_set_library($node);
   return ctools_context_create('node', $node);
 }
 

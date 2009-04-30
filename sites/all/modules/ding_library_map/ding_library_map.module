@@ -6,20 +6,32 @@
  * Displays library nodes on a map with additional information shown on mouse over
  */
 
-function ding_library_map_block($op = 'list', $delta = 0, $edit = array())
-{
-  $func = __FUNCTION__.'_'.$op;
-  return $func($delta, $edit);
+/**
+ * Implementation of hook_block.
+ */
+function ding_library_map_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks = array();
+      $blocks[0] = array(
+        'info' => t('Ding library map'),
+        'cache' => BLOCK_CACHE_GLOBAL,
+      );
+      return $blocks;
+    case 'view':
+      return ding_library_map_block_view($delta);
+  }
 }
 
-function ding_library_map_block_list($delta = 0, $edit = array())
-{
-  $block[0]["info"] = t('Library map');
-  return $block;
-}
-
-function ding_library_map_block_view($delta = 0, $edit = array())
-{
+/**
+ * Render the block output.
+ *
+ * @param integer $delta
+ *    The block delta.
+ * @return array
+ *    Rendered block with subject and content.
+ */
+function ding_library_map_block_view($delta = 0) {
   $nodes = db_query("SELECT location_instance.nid AS nid,
              location.latitude AS location_latitude,
              location.longitude AS location_longitude,
@@ -42,8 +54,10 @@ function ding_library_map_block_view($delta = 0, $edit = array())
   return $block;
 }
 
-function ding_library_map_theme($existing, $type, $theme, $path)
-{  
+/**
+ * Implementation of hook_theme().
+ */
+function ding_library_map_theme($existing, $type, $theme, $path) {  
   return array(
     'ding_library_map' => array(
       'arguments' => array('nodes' => NULL),
