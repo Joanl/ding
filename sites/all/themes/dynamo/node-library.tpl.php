@@ -22,7 +22,7 @@
 
 
   	<?php if($node->title){	?>	
-      <h3><?php print l($node->title, 'biblioteker/'.$node->nid); ?></h3>
+      <h3><?php print l($node->title, 'biblioteker/'.$node->nid); ?>...</h3>
   	<?php } ?>
     
       <?php print $node->locations['0']['street'];?><br/> 
