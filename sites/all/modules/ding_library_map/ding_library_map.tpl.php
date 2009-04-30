@@ -25,7 +25,7 @@ foreach ($nodes as $node)
 									'postal-code' => $node->location['postal_code'],
 									'opening_hours' => $node->field_opening_hours_processed['week'],
 									'state' => $node->field_opening_hours_processed['status'], 
-									'url' => url('node/'.$node->nid),
+									'url' => url('node/'.$node->nid, array('absolute' => TRUE)),
 									'text' => FALSE);
 	$map['markers'][] = $marker;
 }

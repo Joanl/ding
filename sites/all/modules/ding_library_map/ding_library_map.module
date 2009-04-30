@@ -54,6 +54,21 @@ function ding_library_map_block_view($delta = 0) {
   return $block;
 }
 
+function ding_library_map_gmap($hook, &$map) {
+	if ($hook == 'pre_theme_map')
+	{
+		foreach ($map['markers'] as $i => $marker)
+		{
+			//If the marker text contain no actual content then reset it to avoid normal behavior
+			//e.g. showing an empty Google Map pop up
+			if ($marker['text'] != '<div class="gmap-popup"></div>')
+			{
+				$map['marker'][$i]['text'] = NULL;
+			}
+		}
+	}
+}
+
 /**
  * Implementation of hook_theme().
  */

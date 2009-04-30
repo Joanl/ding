@@ -111,8 +111,15 @@ Drupal.dingLibraryMap = function(mapId, options)
 				day = nextDay; //step to day after last day in current section
 			}
 		
+			//Update css classes to reflect open state
 			$('#library-info').removeClass('open').removeClass('closed').addClass(object.state);
-		
+			
+			//Add click handler
+			$('#library-info').unbind('click').click(function()
+			{
+				window.location = object.url;
+			})
+			
 			//Position and show info
 			point = this.getMap().map.fromLatLngToContainerPixel(object.marker.getLatLng());
 			$('#library-info').css({ 'left': (point.x-5)+'px', 'top': (point.y- $('#library-info').outerHeight())+'px' }).show();		
