@@ -83,6 +83,7 @@ Drupal.dingLibraryMap = function(mapId, options)
 					endTime = object.opening_hours[[days[day]]][0].end;
 					
 					while (	(nextDay < days.length) &&
+									(object.opening_hours[[days[nextDay]]]) &&
 									(startTime != null) && (endTime != null) && 
 									(startTime == object.opening_hours[[days[nextDay]]][0].start) &&
 									(endTime == object.opening_hours[[days[nextDay]]][0].end)) {
