@@ -1,5 +1,5 @@
 /* resize button for expanding and contracting map */
-.block-ding_library_map .content { position: relative; }
+.block-ding_library_map .block-content { position: relative; }
 .block-ding_library_map .resize { position: absolute; left: 49%; bottom: -13px; display: block; width: 21px; height: 24px; background: url(../img/resize-button.png) no-repeat top left; text-indent: -9999px; }
 .block-ding_library_map .resize.expand { background-position: left top; }
 .block-ding_library_map .resize.contract { background-position: left -24px; }
