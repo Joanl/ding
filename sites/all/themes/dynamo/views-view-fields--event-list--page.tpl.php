@@ -2,6 +2,7 @@
   //converts the date value to time
   $date = strtotime($fields['field_datetime_value']->raw);
 ?>
+
 <div class="clearfix">
   <div class="picture">
     <?php print $fields['field_image_fid']->content; ?>  
