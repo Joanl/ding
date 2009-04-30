@@ -75,32 +75,37 @@ Drupal.dingLibraryMap = function(mapId, options)
 			while (day < days.length) //iterate until end of week
 			{
 				sectionDays = [days[day]]; //add current day to to section
-				startTime = object.opening_hours[days[day]+'_start'];
-				endTime = object.opening_hours[days[day]+'_end'];
-			
 				nextDay = day + 1;
-				while ((startTime != null) && (endTime != null) && 
-								(startTime == object.opening_hours[days[nextDay]+'_start']) &&
-								(endTime == object.opening_hours[days[nextDay]+'_end'])) {
-					sectionDays.push(days[nextDay]); //if following days have same hours as current day then add these days to section
-					nextDay++;
-				}
-			
-				if (sectionDays.length > 1) {
-					sectionDays = this.shortDayNames[sectionDays.shift()]+'-'+this.shortDayNames[sectionDays.pop()]; //use short day names if section spans more than one day
-				} else {
-					sectionDays = this.fullDayNames[sectionDays.shift()]; //use full day name for section spanning a single day
-				}
-			
-				startTime = (startTime != null) ? startTime.substr(0, startTime.lastIndexOf(':')) : '';
-				endTime = (endTime != null) ? endTime.substr(0, endTime.lastIndexOf(':')) : '';
-			
-				//add section to opening hours container
-				section.append('<dt>'+sectionDays+'</dt>');
-				section.append(	'<dd>'+
-													startTime +' - '+endTime+
-												'</dd>');
-			
+
+				if (object.opening_hours[[days[day]]])
+				{
+					startTime = object.opening_hours[[days[day]]][0].start;
+					endTime = object.opening_hours[[days[day]]][0].end;
+					
+					while (	(nextDay < days.length) &&
+									(startTime != null) && (endTime != null) && 
+									(startTime == object.opening_hours[[days[nextDay]]][0].start) &&
+									(endTime == object.opening_hours[[days[nextDay]]][0].end)) {
+						sectionDays.push(days[nextDay]); //if following days have same hours as current day then add these days to section
+						nextDay++;
+					}
+				
+					if (sectionDays.length > 1) {
+						sectionDays = this.shortDayNames[sectionDays.shift()]+'-'+this.shortDayNames[sectionDays.pop()]; //use short day names if section spans more than one day
+					} else {
+						sectionDays = this.fullDayNames[sectionDays.shift()]; //use full day name for section spanning a single day
+					}
+				
+					startTime = (startTime != null) ? startTime.substr(0, startTime.lastIndexOf(':')) : '';
+					endTime = (endTime != null) ? endTime.substr(0, endTime.lastIndexOf(':')) : '';
+				
+					//add section to opening hours container
+					section.append('<dt>'+sectionDays+'</dt>');
+					section.append(	'<dd>'+
+														startTime +' - '+endTime+
+													'</dd>');
+				}	
+						
 				day = nextDay; //step to day after last day in current section
 			}
 		

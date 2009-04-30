@@ -18,13 +18,13 @@ foreach ($nodes as $node)
 {
 	$marker = array('latitude' => $node->location['latitude'], 
 									'longitude' => $node->location['longitude'], 
-									'markername' => 'ding_library_map_open',
+									'markername' => 'ding_library_map_'.(($node->field_opening_hours_processed->status) ? $node->field_opening_hours_processed->status : 'open'),
 									'name' => $node->title,
 									'street' => $node->location['street'], 
 									'city' => $node->location['city'], 
 									'postal-code' => $node->location['postal_code'],
-									'opening_hours' => $node->field_opening_hours[0], //TODO replace with active opening hours
-									'state' => 'open', 
+									'opening_hours' => $node->field_opening_hours_processed['week'],
+									'state' => (($node->field_opening_hours_processed->status) ? $node->field_opening_hours_processed->status : 'open'), 
 									'url' => url('node/'.$node->nid),
 									'text' => FALSE);
 	$map['markers'][] = $marker;
@@ -49,7 +49,7 @@ foreach ($nodes as $node)
 										 								'sun': '<?php echo t('Sun') ?>' }
 	};
 								
-	$(document).ready(function()
+	jQuery(function()
 	{
 		Drupal.dingLibraryMap('<?php echo $mapId; ?>', options)
 	});
