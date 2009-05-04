@@ -31,7 +31,7 @@ function ding_panels_theme($existing, $type, $theme, $path) {
  * Tells CTools (and thus Panels) where to look for plugin code.
  */
 function ding_panels_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'ctools') {
+  if ($module == 'ctools' || $module == 'panels') {
     return 'plugins/' . $plugin;
   }
 }

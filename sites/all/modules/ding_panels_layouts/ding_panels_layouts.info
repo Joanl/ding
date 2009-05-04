@@ -1,7 +1,0 @@
-; $Id$
-name = Ding! panel layouts
-description = Provides custom layouts for Panels, used on library pages, etc.
-package = Ding!
-core = 6.x
-dependencies[] = panels
-
