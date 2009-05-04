@@ -1,5 +1,5 @@
 <?php
-// $Id: term.inc,v 1.3 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: term.inc,v 1.4 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -19,6 +19,7 @@ function ctools_term_ctools_arguments() {
     'context' => 'ctools_term_context',
     'default' => array('input_form' => 'tid'),
     'settings form' => 'ctools_term_settings_form',
+    'placeholder form' => 'ctools_term_ctools_argument_placeholder',
   );
   return $args;
 }
@@ -86,3 +87,21 @@ function ctools_term_settings_form(&$form, &$form_state, $conf) {
   );
 }
 
+/**
+ * Form fragment to get an argument to convert a placeholder for preview.
+ */
+function ctools_term_ctools_argument_placeholder($conf) {
+  switch ($conf['input_form']) {
+    case 'tid':
+    default:
+      return array(
+        '#type' => 'textfield',
+        '#description' => t('Enter a taxonomy term ID.'),
+      );
+    case 'term':
+      return array(
+        '#type' => 'textfield',
+        '#description' => t('Enter a taxonomy term name.'),
+      );
+  }
+}

@@ -1,5 +1,5 @@
 <?php
-// $Id: node_edit_form.inc,v 1.3 2009/01/13 01:38:53 merlinofchaos Exp $
+// $Id: node_edit_form.inc,v 1.6 2009/04/23 20:53:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -19,6 +19,10 @@ function ctools_node_edit_form_ctools_contexts() {
     'settings form validate' => 'ctools_context_node_edit_form_settings_form_validate',
     'keyword' => 'node_edit',
     'context name' => 'node_edit_form',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the node ID of a node for this argument:'),
+    ),
   );
   return $args;
 }
@@ -58,6 +62,7 @@ function ctools_context_create_node_edit_form($empty, $node = NULL, $conf = FALS
     $context->form_id    = $form_id;
     $context->form_title = $node->title;
     $context->node_type  = $node->type;
+    $context->restrictions['type'] = array($node->type);
     return $context;
   }
 }
@@ -78,7 +83,7 @@ function ctools_context_node_edit_form_settings_form($conf, $external = FALSE) {
     '#title' => t('Enter the title or NID of a post'),
     '#type' => 'textfield',
     '#maxlength' => 512,
-    '#autocomplete_path' => 'ctools/node/autocomplete',
+    '#autocomplete_path' => 'ctools/autocomplete/node',
     '#weight' => -10,
   );
 

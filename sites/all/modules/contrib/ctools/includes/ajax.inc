@@ -1,5 +1,5 @@
 <?php
-// $Id: ajax.inc,v 1.5 2009/03/24 18:32:44 merlinofchaos Exp $
+// $Id: ajax.inc,v 1.6 2009/04/20 21:29:46 merlinofchaos Exp $
 
 /**
  * @file
@@ -54,6 +54,9 @@
  * - css
  *   - selector: The CSS selector to add CSS to.
  *   - argument: An array of 'key': 'value' CSS selectors to set.
+ *
+ * - settings
+ *   - argument: An array of settings to add to Drupal.settings via $.extend
  *
  * Commands are usually created with a couple of helper functions, so they
  * look like this:
@@ -272,6 +275,21 @@ function ctools_ajax_command_css($selector, $argument) {
   return array(
     'command' => 'css',
     'selector' => $selector,
+    'argument' => $argument,
+  );
+}
+
+/**
+ * Create a settings command for the AJAX responder.
+ *
+ * This will extend Drupal.settings with the given array.
+ *
+ * @param $argument
+ *   An array of key: value pairs to add to the settings.
+ */
+function ctools_ajax_command_settings($argument) {
+  return array(
+    'command' => 'settings',
     'argument' => $argument,
   );
 }

@@ -1,12 +1,12 @@
 <?php
-// $Id: context-task-handler.inc,v 1.5 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: context-task-handler.inc,v 1.8 2009/04/28 20:37:06 merlinofchaos Exp $
 
 /**
  * @file
  * Support for creating 'context' type task handlers.
  *
  * Context task handlers expect the task to provide 0 or more contexts. The
- * task handler should use those contexts as selection criteria, as well as
+ * task handler should use those contexts as selection rules, as well as
  * rendering with them.
  *
  * The functions and forms in this file should be common to every context type
@@ -26,6 +26,8 @@
  *   The id of the subtask in use.
  * @param $contexts
  *   The context objects in use.
+ * @param $args
+ *   The raw arguments behind the contexts.
  * @param $page
  *   If TRUE then this renderer owns the page and can use theme('page')
  *   for no blocks; if false, output is returned regardless of any no
@@ -34,14 +36,14 @@
  *   Either the output or NULL if there was output, FALSE if no handler
  *   accepted the task. If $page is FALSE then the $info block is returned instead.
  */
-function ctools_context_handler_render($task, $subtask_id, $contexts, $page = TRUE) {
+function ctools_context_handler_render($task, $subtask_id, $contexts, $args, $page = TRUE) {
   // Load the landlers, choosing only enabled handlers.
   $handlers = delegator_load_sorted_handlers($task, $subtask_id, TRUE);
 
   // Try each handler.
   foreach ($handlers as $handler) {
     if ($function = delegator_get_renderer($handler)) {
-      if ($info = $function($handler, $contexts)) {
+      if ($info = $function($handler, $contexts, $args)) {
         // If we don't own the page, let the caller deal with rendering.
         if (!$page) {
           return $info;
@@ -75,7 +77,7 @@ function ctools_context_handler_render($task, $subtask_id, $contexts, $page = TR
  *   The context objects provided by the task.
  *
  * @return
- *   TRUE if these contexts match the selection criteria. NULL or FALSE
+ *   TRUE if these contexts match the selection rules. NULL or FALSE
  *   otherwise.
  */
 function ctools_context_handler_select($handler, $contexts) {
@@ -162,7 +164,9 @@ function ctools_context_handler_get_handler_contexts($contexts, $handler) {
  */
 function ctools_context_handler_get_all_contexts($task, $subtask_id, $handler) {
   $object = ctools_context_handler_get_task_object($task, $subtask_id, $handler);
-  return ctools_context_load_contexts($object, TRUE);
+  $contexts = ctools_context_load_contexts($object, TRUE);
+  ctools_context_handler_set_access_restrictions($task, $subtask_id, $handler, $contexts);
+  return $contexts;
 }
 
 /**
@@ -205,7 +209,29 @@ function ctools_context_handler_get_task_arguments($task, $subtask_id) {
 }
 
 /**
- * Form to choose context based selection criteria for a task handler.
+ * Set any access restrictions on the contexts for a handler.
+ *
+ * Both the task and the handler could add restrictions to the contexts
+ * based upon the access control. These restrictions might be useful
+ * to limit what kind of content appears in the add content dialog;
+ * for example, if we have an access item that limits a node context
+ * to only 'story' and 'page' types, there is no need for content that
+ * only applies to the 'poll' type to appear.
+ */
+function ctools_context_handler_set_access_restrictions($task, $subtask_id, $handler, &$contexts) {
+  // First, for the task:
+  if ($function = ctools_plugin_get_function($task, 'access restrictions')) {
+    $function($task, $subtask_id, $contexts);
+  }
+
+  // Then for the handler:
+  if (isset($handler->conf['access'])) {
+    ctools_access_add_restrictions($handler->conf['access'], $contexts);
+  }
+}
+
+/**
+ * Form to choose context based selection rules for a task handler.
  *
  * The configuration will be assumed to go simply in $handler->conf and
  * will be keyed by the argument ID.
@@ -228,7 +254,7 @@ function ctools_context_handler_edit_criteria(&$form, &$form_state) {
 }
 
 /**
- * Submit handler for criteria selection
+ * Submit handler for rules selection
  */
 function ctools_context_handler_edit_criteria_submit(&$form, &$form_state) {
   $form_state['handler']->conf['access']['logic'] = $form_state['values']['logic'];

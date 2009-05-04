@@ -1,5 +1,5 @@
 <?php
-// $Id: node.inc,v 1.2 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: node.inc,v 1.6 2009/04/23 20:53:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -21,6 +21,12 @@ function ctools_node_ctools_contexts() {
     'settings form submit' => 'ctools_context_node_settings_form_submit',
     'keyword' => 'node',
     'context name' => 'node',
+    'convert list' => 'ctools_context_node_convert_list',
+    'convert' => 'ctools_context_node_convert',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the node ID of a node for this context.'),
+    ),
   );
   return $args;
 }
@@ -30,16 +36,7 @@ function ctools_node_ctools_contexts() {
  * are not always created from the UI.
  */
 function ctools_context_create_node($empty, $data = NULL, $conf = FALSE) {
-  $types = array('node');
-  // FIXME this is broken when called from ctools_page's render process, through ctools_context_load_contexts(); it passes in $conf as TRUE.
-  if (!empty($conf['types'])) {
-    foreach ($conf['types'] as $type) {
-      if ($type) {
-        $types[] = 'node-' . $type;
-      }
-    }
-  }
-  $context = new ctools_context($types);
+  $context = new ctools_context('node');
   $context->plugin = 'node';
 
   if ($empty) {
@@ -65,12 +62,8 @@ function ctools_context_create_node($empty, $data = NULL, $conf = FALSE) {
     $context->data     = $data;
     $context->title    = $data->title;
     $context->argument = $data->nid;
-    if (is_array($context->type)) {
-      $context->type[] = 'node-' . $data->type;
-    }
-    else {
-      $context->type = array($context->type, 'node-' . $data->type);
-    }
+
+    $context->restrictions['type'] = array($data->type);
     return $context;
   }
 }
@@ -97,7 +90,7 @@ function ctools_context_node_settings_form($conf, $external = FALSE) {
     '#title' => t('Enter the title or NID of a post'),
     '#type' => 'textfield',
     '#maxlength' => 512,
-    '#autocomplete_path' => 'ctools/node/autocomplete',
+    '#autocomplete_path' => 'ctools/autocomplete/node',
     '#weight' => -10,
   );
 
@@ -174,3 +167,27 @@ function ctools_context_node_settings_form_submit($form, &$form_values, &$form_s
   unset($form_values['set_identifier']);
 }
 
+/**
+ * Provide a list of ways that this context can be converted to a string.
+ */
+function ctools_context_node_convert_list() {
+  return array(
+    'nid' => t('Node ID'),
+    'title' => t('Node title'),
+    'uid' => t('Author UID'),
+  );
+}
+
+/**
+ * Convert a context into a string.
+ */
+function ctools_context_node_convert($context, $type) {
+  switch ($type) {
+    case 'nid':
+      return $context->data->nid;
+    case 'title':
+      return $context->data->title;
+    case 'uid':
+      return $context->data->uid;
+  }
+}

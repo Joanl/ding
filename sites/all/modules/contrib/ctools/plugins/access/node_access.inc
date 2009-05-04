@@ -1,5 +1,5 @@
 <?php
-// $Id: node_access.inc,v 1.4 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: node_access.inc,v 1.6 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,11 +7,11 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_node_access_ctools_access() {
   $args['node_access'] = array(
-    'title' => t("Node access by node security"),
+    'title' => t("Node: Access status"),
     'description' => t('Control access with built in Drupal node access test.'),
     'callback' => 'ctools_node_access_ctools_access_check',
     'default' => array('type' => 'view'),

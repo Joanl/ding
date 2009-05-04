@@ -1,5 +1,5 @@
 <?php
-// $Id: node_language.inc,v 1.4 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: node_language.inc,v 1.6 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,12 +7,12 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_node_language_ctools_access() {
   if (module_exists('locale')) {
     $items['node_language'] = array(
-      'title' => t("Node access by language"),
+      'title' => t("Node: Language"),
       'description' => t('Control access by node language.'),
       'callback' => 'ctools_node_language_ctools_access_check',
       'default' => array('language' => array()),

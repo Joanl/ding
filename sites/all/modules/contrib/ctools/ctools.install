@@ -1,5 +1,5 @@
 <?php
-// $Id: ctools.install,v 1.6 2009/02/14 20:24:10 merlinofchaos Exp $
+// $Id: ctools.install,v 1.7 2009/04/20 21:45:09 merlinofchaos Exp $
 
 /**
  * @file
@@ -143,5 +143,20 @@ function ctools_update_6002() {
   $schema = ctools_schema_2();
 
   db_create_table($ret, 'ctools_css_cache', $schema['ctools_css_cache']);
+  return $ret;
+}
+
+/**
+ * Take over for the panels_views module if it was on.
+ */
+function ctools_update_6003() {
+  $ret = array();
+
+  $result = db_result(db_query("SELECT status FROM {system} WHERE name = 'panels_views'"));
+  if ($result) {
+    $ret[] = update_sql("DELETE from {system} WHERE name = 'panels_views'");
+    drupal_install_modules(array('views_content'));
+  }
+
   return $ret;
 }

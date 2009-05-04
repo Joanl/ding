@@ -1,5 +1,5 @@
 <?php
-// $Id: delegator.admin.inc,v 1.24 2009/03/27 01:57:57 merlinofchaos Exp $
+// $Id: delegator.admin.inc,v 1.29 2009/04/30 21:51:41 merlinofchaos Exp $
 
 /**
  * @file
@@ -25,33 +25,6 @@ define('DGA_CHANGED_DELETED', 0x04);
  * Bit flag on the 'changed' value to tell us if an item has had its disabled status changed.
  */
 define('DGA_CHANGED_STATUS', 0x08);
-
-/**
- * Reset the active menu trail to the trail specified by the task type.
- *
- * The task type can specify an 'admin path'. If it does,
- * 'admin/build/delegator' will be removed from the active trail and replaced
- * with whatever is in the admin path; that way task types can provide
- * their own administration.
- */
-function delegator_set_trail($task, $task_name = NULL) {
-  $task_type = delegator_get_task_type($task['task type']);
-  if (empty($task_type['admin path'])) {
-    return;
-  }
-
-  ctools_include('menu');
-  $trail = menu_get_active_trail();
-  $remove = ctools_get_menu_trail('admin/build/delegator');
-  foreach ($remove as $id => $info) {
-    if (isset($trail[$id])) {
-      unset($trail[$id]);
-    }
-  }
-
-  $trail = array_merge(ctools_get_menu_trail($task_type['admin path']), $trail);
-  menu_set_active_trail($trail);
-}
 
 /**
  * Get the cached changes to a group of task handlers for
@@ -132,6 +105,8 @@ function delegator_admin_set_task_cache($task, $subtask_id, $cache) {
   // Then write it.
   $key = delegator_make_task_name($task['name'], $subtask_id);
   ctools_include('object-cache');
+
+  $cache->changed = TRUE;
   $cache = ctools_object_cache_set('delegator_handlers', $key, $cache);
 }
 
@@ -500,8 +475,12 @@ function delegator_admin_list_form(&$form_state) {
     '#submit' => array('delegator_admin_list_form_cancel'),
   );
 
-  $form['#delegator-lock'] = $cache->locked;
-  $form['#task-name'] = $form_state['task_name'];
+  if (!empty($cache->locked)) {
+    $form['warning'] = array('#value' => theme('delegator_admin_lock', $cache->locked, $form_state['task_name']));
+  }
+  else if (!empty($cache->changed)) {
+    $form['warning'] = array('#value' => theme('delegator_admin_changed'));
+  }
 
   // Set up a list of callbacks for our actions. This method allows
   // clever form_alter uses to add more actions easily.
@@ -553,25 +532,46 @@ function delegator_admin_make_dropdown_links($actions) {
 }
 
 /**
+ * Draw the "this task is locked from editing" box.
+ */
+function theme_delegator_admin_lock($lock, $task_name) {
+  $account  = user_load($lock->uid);
+  $name     = theme('username', $account);
+  $lock_age = format_interval(time() - $lock->updated);
+  $break    = url('admin/build/delegator/' . $task_name . '/break-lock', array('query' => array('destination' => $_GET['q'], 'cancel' => $_GET['q'])));
+
+  ctools_add_css('ctools');
+  $output = '<div class="ctools-locked">';
+  $output .= t('This task handler is being edited by user !user, and is therefore locked from editing by others. This lock is !age old. Click here to <a href="!break">break this lock</a>.', array('!user' => $name, '!age' => $lock_age, '!break' => $break));
+  $output .= '</div>';
+  return $output;
+}
+
+/**
+ * Draw the "you have unsaved changes and this task is locked." message.
+ */
+function theme_delegator_admin_changed() {
+  ctools_add_css('ctools');
+  $output = '<div class="ctools-owns-lock">';
+  $output .= t('You have modified this task handler but the changes have not yet been permanently saved. It will be locked for editing by others until you save or cancel these changes.');
+  $output .= '</div>';
+
+  return $output;
+}
+
+/**
  * Theme the form so it has a table.
  */
 function theme_delegator_admin_list_form($form) {
   $output = '';
-  if (!empty($form['#delegator-lock'])) {
-    $account  = user_load($form['#delegator-lock']->uid);
-    $name     = theme('username', $account);
-    $lock_age = format_interval(time() - $form['#delegator-lock']->updated);
-    $break    = url('admin/build/delegator/' . $form['#task-name'] . '/break-lock');
 
-    $output .= '<div class="delegator-locked">';
-    $output .= t('This task is being edited by user !user, and is therefore locked from editing by others. This lock is !age old. Click here to <a href="!break">break this lock</a>.', array('!user' => $name, '!age' => $lock_age, '!break' => $break));
-    $output .= '</div>';
+  if (isset($form['warning'])) {
+    $output .= drupal_render($form['warning']);
   }
-
   if (isset($form['description'])) {
     $output .= drupal_render($form['description']);
   }
-  if (isset($form['subatsk_description'])) {
+  if (isset($form['subtask_description'])) {
     $output .= drupal_render($form['subtask_description']);
   }
 
@@ -780,7 +780,7 @@ function delegator_admin_list_form_submit($form, &$form_state) {
       // @todo -- do we need to clear the handler weight here?
     }
     // Otherwise, check to see if it has moved and, if so, update the weight.
-    elseif ($info['weight'] != $form_state['task_handlers'][$id]->weight) {
+    elseif ($info['weight'] != isset($form_state['task_handlers']) && $form_state['task_handlers'][$id]->weight) {
       // Theoretically we could only do this for in code objects, but since our
       // load mechanism checks for all, this is less database work.
       delegator_update_task_handler_weight($form_state['task_handlers'][$id], $info['weight']);
@@ -894,6 +894,9 @@ function delegator_admin_list_form_action_clone($form, &$form_state, $id, $actio
   // Get the next weight from the form
   $handler->weight = delegator_admin_update_weights($form_state);
 
+  $handler->export_type = EXPORT_IN_DATABASE;
+  $handler->type = t('Normal');
+
   // Generate a unique name. Unlike most named objects, we don't let people choose
   // names for task handlers because they mostly don't make sense.
   $base = $form_state['task']['name'];
@@ -912,6 +915,10 @@ function delegator_admin_list_form_action_clone($form, &$form_state, $id, $actio
 
   $handler->name = $name;
   unset($handler->did);
+
+  if ($function = ctools_plugin_load_function('delegator', 'task_handlers', $handler->handler, 'clone')) {
+    $function($handler);
+  }
 
   // Store the new handler.
   if (!$form_state['cache']->locked) {
@@ -974,7 +981,7 @@ function delegator_administer_task_handler_export($task_name, $name) {
   drupal_set_title(t('Export task handler "@title"', array('@title' => $title)));
 
   ctools_include('export');
-  delegator_set_trail($task);
+  delegator_set_trail($task, $task_name);
   return drupal_get_form('ctools_export_form', delegator_export_task_handler($handler), $title);
 }
 
@@ -1037,7 +1044,7 @@ function delegator_administer_task_handler_edit($task_name, $handler_id, $name, 
   $title = delegator_get_handler_title($plugin, $handler, $task, $subtask_id);
   drupal_set_title(t('Edit task handler "@title"', array('@title' => $title)));
 
-  delegator_set_trail($task);
+  delegator_set_trail($task, $task_name);
   $form_state = array(
     'step' => $step,
     'task_name' => $task_name,
@@ -1053,6 +1060,13 @@ function delegator_administer_task_handler_edit($task_name, $handler_id, $name, 
 
   ctools_include('wizard');
   $output = ctools_wizard_multistep_form($form_info, $step, $form_state);
+
+  if (!empty($cache->locked)) {
+    $output = theme('delegator_admin_lock', $cache->locked, $task_name) . $output;
+  }
+  else if (!empty($cache->changed)) {
+    $output = theme('delegator_admin_changed') . $output;
+  }
 
   drupal_add_css(drupal_get_path('module', 'delegator') . '/css/task-handlers.css');
   if (!empty($plugin['forms'][$step]['no blocks'])) {
@@ -1216,7 +1230,7 @@ function delegator_administer_break_lock(&$form_state, $task_name) {
   $form = array();
 
   $task = delegator_get_task($task_id);
-  delegator_set_trail($task);
+  delegator_set_trail($task, $task_name);
 
   // @todo put task title here, but also needs subtask support.
   if (empty($lock)) {

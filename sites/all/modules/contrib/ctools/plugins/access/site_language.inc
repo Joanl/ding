@@ -1,5 +1,5 @@
 <?php
-// $Id: site_language.inc,v 1.3 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: site_language.inc,v 1.5 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,13 +7,13 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_site_language_ctools_access() {
   if (module_exists('locale')) {
     $items['site_language'] = array(
-      'title' => t("Access by site language"),
-      'description' => t('Control access by the language the site currently uses.'),
+      'title' => t("User: language"),
+      'description' => t('Control access by the language the user or site currently uses.'),
       'callback' => 'ctools_site_language_ctools_access_check',
       'default' => array('language' => array()),
       'settings form' => 'ctools_site_language_ctools_access_settings',

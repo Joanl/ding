@@ -1,5 +1,5 @@
 <?php
-// $Id: node_edit.inc,v 1.6 2009/02/06 22:32:21 merlinofchaos Exp $
+// $Id: node_edit.inc,v 1.9 2009/04/30 20:08:32 merlinofchaos Exp $
 
 /**
  * Specialized implementation of hook_delegator_tasks(). See api-task.html for
@@ -7,26 +7,24 @@
  */
 function delegator_node_edit_delegator_tasks() {
   return array(
-    'node_edit' => array(
-      // This is a 'page' task and will fall under the page admin UI
-      'task type' => 'page',
+    // This is a 'page' task and will fall under the page admin UI
+    'task type' => 'page',
 
-      'title' => t('Node edit'),
-      'description' => t('The node edit task allows you to control what handler will handle the job of editing a node at the path <em>node/%node/edit</em>. It also handles the node add page at node/add/%type. If no handler is set or matches the criteria, the default Drupal node renderer will be used. Please note that some modules sufficiently customize their node add and edit procedure that this may not successfully override adding or editing of all types.'),
-      'admin title' => 'Node edit', // translated by menu system
-      'admin description' => 'Overrides for the built in node edit handler at <em>node/%node/edit</em>.',
-      'admin path' => 'node/%node/edit',
+    'title' => t('Node edit'),
+    'description' => t('The node edit task allows you to control what handler will handle the job of editing a node at the path <em>node/%node/edit</em>. It also handles the node add page at node/add/%type. If no handler is set or matches the criteria, the default Drupal node renderer will be used. Please note that some modules sufficiently customize their node add and edit procedure that this may not successfully override adding or editing of all types.'),
+    'admin title' => 'Node edit', // translated by menu system
+    'admin description' => 'Overrides for the built in node edit handler at <em>node/%node/edit</em>.',
+    'admin path' => 'node/%node/edit',
 
-      // Menu hooks so that we can alter the node/%node menu entry to point to us.
-      'hook menu' => 'delegator_node_edit_menu',
-      'hook menu alter' => 'delegator_node_edit_menu_alter',
+    // Menu hooks so that we can alter the node/%node menu entry to point to us.
+    'hook menu' => 'delegator_node_edit_menu',
+    'hook menu alter' => 'delegator_node_edit_menu_alter',
 
-      // This is task uses 'context' handlers and must implement these to give the
-      // handler data it needs.
-      'handler type' => 'context',
-      'get arguments' => 'delegator_node_edit_get_arguments',
-      'get context placeholders' => 'delegator_node_edit_get_contexts',
-    ),
+    // This is task uses 'context' handlers and must implement these to give the
+    // handler data it needs.
+    'handler type' => 'context',
+    'get arguments' => 'delegator_node_edit_get_arguments',
+    'get context placeholders' => 'delegator_node_edit_get_contexts',
   );
 }
 
@@ -73,7 +71,8 @@ function delegator_node_edit($node) {
   ctools_include('context-task-handler');
   $contexts = ctools_context_handler_get_task_contexts($task, '', array($node));
 
-  $output = ctools_context_handler_render($task, '', $contexts);
+  $arg = array(isset($node->nid) ? $node->nid : $node->type);
+  $output = ctools_context_handler_render($task, '', $contexts, $arg);
   if ($output === FALSE) {
     // Fall back!
     // We've already built the form with the context, so we can't build it again, or
@@ -122,7 +121,7 @@ function delegator_node_edit_get_arguments($task, $subtask_id) {
     array(
       'keyword' => 'node',
       'identifier' => t('Node being edited'),
-      'id' => 0,
+      'id' => 1,
       'name' => 'node_edit',
       'settings' => array(),
     ),

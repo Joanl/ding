@@ -1,5 +1,5 @@
 <?php
-// $Id: nid.inc,v 1.7 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: nid.inc,v 1.8 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -16,6 +16,10 @@ function ctools_nid_ctools_arguments() {
     'keyword' => 'node',
     'description' => t('Creates a node context from a node ID argument.'),
     'context' => 'ctools_argument_nid_context',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the node ID of a node for this argument'),
+    ),
   );
   return $args;
 }

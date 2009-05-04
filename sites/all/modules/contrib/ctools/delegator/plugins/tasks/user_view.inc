@@ -1,5 +1,5 @@
 <?php
-// $Id: user_view.inc,v 1.6 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: user_view.inc,v 1.7 2009/04/28 20:37:06 merlinofchaos Exp $
 
 /**
  * Specialized implementation of hook_delegator_tasks(). See api-task.html for
@@ -55,7 +55,7 @@ function delegator_user_view($account) {
   ctools_include('context-task-handler');
   $contexts = ctools_context_handler_get_task_contexts($task, '', array($account));
 
-  $output = ctools_context_handler_render($task, '', $contexts);
+  $output = ctools_context_handler_render($task, '', $contexts, array($account->uid));
   if ($output === FALSE) {
     // Fall back!
     module_load_include('inc', 'user', 'user.pages');
@@ -76,7 +76,7 @@ function delegator_user_view_get_arguments($task, $subtask_id) {
     array(
       'keyword' => 'user',
       'identifier' => t('User being viewed'),
-      'id' => 0,
+      'id' => 1,
       'name' => 'uid',
       'settings' => array(),
     ),

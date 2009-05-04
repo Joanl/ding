@@ -1,5 +1,5 @@
 <?php
-// $Id: page.admin.inc,v 1.13 2009/03/27 22:22:29 merlinofchaos Exp $
+// $Id: page.admin.inc,v 1.21 2009/04/30 22:02:59 merlinofchaos Exp $
 
 /**
  * @file
@@ -25,16 +25,17 @@ function delegator_page_menu(&$items, $task) {
   );
 
   $items['admin/build/pages/add'] = array(
-    'title' => 'Add page',
+    'title' => 'Add custom page',
     'description' => 'Add a delegator page subtask.',
     'page callback' => 'delegator_page_add_subtask',
+    'page arguments' => array('page'),
     'type' => MENU_LOCAL_TASK,
   ) + $base;
   $items['admin/build/pages/import'] = array(
     'title' => 'Import page',
     'description' => 'Import a delegator page subtask.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('delegator_page_import_subtask'),
+    'page arguments' => array('delegator_page_import_subtask', 'page'),
     'type' => MENU_LOCAL_TASK,
   ) + $base;
 
@@ -48,9 +49,9 @@ function delegator_page_menu(&$items, $task) {
       $default_task = TRUE;
       // Add the callback for the default tab.
       $items["admin/build/pages/edit/%"] = array(
-        'title' => t('Edit'),
+        'title' => 'Edit',
         'page callback' => 'delegator_page_edit_subtask',
-        'page arguments' => array(4, $step),
+        'page arguments' => array('page', 4, $step),
         'type' => MENU_CALLBACK,
       ) + $base;
 
@@ -68,49 +69,49 @@ function delegator_page_menu(&$items, $task) {
     $items["admin/build/pages/edit/%/$step"] = array(
       'title' => $form_title,
       'page callback' => 'delegator_page_edit_subtask',
-      'page arguments' => array(4, 5),
+      'page arguments' => array('page', 4, 5),
       'type' => $type,
       'weight' => $weight++,
     ) + $base;
   }
 
   $items["admin/build/pages/delete/%"] = array(
-    'title' => t('Delete'),
+    'title' => 'Delete',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('delegator_page_delete_subtask', 4),
     'type' => MENU_CALLBACK,
   ) + $base;
 
   $items["admin/build/pages/break-lock/%"] = array(
-    'title' => t('Break lock'),
+    'title' => 'Break lock',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('delegator_page_break_lock_subtask', 4),
     'type' => MENU_CALLBACK,
   ) + $base;
 
   $items["admin/build/pages/clone/%"] = array(
-    'title' => t('Clone'),
+    'title' => 'Clone',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('delegator_page_clone_subtask', 4),
     'type' => MENU_CALLBACK,
   ) + $base;
 
   $items["admin/build/pages/export/%"] = array(
-    'title' => t('Clone'),
+    'title' => 'Export',
     'page callback' => 'delegator_page_export_subtask',
     'page arguments' => array(4),
     'type' => MENU_CALLBACK,
   ) + $base;
 
   $items["admin/build/pages/enable/%"] = array(
-    'title' => t('Break lock'),
+    'title' => 'Enable',
     'page callback' => 'delegator_page_enable_subtask',
     'page arguments' => array(4),
     'type' => MENU_CALLBACK,
   ) + $base;
 
   $items["admin/build/pages/disable/%"] = array(
-    'title' => t('Disable'),
+    'title' => 'Disable',
     'page callback' => 'delegator_page_disable_subtask',
     'page arguments' => array(4),
     'type' => MENU_CALLBACK,
@@ -141,7 +142,13 @@ function delegator_page_menu(&$items, $task) {
     $load_arguments   = array($subtask_id, '%index');
 
     // Replace named placeholders with our own placeholder to load contexts.
-    foreach (explode('/', $subtask->path) as $position => $bit) {
+    $position = 0;
+    foreach (explode('/', $subtask->path) as $bit) {
+      // Remove things like double slashes completely.
+      if (!isset($bit) || $bit === '') {
+        continue;
+      }
+
       if ($bit[0] == '%' && $bit != '%') {
         // If an argument, swap it out with our argument loader and make sure
         // the argument gets passed through to the page callback.
@@ -149,20 +156,24 @@ function delegator_page_menu(&$items, $task) {
         $page_arguments[]   = $position;
         $access_arguments[] = $position;
       }
-      else {
+      else if ($bit[0] != '!') {
         $path[] = $bit;
       }
+
+      // Increment position. We do it like this to skip empty items that
+      // could happen from erroneous paths like: this///that
+      $position++;
     }
 
     $menu_path = implode('/', $path);
 
-    $items[$menu_path] = delegator_page_menu_item($subtask->menu, $access_arguments, $page_arguments, $load_arguments);
+    $items[$menu_path] = delegator_page_menu_item($task, $subtask->menu, $access_arguments, $page_arguments, $load_arguments);
 
     // Add a parent menu item if one is configured.
     if ($subtask->menu['type'] == 'default tab' && $subtask->menu['parent']['type'] != 'none') {
       array_pop($path);
       $parent_path = implode('/', $path);
-      $items[$parent_path] = delegator_page_menu_item($subtask->menu['parent'], $access_arguments, $page_arguments, $load_arguments);
+      $items[$parent_path] = delegator_page_menu_item($task, $subtask->menu['parent'], $access_arguments, $page_arguments, $load_arguments);
     }
   }
 }
@@ -185,7 +196,7 @@ function delegator_page_menu(&$items, $task) {
  * @param $load_arguments
  *   Arguments to send to the arg loader; should be the subtask id and '%index'.
  */
-function delegator_page_menu_item($menu, $access_arguments, $page_arguments, $load_arguments) {
+function delegator_page_menu_item($task, $menu, $access_arguments, $page_arguments, $load_arguments) {
   $item = array(
     'access callback' => 'ctools_access_menu',
     'access arguments' => $access_arguments,
@@ -230,12 +241,20 @@ function delegator_page_menu_item($menu, $access_arguments, $page_arguments, $lo
  * Get the cached changes to a given task handler.
  */
 function delegator_page_get_page_cache($name) {
+  // This ensures the task .inc file is loaded
+  $task = delegator_get_task('page');
+
   ctools_include('object-cache');
   $cache = ctools_object_cache_get('delegator_page', $name);
   if (!$cache) {
-    // This ensures the task .inc file is loaded
-    $task = delegator_get_task('page');
     $cache = delegator_page_load($name);
+  }
+
+  if ($name != '::new') {
+    $cache->locked = ctools_object_cache_test('delegator_page', $name);
+  }
+  else {
+    $cache->locked = FALSE;
   }
 
   return $cache;
@@ -245,8 +264,16 @@ function delegator_page_get_page_cache($name) {
  * Store changes to a task handler in the object cache.
  */
 function delegator_page_set_page_cache($page) {
+  // This ensures the task .inc file is loaded
+  $task = delegator_get_task('page');
+
+  if (!empty($page->locked)) {
+    return;
+  }
+
   $name = isset($page->new) || !isset($page->name) ? '::new' : $page->name;
   ctools_include('object-cache');
+  $page->changed = TRUE;
   $cache = ctools_object_cache_set('delegator_page', $name, $page);
 }
 
@@ -254,58 +281,76 @@ function delegator_page_set_page_cache($page) {
  * Remove an item from the object cache.
  */
 function delegator_page_clear_page_cache($name) {
+  // This ensures the task .inc file is loaded
+  $task = delegator_get_task('page');
+
   ctools_include('object-cache');
   ctools_object_cache_clear('delegator_page', $name);
 }
 
 /**
- * Get a list of named arguments in a delegator page path.
- *
- * @param $path
- *   A normal Drupal path.
- *
- * @return
- *   An array of % marked variable arguments, keyed by the argument's name.
- *   The value will be the position of the argument so that it can easily
- *   be found. Items with a position of -1 have multiple positions.
+ * Draw the "this task is locked from editing" box.
  */
-function delegator_page_get_named_arguments($path) {
-  $arguments = array();
-  $bits = explode('/', $path);
-  foreach ($bits as $position => $bit) {
-    if ($bit && $bit[0] == '%') {
-      // special handling for duplicate path items and substr to remove the %
-      $arguments[substr($bit, 1)] = isset($arguments[$bit]) ? -1 : $position;
-    }
-  }
+function theme_delegator_page_lock($lock, $page_name) {
+  $account  = user_load($lock->uid);
+  $name     = theme('username', $account);
+  $lock_age = format_interval(time() - $lock->updated);
+  $break    = url('admin/build/pages/break-lock/' . $page_name, array('query' => array('destination' => $_GET['q'], 'cancel' => $_GET['q'])));
 
-  return $arguments;
+  ctools_add_css('ctools');
+  $output = '<div class="ctools-locked">';
+  $output .= t('This page is being edited by user !user, and is therefore locked from editing by others. This lock is !age old. Click here to <a href="!break">break this lock</a>.', array('!user' => $name, '!age' => $lock_age, '!break' => $break));
+  $output .= '</div>';
+  return $output;
+}
+
+/**
+ * Draw the "you have unsaved changes and this task is locked." message.
+ */
+function theme_delegator_page_changed() {
+  ctools_add_css('ctools');
+  $output = '<div class="ctools-owns-lock">';
+  $output .= t('You have modified this page but the changes have not yet been permanently saved. It will be locked for editing by others until you update or cancel these changes.');
+  $output .= '</div>';
+
+  return $output;
 }
 
 /**
  * Page callback to add a subtask.
  */
-function delegator_page_add_subtask($step = NULL) {
-  // We load the task to make sure our .inc file is loaded.
-  $task = delegator_get_task('page');
+function delegator_page_add_subtask($task_name, $step = NULL) {
+  // We load the 'page' task to make sure our .inc file is loaded.
+  delegator_get_task('page');
 
-  $form_info = delegator_page_edit_form_info();
+  $task = delegator_get_task($task_name);
+
+  $function = ctools_plugin_get_function($task, 'form info');
+  $form_info = $function();
+
   $form_info += array(
-    'path' => 'admin/build/pages/add/%step',
+    'path' => $form_info['add path'],
   );
+
+  if (!empty($form_info['add order'])) {
+    $form_info['order'] = $form_info['add order'];
+  }
 
   // If step is unset, we're creating a new one. Wipe out our values and start
   // over.
   if (!isset($step) || !$page = delegator_page_get_page_cache('::new')) {
-    $step      = 'basic';
-    $page      = delegator_page_new();
-    $page->new = TRUE;
+    $step         = current(array_keys($form_info['order']));
+    $page         = delegator_page_new();
+    $page->task   = $task_name;
+    $page->new    = TRUE;
+    $page->locked = FALSE;
     delegator_page_set_page_cache($page);
   }
 
   ctools_include('wizard');
   $form_state = array(
     'cache name' => '::new',
+    'task' => $task,
     'page' => $page,
     'type' => 'add',
   );
@@ -322,28 +367,38 @@ function delegator_page_add_subtask($step = NULL) {
 /**
  * Page callback to add a subtask.
  */
-function delegator_page_edit_subtask($page_name, $step = NULL) {
+function delegator_page_edit_subtask($task_name, $page_name, $step = NULL) {
   if (!$page = delegator_page_get_page_cache($page_name)) {
     return drupal_not_found();
   }
 
   // We load the task to make sure our .inc file is loaded.
-  $task = delegator_get_task('page');
+  $task = delegator_get_task($task_name);
 
+  $function = ctools_plugin_get_function($task, 'form info');
+  $form_info = $function();
+
+  $path = str_replace('%page_name', $page_name, $form_info['edit path']);
   $form_info = array(
-    'path' => "admin/build/pages/edit/$page_name/%step",
+    'path' => $path,
     'show trail' => FALSE,
     'show return' => TRUE,
+    'show cancel' => TRUE,
     'return path' => 'admin/build/pages',
-  ) + delegator_page_edit_form_info();
+  ) + $form_info;
+
+  if (!empty($form_info['edit order'])) {
+    $form_info['order'] = $form_info['edit order'];
+  }
 
   // If step is unset, go with the basic step.
   if (!isset($step)) {
-    $step = 'basic';
+    $step = current(array_keys($form_info['order']));
   }
 
   ctools_include('wizard');
   $form_state = array(
+    'task' => $task,
     'cache name' => $page_name,
     'page' => $page,
     'type' => 'edit',
@@ -353,6 +408,13 @@ function delegator_page_edit_subtask($page_name, $step = NULL) {
   if (!$output) {
     // redirect.
     drupal_redirect_form(array(), $form_state['redirect']);
+  }
+
+  if (!empty($page->locked)) {
+    $output = theme('delegator_page_lock', $page->locked, $page_name) . $output;
+  }
+  else if (!empty($page->changed)) {
+    $output = theme('delegator_page_changed') . $output;
   }
 
   return $output;
@@ -400,7 +462,7 @@ function delegator_page_add_subtask_finish(&$form_state) {
     $handler = delegator_new_task_handler($task, $page->name, $plugin, 0, $cache);
     $form_state['redirect'] = delegator_admin_new_task_handler($handler, $task_name, $task, $page->name, $cache, $plugin);
   }
-  else if ($form_state['type'] == 'add') {
+  else if ($form_state['type'] == 'add' && !empty($form_state['task']['uses handlers'])) {
     // Redirect to the new page's task handler editor.
     $form_state['redirect'] = 'admin/build/delegator/page-' . $page->name;
   }
@@ -457,7 +519,7 @@ function delegator_page_form_basic(&$form, &$form_state) {
   $form['path'] = array(
     '#type' => 'textfield',
     '#title' => t('Path'),
-    '#description' => t('The URL path to get to this page. You may create placeholders in the path by using %, or named placeholders by using %name. For example: "node/%node/foo", "forum/%forum" or "dashboard/%input". Named placeholders can be turned into contexts on the arguments form.'),
+    '#description' => t('The URL path to get to this page. You may create named placeholders for variable parts of the path by using %name for required elements and !name for optional elements. For example: "node/%node/foo", "forum/%forum" or "dashboard/!input". These named placeholders can be turned into contexts on the arguments form.'),
     '#default_value' => $page->path,
   );
 }
@@ -473,6 +535,10 @@ function delegator_page_form_basic_validate(&$form, &$form_state) {
   // Ensure path is unused by other pages.
   $pages = delegator_page_load_all();
   $name = !empty($form_state['values']['name']) ? $form_state['values']['name'] : $form_state['page']->name;
+  if (empty($name)) {
+    form_error($form['name'], t('Name is required.'));
+  }
+
   foreach ($pages as $page) {
     if ($page->name != $name && $page->path == $form_state['values']['path'] && empty($page->disabled)) {
       form_error($form['path'], t('That path is used by another page: @page', array('@page' => $page->admin_title)));
@@ -484,11 +550,32 @@ function delegator_page_form_basic_validate(&$form, &$form_state) {
 
   // Replace named placeholders with our own placeholder to load contexts.
   $path = array();
+  if (empty($form_state['values']['path'])) {
+    form_error($form['path'], t('Path is required.'));
+    // stop processing here if there is no path.
+    return;
+  }
+
+  $found = FALSE;
+  $error = FALSE;
   foreach (explode('/', $form_state['values']['path']) as $bit) {
+    if (!isset($bit) || $bit === '') {
+      continue;
+    }
+
     if ($bit[0] == '%') {
+      if ($found) {
+        form_error($form['path'], t('You cannot have a dynamic path element after an optional path element.'));
+      }
       $path[] = '%';
     }
+    else if ($bit[0] == '!') {
+      $found = TRUE;
+    }
     else {
+      if ($found) {
+        form_error($form['path'], t('You cannot have a static path element after an optional path element.'));
+      }
       $path[] = $bit;
     }
   }
@@ -535,6 +622,11 @@ function delegator_page_form_basic_validate(&$form, &$form_state) {
  * Store the values from the basic settings form.
  */
 function delegator_page_form_basic_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   if (!isset($form_state['page']->pid) && empty($form_state['page']->import)) {
     $form_state['page']->name = $form_state['values']['name'];
   }
@@ -687,6 +779,11 @@ function delegator_page_form_menu(&$form, &$form_state) {
  * Submit handler for the menu form for add/edit page task.
  */
 function delegator_page_form_menu_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   $form_state['page']->menu = $form_state['values']['menu'];
 }
 
@@ -714,6 +811,11 @@ function delegator_page_form_access(&$form, &$form_state) {
  * Submit handler to deal with access control changes.
  */
 function delegator_page_form_access_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   $form_state['page']->access['logic'] = $form_state['values']['logic'];
 }
 
@@ -729,6 +831,7 @@ function delegator_page_form_argument(&$form, &$form_state) {
   $form['table'] = array(
     '#theme' => 'delegator_page_form_argument_table',
     '#delegator-path' => $path,
+    'argument' => array(),
   );
 
   $cache_name = $form_state['cache name'];
@@ -991,6 +1094,11 @@ function delegator_page_argument_form_change(&$form, &$form_state) {
  * Submit handler to change an argument.
  */
 function delegator_page_argument_form_change_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   $page     = &$form_state['page'];
   $keyword  = &$form_state['keyword'];
   $argument = $form_state['values']['argument'];
@@ -1100,13 +1208,17 @@ function delegator_page_argument_form_settings_validate(&$form, &$form_state) {
  * Submit handler for argument settings.
  */
 function delegator_page_argument_form_settings_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   if ($function = ctools_plugin_get_function($form_state['plugin'], 'settings form submit')) {
     $function($form, $form_state);
   }
 
   $page = &$form_state['page'];
   $keyword = &$form_state['keyword'];
-
   // Copy the form to our temporary location which will get moved again when
   // finished. Yes, finished is always next but finish can happen from other
   // locations so we funnel through that path rather than duplicate.
@@ -1124,7 +1236,7 @@ function delegator_page_argument_form_settings_submit(&$form, &$form_state) {
  * task handlers.
  */
 function delegator_page_argument_form_multiple(&$form, &$form_state) {
-  $task = delegator_get_task('page');
+  $task = $form_state['task'];
   $task_handlers = delegator_load_task_handlers($task, $form_state['page']->name);
 
   $form['multiple'] = array(
@@ -1144,7 +1256,6 @@ function delegator_page_argument_form_multiple(&$form, &$form_state) {
     $form['multiple']['#description'] .= t('You may not modify this value while multiple task handlers exist. If you wish to change this to single only, you must reduce the number of task handlers attached to the page to zero or one.');
   }
 
-  $form_state['task'] = $task;
   $form_state['task_handlers'] = $task_handlers;
 
   if ($form_state['type'] == 'add' || empty($task_handlers)) {
@@ -1169,6 +1280,11 @@ function delegator_page_argument_form_multiple(&$form, &$form_state) {
  * Submit handler for the multiple form.
  */
 function delegator_page_argument_form_multiple_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   $form_state['page']->multiple = $form_state['values']['multiple'];
 
   // The task handler will be created in the _finish hook.
@@ -1182,9 +1298,10 @@ function delegator_page_argument_form_multiple_submit(&$form, &$form_state) {
  */
 function delegator_page_break_lock_subtask(&$form_state, $name) {
   // This ensures the task .inc file is loaded
-  $task = delegator_get_task('page');
+  delegator_get_task('page');
   $page = delegator_page_load($name);
 
+  $form_state['task'] = delegator_get_task($page->task);
   $form_state['name'] = $name;
 
   ctools_include('object-cache');
@@ -1195,9 +1312,6 @@ function delegator_page_break_lock_subtask(&$form_state, $name) {
   if (empty($lock)) {
     return array('message' => array('#value' => t('There is no lock on this page to break.')));
   }
-
-  $task = delegator_get_task($page->task);
-  delegator_set_trail($task);
 
   $cancel = 'admin/build/pages';
   if (!empty($_REQUEST['cancel'])) {
@@ -1226,7 +1340,9 @@ function delegator_page_break_lock_subtask_submit(&$form, &$form_state) {
 /**
  * Import a task handler from cut & paste
  */
-function delegator_page_import_subtask(&$form_state) {
+function delegator_page_import_subtask(&$form_state, $task_name) {
+  $form_state['task'] = delegator_get_task($task_name);
+
   drupal_set_title(t('Import page'));
   $form['name'] = array(
     '#type' => 'textfield',
@@ -1311,7 +1427,10 @@ function delegator_page_import_subtask_submit($form, &$form_state) {
   }
 
   delegator_page_set_page_cache($page);
-  $form_state['redirect'] = 'admin/build/pages/edit/' . $page->name;
+  $function = ctools_plugin_get_function($form_state['task'], 'form info');
+  $form_info = $function();
+
+  $form_state['redirect'] = str_replace('%page_name/%step', $page->name, $form_info['edit path']);
 }
 
 /**
@@ -1319,8 +1438,9 @@ function delegator_page_import_subtask_submit($form, &$form_state) {
  */
 function delegator_page_export_subtask($name, $handlers = FALSE) {
   // This ensures the task .inc file is loaded
-  $task = delegator_get_task('page');
+  delegator_get_task('page');
   $page = delegator_page_load($name);
+  $form_state['task'] = delegator_get_task($page->task);
 
   if (!$page) {
     return drupal_not_found();
@@ -1342,10 +1462,11 @@ function delegator_page_export_subtask($name, $handlers = FALSE) {
 /**
  * Entry point to clone a page.
  */
-function delegator_page_clone_subtask(&$form_state, $name) {
+function delegator_page_clone_subtask(&$form_state, $task_name, $name) {
   // This ensures the task .inc file is loaded
-  $form_state['task'] = delegator_get_task('page');
+  delegator_get_task('page');
   $page = delegator_page_load($name);
+  $form_state['task'] = delegator_get_task($page->task);
 
   if (!$page) {
     drupal_not_found();
@@ -1420,7 +1541,10 @@ function delegator_page_clone_subtask_submit(&$form, &$form_state) {
   unset($page->pid);
 
   delegator_page_set_page_cache($page);
-  $form_state['redirect'] = 'admin/build/pages/edit/' . $page->name;
+  $function = ctools_plugin_get_function($task, 'form info');
+  $form_info = $function();
+
+  $form_state['redirect'] = str_replace('%page_name/%step', $page->name, $form_info['edit path']);
 }
 /**
  * Entry point to enable a page.
@@ -1444,12 +1568,15 @@ function delegator_page_disable_subtask($name) {
  * Entry point to export a page.
  */
 function delegator_page_delete_subtask($form_state, $name) {
-  // This ensures the task .inc file is loaded
-  $task = delegator_get_task('page');
-  $page = delegator_page_load($name);
+  $page = delegator_page_get_page_cache($name);
+  $task = delegator_get_task($page->task);
 
   if (!$page) {
     return drupal_not_found();
+  }
+
+  if (!empty($page->locked)) {
+    return array('locked' => array('#value' => theme('delegator_page_lock', $page->locked, $name)));
   }
 
   $form_state['page'] = $page;
@@ -1479,6 +1606,11 @@ function delegator_page_delete_subtask($form_state, $name) {
  * Submit handler to delete a view.
  */
 function delegator_page_delete_subtask_submit(&$form, &$form_state) {
+  if ($form_state['page']->locked) {
+    drupal_set_message(t('Unable to update page due to lock.'), 'error');
+    return;
+  }
+
   delegator_page_delete($form_state['page']);
   drupal_set_message(t('The page has been deleted.'));
   $form_state['redirect'] = 'admin/build/pages';

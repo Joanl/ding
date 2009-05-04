@@ -1,5 +1,5 @@
 <?php
-// $Id: page.inc,v 1.13 2009/02/04 22:32:33 merlinofchaos Exp $
+// $Id: page.inc,v 1.22 2009/04/30 23:41:27 merlinofchaos Exp $
 
 /**
  * @file
@@ -31,6 +31,7 @@ function delegator_page_delegator_tasks() {
         'function' => 'delegator_page_menu',
       ),
       'hook theme' => 'delegator_page_theme',
+      'form info' => 'delegator_page_edit_form_info',
       // page only items
       'task type' => 'page',
       'operations' => array(
@@ -39,7 +40,7 @@ function delegator_page_delegator_tasks() {
           'href' => 'admin/build/pages/import',
         ),
         array(
-          'title' => t('Add page'),
+          'title' => t('Add custom page'),
           'href' => 'admin/build/pages/add',
         ),
       ),
@@ -49,10 +50,20 @@ function delegator_page_delegator_tasks() {
           'class' => 'delegator-page-storage',
         ),
       ),
+      'page type' => 'custom',
+      // What page callback will execute this page. If it has handlers then
+      // delegator_page_execute should be the default.
+//      'page callback' => 'delegator_page_execute',
       // context only items
       'handler type' => 'context',
-      'get arguments' => 'delegator_page_get_arguments',
+      'get arguments' => array(
+        'file' => 'page.admin.inc',
+        'path' => drupal_get_path('module', 'delegator') . '/plugins/tasks',
+        'function' => 'delegator_page_get_arguments',
+      ),
       'get context placeholders' => 'delegator_page_get_contexts',
+      'access restrictions' => 'delegator_page_access_restrictions',
+      'uses handlers' => TRUE,
     ),
   );
 }
@@ -61,7 +72,7 @@ function delegator_page_delegator_tasks() {
  * Return a list of all subtasks.
  */
 function delegator_page_subtasks($task) {
-  $pages = delegator_page_load_all();
+  $pages = delegator_page_load_all($task['name']);
   $return = array();
   foreach ($pages as $name => $page) {
     $return[$name] = delegator_page_build_subtask($task, $page);
@@ -84,14 +95,17 @@ function delegator_page_subtask($task, $subtask_id) {
  * Build a subtask array for a given page.
  */
 function delegator_page_build_subtask($task, $page) {
-  $form_info  = delegator_page_edit_form_info();
+  $function = ctools_plugin_get_function($task, 'form info');
+  $form_info = $function();
+
   $edit_links = array();
   $name       = $page->name;
 
   foreach ($form_info['order'] as $form_id => $form_title) {
+
     $edit_links[] = array(
       'title' => $form_title,
-      'href' => "admin/build/pages/edit/$name/$form_id",
+      'href' => str_replace(array('%page_name', '%step'), array($name, $form_id), $form_info['edit path']),
     );
   }
 
@@ -99,35 +113,38 @@ function delegator_page_build_subtask($task, $page) {
   $task_name = delegator_make_task_name($task['name'], $name);
 
   if (empty($page->disabled)) {
-    if ($page->multiple) {
-      $operations[] = array(
-        'title' => t('Task handlers'),
-        'href' => "admin/build/delegator/$task_name",
-      );
-    }
-    else {
-      $default_handlers = isset($page->default_handlers) ? $page->default_handlers : array();
-      $task_handlers = delegator_load_task_handlers($task, $page->name, $default_handlers);
-      if ($task_handlers) {
-        $handler = array_shift($task_handlers);
-        $plugin = delegator_get_task_handler($handler->handler);
-        if (!empty($plugin['edit forms'])) {
-          $actions = array();
-          foreach ($plugin['edit forms'] as $edit_id => $title) {
-            if ($title) {
-              $actions[] = array(
-                'title' => $title,
-                'href' => "admin/build/delegator/$task_name/$handler->handler/$handler->name/$edit_id",
-              );
+    if (!empty($task['uses handlers'])) {
+      if ($page->multiple) {
+        $operations[] = array(
+          'title' => t('Task handlers'),
+          'href' => "admin/build/delegator/$task_name",
+        );
+      }
+      else {
+        $default_handlers = isset($page->default_handlers) ? $page->default_handlers : array();
+        $task_handlers = delegator_load_task_handlers($task, $page->name, $default_handlers);
+        if ($task_handlers) {
+          $handler = array_shift($task_handlers);
+          $plugin = delegator_get_task_handler($handler->handler);
+          if (!empty($plugin['edit forms'])) {
+            $actions = array();
+            foreach ($plugin['edit forms'] as $edit_id => $title) {
+              if ($title) {
+                $actions[] = array(
+                  'title' => $title,
+                  'href' => "admin/build/delegator/$task_name/$handler->handler/$handler->name/$edit_id",
+                );
+              }
             }
+            $operations[] = array(
+              'title' => '<span class="text">' . t('Edit handler') . '</span>' . theme('links', $actions),
+              'html' => TRUE,
+            );
           }
-          $operations[] = array(
-            'title' => '<span class="text">' . t('Edit handler') . '</span>' . theme('links', $actions),
-            'html' => TRUE,
-          );
         }
       }
     }
+
     $operations[] = array(
       'title' => '<span class="text">' . t('Edit page') . '</span>' . theme('links', $edit_links),
       'html' => TRUE,
@@ -140,10 +157,12 @@ function delegator_page_build_subtask($task, $page) {
       'title' => t('Export'),
       'href' => "admin/build/pages/export/$name",
     );
-    $operations[] = array(
-      'title' => t('Export (with handlers)'),
-      'href' => "admin/build/pages/export/$name/handlers",
-    );
+    if (!empty($task['has handlers'])) {
+      $operations[] = array(
+        'title' => t('Export (with handlers)'),
+        'href' => "admin/build/pages/export/$name/handlers",
+      );
+    }
     if ($page->export_type == (EXPORT_IN_CODE | EXPORT_IN_DATABASE)) {
       $operations[] = array(
         'title' => t('Revert'),
@@ -169,6 +188,7 @@ function delegator_page_build_subtask($task, $page) {
       'href' => "admin/build/pages/enable/$name",
     );
   }
+
   $subtask = array(
     'name' => $name,
     'admin title' => $page->admin_title,
@@ -191,10 +211,18 @@ function delegator_page_build_subtask($task, $page) {
  * Delegated implementation of hook_theme().
  */
 function delegator_page_theme(&$items, $task) {
-  $items['delegator_page_form_argument_table'] = array(
-    'arguments' => array('form' => NULL),
+  $base = array(
     'file' => 'page.admin.inc',
     'path' => drupal_get_path('module', 'delegator') . '/plugins/tasks',
+  );
+  $items['delegator_page_form_argument_table'] = $base + array(
+    'arguments' => array('form' => NULL),
+  );
+  $items['delegator_page_lock'] = $base + array(
+    'arguments' => array('lock' => array(), 'task_name' => NULL),
+  );
+  $items['delegator_page_changed'] = $base + array(
+    'arguments' => array(),
   );
 }
 
@@ -235,50 +263,15 @@ function delegator_page_edit_form_info() {
         'form id' => 'delegator_page_argument_form_multiple',
       ),
     ),
+    // Items specific to the 'add' routines that will get moved over:
+    'add path' => 'admin/build/pages/add/%step',
+    // Items specific to the 'edit' routines that will get moved over:
+    'edit path' => 'admin/build/pages/edit/%page_name/%step',
   );
 }
 
 // --------------------------------------------------------------------------
 // Page execution functions
-
-/**
- * Load a context from an argument for a given page task.
- *
- * @param $value
- *   The incoming argument value.
- * @param $subtask
- *   The subtask id.
- * @param $argument
- *   The numeric position of the argument in the path, counting from 0.
- *
- * @return
- *   A context item if one is configured, the argument if one is not, or
- *   FALSE if restricted or invalid.
- */
-function _dp_arg_load($value, $subtask, $argument) {
-  $page = delegator_page_load($subtask);
-  if (!$page) {
-    return FALSE;
-  }
-
-  $path = explode('/', $page->path);
-  if (empty($path[$argument])) {
-    return FALSE;
-  }
-
-  $keyword = substr($path[$argument], 1);
-  if (empty($page->arguments[$keyword])) {
-    return $value;
-  }
-
-  $page->arguments[$keyword]['keyword'] = $keyword;
-
-  ctools_include('context');
-  $context = ctools_context_get_context_from_argument($page->arguments[$keyword], $value);
-
-  // convert false equivalents to false.
-  return $context ? $context : FALSE;
-}
 
 /**
  * Execute a page task.
@@ -293,18 +286,43 @@ function _dp_arg_load($value, $subtask, $argument) {
  *   creating named arguments in the path.
  */
 function delegator_page_execute($subtask_id) {
+  $page = delegator_page_load($subtask_id);
+  $task = delegator_get_task($page->task);
+
   // Turn the contexts into a properly keyed array.
   $contexts = array();
-  foreach (func_get_args() as $arg) {
+  $args = array();
+  foreach (func_get_args() as $count => $arg) {
     if (is_object($arg) && get_class($arg) == 'ctools_context') {
       $contexts[$arg->id] = $arg;
+      $args[] = $arg->original_argument;
+    }
+    else if ($count) {
+      $args[] = $arg;
     }
   }
 
-  $task = delegator_get_task('page');
+  $count = 0;
+  $names = delegator_page_get_named_arguments($page->path);
+  $bits = explode('/', $page->path);
+
+  foreach ($page->arguments as $name => $argument) {
+    // Optional arguments must be converted to contexts too, if they exist.
+    if ($bits[$names[$name]][0] == '!' && isset($args[$count])) {
+      $argument['keyword'] = $name;
+      ctools_include('context');
+      $context = ctools_context_get_context_from_argument($argument, $args[$count]);
+      $contexts[$context->id] = $context;
+    }
+    $count++;
+  }
+
+  if ($function = ctools_plugin_get_function($task, 'page callback')) {
+    return call_user_func_array($function, array($page, $contexts, $args));
+  }
 
   ctools_include('context-task-handler');
-  $output = ctools_context_handler_render($task, $subtask_id, $contexts);
+  $output = ctools_context_handler_render($task, $subtask_id, $contexts, $args);
   if ($output === FALSE) {
     return drupal_not_found();
   }
@@ -319,13 +337,12 @@ function delegator_page_execute($subtask_id) {
  * Return a list of arguments used by this task.
  */
 function delegator_page_get_arguments($task, $subtask_id) {
-  $page = delegator_page_load($subtask_id);
+  $page = delegator_page_get_page_cache($subtask_id);
   return _delegator_page_get_arguments($page);
 }
 
 function _delegator_page_get_arguments($page) {
   $arguments = array();
-
   if (!empty($page->arguments)) {
     foreach ($page->arguments as $keyword => $argument) {
       if (isset($argument['name'])) {
@@ -343,6 +360,14 @@ function _delegator_page_get_arguments($page) {
 function delegator_page_get_contexts($task, $subtask_id) {
   ctools_include('context');
   return ctools_context_get_placeholders_from_argument(delegator_page_get_arguments($task, $subtask_id));
+}
+
+/**
+ * Return a list of arguments used by this task.
+ */
+function delegator_page_access_restrictions($task, $subtask_id, $contexts) {
+  $page = delegator_page_load($subtask_id);
+  return ctools_access_add_restrictions($page->access, $contexts);
 }
 
 // --------------------------------------------------------------------------
@@ -370,48 +395,76 @@ function delegator_page_load($name) {
 /**
  * Load all page subtasks.
  */
-function delegator_page_load_all() {
+function delegator_page_load_all($task = NULL) {
   ctools_include('export');
-  return ctools_export_load_object('delegator_pages');
+
+  if (empty($task)) {
+    return ctools_export_load_object('delegator_pages');
+  }
+  else {
+    return ctools_export_load_object('delegator_pages', 'conditions', array('task' => $task));
+  }
 }
 
 /**
  * Write a page subtask to the database.
  */
-function delegator_page_save(&$subtask) {
-  $update = (isset($subtask->pid)) ? array('pid') : array();
-  drupal_write_record('delegator_pages', $subtask, $update);
+function delegator_page_save(&$page) {
+  $update = (isset($page->pid)) ? array('pid') : array();
+  $task = delegator_get_task($page->task);
+
+  if ($function = ctools_plugin_get_function($task, 'save')) {
+    $function($page, $update);
+  }
+  drupal_write_record('delegator_pages', $page, $update);
 
   // If this was a default page we may need to write default task
   // handlers that we provided as well.
-  if (!$update && isset($subtask->default_handlers)) {
-    $handlers = delegator_load_task_handlers(delegator_get_task('page'), $subtask->name);
-    foreach ($subtask->default_handlers as $name => $handler) {
+  if (!$update && isset($page->default_handlers)) {
+    $handlers = delegator_load_task_handlers(delegator_get_task('page'), $page->name);
+    foreach ($page->default_handlers as $name => $handler) {
       if (!isset($handlers[$name]) || !($handlers[$name]->export_type & EXPORT_IN_DATABASE)) {
         // Make sure this is right, as exports can wander a bit.
-        $handler->subtask = $subtask->name;
+        $handler->subtask = $page->name;
         delegator_save_task_handler($handler);
       }
     }
   }
-  return $subtask;
+  return $page;
 }
 
 /**
  * Remove a page subtask.
  */
-function delegator_page_delete($subtask) {
-  db_query("DELETE FROM {delegator_pages} WHERE name = '%s'", $subtask->name);
+function delegator_page_delete($page) {
+  $task = delegator_get_task($page->task);
+  if ($function = ctools_plugin_get_function($task, 'delete')) {
+    $function($page);
+  }
+  if (!empty($task['uses handlers'])) {
+    $handlers = delegator_load_task_handlers($task, $page->name);
+    foreach ($handlers as $handler) {
+      delegator_delete_task_handler($handler);
+    }
+  }
+  db_query("DELETE FROM {delegator_pages} WHERE name = '%s'", $page->name);
 }
 
 /**
  * Export a page subtask.
  */
-function delegator_page_export($subtask, $with_handlers = FALSE, $indent = '') {
+function delegator_page_export($page, $with_handlers = FALSE, $indent = '') {
+  $task = delegator_get_task($page->task);
+  if ($function = ctools_plugin_get_function($task, 'export')) {
+    $append = $function($page, $indent);
+  }
+
   ctools_include('export');
-  $output = ctools_export_object('delegator_pages', $subtask, $indent);
+  $output = ctools_export_object('delegator_pages', $page, $indent);
+  $output .= $append;
+
   if ($with_handlers) {
-    $handlers = delegator_load_task_handlers(delegator_get_task('page'), $subtask->name);
+    $handlers = delegator_load_task_handlers(delegator_get_task('page'), $page->name);
     $output .= $indent . '$page->default_handlers = array();' . "\n";
     foreach ($handlers as $handler) {
       $output .= delegator_export_task_handler($handler, $indent);
@@ -421,3 +474,26 @@ function delegator_page_export($subtask, $with_handlers = FALSE, $indent = '') {
   return $output;
 }
 
+/**
+ * Get a list of named arguments in a delegator page path.
+ *
+ * @param $path
+ *   A normal Drupal path.
+ *
+ * @return
+ *   An array of % marked variable arguments, keyed by the argument's name.
+ *   The value will be the position of the argument so that it can easily
+ *   be found. Items with a position of -1 have multiple positions.
+ */
+function delegator_page_get_named_arguments($path) {
+  $arguments = array();
+  $bits = explode('/', $path);
+  foreach ($bits as $position => $bit) {
+    if ($bit && ($bit[0] == '%' || $bit[0] == '!')) {
+      // special handling for duplicate path items and substr to remove the %
+      $arguments[substr($bit, 1)] = isset($arguments[$bit]) ? -1 : $position;
+    }
+  }
+
+  return $arguments;
+}

@@ -1,5 +1,5 @@
 <?php
-// $Id: user.inc,v 1.2 2009/01/15 20:20:54 merlinofchaos Exp $
+// $Id: user.inc,v 1.3 2009/04/20 23:51:44 merlinofchaos Exp $
 
 /**
  * @file
@@ -20,6 +20,11 @@ function ctools_user_ctools_contexts() {
     'keyword' => 'user',
     'no ui' => TRUE,
     'context name' => 'user',
+    'convert list' => array(
+      'uid' => t('User ID'),
+      'name' => t('User name'),
+    ),
+    'convert' => 'ctools_context_user_convert',
   );
   return $args;
 }
@@ -53,3 +58,14 @@ function ctools_context_user_settings_form($conf, $external = FALSE) {
   return $form;
 }
 
+/**
+ * Convert a context into a string.
+ */
+function ctools_context_user_convert($context, $type) {
+  switch ($type) {
+    case 'uid':
+      return $context->data->uid;
+    case 'name':
+      return $context->data->name;
+  }
+}

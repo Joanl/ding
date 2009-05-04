@@ -1,5 +1,5 @@
 <?php
-// $Id: term_view.inc,v 1.1 2009/02/04 22:32:33 merlinofchaos Exp $
+// $Id: term_view.inc,v 1.3 2009/04/30 17:15:30 merlinofchaos Exp $
 
 /**
  * @file
@@ -16,40 +16,53 @@
  */
 function delegator_term_view_delegator_tasks() {
   return array(
-    'term_view' => array(
-      // This is a 'page' task and will fall under the page admin UI
-      'task type' => 'page',
+    // This is a 'page' task and will fall under the page admin UI
+    'task type' => 'page',
 
-      'title' => t('Taxonomy term view'),
-      'description' => t('Control what handles the job of displaying a term at taxonomy/term/%term.'),
-      'admin title' => 'Taxonomy term view', // translated by menu system
-      'admin description' => 'Overrides for the built in taxonomy term handler at <em>taxonomy/term/%term</em>.',
-      'admin path' => 'taxonomy/term/%term',
+    'title' => t('Taxonomy term view'),
+    'description' => t('Control what handles the job of displaying a term at taxonomy/term/%term.'),
+    'admin title' => 'Taxonomy term view', // translated by menu system
+    'admin description' => 'Overrides for the built in taxonomy term handler at <em>taxonomy/term/%term</em>.',
+    'admin path' => 'taxonomy/term/%term',
 
-      // Menu hooks so that we can alter the term/%term menu entry to point to us.
-      'hook menu' => 'delegator_term_view_menu',
-      'hook menu alter' => 'delegator_term_view_menu_alter',
+    // Menu hooks so that we can alter the term/%term menu entry to point to us.
+    'hook menu' => 'delegator_term_view_menu',
+    'hook menu alter' => 'delegator_term_view_menu_alter',
 
-      // This is task uses 'context' handlers and must implement these to give the
-      // handler data it needs.
-      'handler type' => 'context',
-      'get arguments' => 'delegator_term_view_get_arguments',
-      'get context placeholders' => 'delegator_term_view_get_contexts',
+    // Provide a setting to the primary settings UI for Panels
+    'admin settings' => 'delegator_term_view_admin_settings',
 
-      // Allow additional operations
-      'operations' => array(
-        array(
-          'title' => t('Task handlers'),
-          'href' => "admin/build/delegator/term_view",
-        ),
-/*
-        array(
-          'title' => t('Settings'),
-          'href' => "admin/build/delegator/term_view/settings",
-        ),
-*/
+    // This is task uses 'context' handlers and must implement these to give the
+    // handler data it needs.
+    'handler type' => 'context',
+    'get arguments' => 'delegator_term_view_get_arguments',
+    'get context placeholders' => 'delegator_term_view_get_contexts',
+
+    // Allow additional operations
+    'operations' => array(
+      array(
+        'title' => t('Task handlers'),
+        'href' => "admin/build/delegator/term_view",
+      ),
+      array(
+        'title' => t('Settings'),
+        'href' => "admin/build/delegator/term_view/settings",
       ),
     ),
+  );
+}
+
+/**
+ * Create the term view settings page menu item.
+ */
+function delegator_term_view_menu(&$items, $task) {
+  $items['admin/build/delegator/term_view/settings'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('delegator_term_view_settings'),
+    'file path' => $task['path'],
+    'file' => $task['file'],
+    'access arguments' => array('administer delegator'),
+    'type' => MENU_CALLBACK,
   );
 }
 
@@ -84,8 +97,11 @@ function delegator_term_view($terms, $depth = 0, $op = 'page') {
     ctools_include('context');
     ctools_include('context-task-handler');
     $contexts = ctools_context_handler_get_task_contexts($task, '', array($terms, $depth));
+    if (empty($contexts)) {
+      return drupal_not_found();
+    }
 
-    $output = ctools_context_handler_render($task, '', $contexts);
+    $output = ctools_context_handler_render($task, '', $contexts, array($terms, $depth, $op));
     if ($output !== FALSE) {
       return $output;
     }
@@ -106,15 +122,16 @@ function delegator_term_view_get_arguments($task, $subtask_id) {
   return array(
     array(
       'keyword' => 'term',
-      'identifier' => t('Term(s) being viewed'),
-      'id' => 0,
-      'name' => 'terms',
-      'settings' => array(),
+      'identifier' => variable_get('delegator_term_view_type', 'multiple') == 'multiple' ? t('Term(s) being viewed') : t('Term being viewed'),
+      'id' => 1,
+      'name' => variable_get('delegator_term_view_type', 'multiple') == 'multiple' ? 'terms' : 'term',
+      'settings' => array('input_form' => 'tid'),
+      'default' => '404',
     ),
     array(
       'keyword' => 'depth',
       'identifier' => t('Depth'),
-      'id' => 0,
+      'id' => 1,
       'name' => 'string',
       'settings' => array(),
     ),
@@ -128,3 +145,37 @@ function delegator_term_view_get_contexts($task, $subtask_id) {
   return ctools_context_get_placeholders_from_argument(delegator_term_view_get_arguments($task, $subtask_id));
 }
 
+/**
+ * Settings page for this item.
+ */
+function delegator_term_view_settings() {
+  $task = delegator_get_task('term_view');
+  delegator_set_trail($task);
+  $form = array();
+
+  // This passes thru because the setting can also appear on the main Panels
+  // settings form.
+  delegator_term_view_admin_settings($form);
+  $form['delegator_term_view_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Allow multiple terms'),
+    '#options' => array('single' => t('Single term'), 'multiple' => t('Multiple terms')),
+    '#description' => t('By default, Drupal allows multiple terms as an argument by separating them with commas or plus signs. If you set this to single, that feature will be disabled.'),
+    '#default_value' => variable_get('delegator_term_view_type', 'multiple'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Provide a setting to the Panels administrative form.
+ */
+function delegator_term_view_admin_settings(&$form) {
+  $form['delegator_term_view_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Allow multiple terms on taxonomy/term/%term'),
+    '#options' => array('single' => t('Single term'), 'multiple' => t('Multiple terms')),
+    '#description' => t('By default, Drupal allows multiple terms as an argument by separating them with commas or plus signs. If you set this to single, that feature will be disabled.'),
+    '#default_value' => variable_get('delegator_term_view_type', 'multiple'),
+  );
+}

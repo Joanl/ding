@@ -1,5 +1,5 @@
 <?php
-// $Id: string.inc,v 1.1 2009/02/04 22:32:34 merlinofchaos Exp $
+// $Id: string.inc,v 1.2 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,10 @@ function ctools_string_ctools_arguments() {
     'keyword' => 'string',
     'description' => t('A string is a minimal context that simply holds a string that can be used for some other purpose.'),
     'context' => 'ctools_string_context',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter a value for this argument'),
+    ),
   );
   return $args;
 }

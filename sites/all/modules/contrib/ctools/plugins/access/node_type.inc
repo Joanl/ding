@@ -1,5 +1,5 @@
 <?php
-// $Id: node_type.inc,v 1.2 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: node_type.inc,v 1.5 2009/04/23 20:53:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,11 +7,11 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_node_type_ctools_access() {
   $args['node_type'] = array(
-    'title' => t("Node access by type"),
+    'title' => t("Node: Type"),
     'description' => t('Control access by node_type.'),
     'callback' => 'ctools_node_type_ctools_access_check',
     'default' => array('type' => array()),
@@ -19,6 +19,7 @@ function ctools_node_type_ctools_access() {
     'settings form submit' => 'ctools_node_type_ctools_access_settings_submit',
     'summary' => 'ctools_node_type_ctools_acesss_summary',
     'required context' => new ctools_context_required(t('Node'), 'node'),
+    'restrictions' => 'ctools_node_type_ctools_access_restrictions',
   );
 
   return $args;
@@ -64,6 +65,19 @@ function ctools_node_type_ctools_access_check($conf, $context) {
   }
 
   return TRUE;
+}
+
+/**
+ * Inform the UI that we've eliminated a bunch of possibilities for this
+ * context.
+ */
+function ctools_node_type_ctools_access_restrictions($conf, &$context) {
+  if (isset($context->restrictions['type'])) {
+    $context->restrictions['type'] = array_unique(array_merge($context->restrictions['type'], array_keys(array_filter($conf['type']))));
+  }
+  else {
+    $context->restrictions['type'] = array_keys(array_filter($conf['type']));
+  }
 }
 
 /**

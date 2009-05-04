@@ -1,5 +1,5 @@
 <?php
-// $Id: perm.inc,v 1.3 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: perm.inc,v 1.5 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,11 +7,11 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_perm_ctools_access() {
   $args['perm'] = array(
-    'title' => t("Access by user permission string"),
+    'title' => t("User: Permission string"),
     'description' => t('Control access by permission string.'),
     'callback' => 'ctools_perm_ctools_access_check',
     'default' => array('perm' => 'access content'),

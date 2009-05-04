@@ -1,5 +1,5 @@
 <?php
-// $Id: node_add_form.inc,v 1.2 2009/02/06 22:32:21 merlinofchaos Exp $
+// $Id: node_add_form.inc,v 1.5 2009/04/23 20:53:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -18,6 +18,12 @@ function ctools_node_add_form_ctools_contexts() {
     'settings form' => 'ctools_context_node_add_form_settings_form',
     'keyword' => 'node_add',
     'context name' => 'node_add_form',
+    'convert list' => array('type' => t('Node type')),
+    'convert' => 'ctools_context_node_add_form_convert',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the node type this context.'),
+    ),
   );
   return $args;
 }
@@ -64,6 +70,7 @@ function ctools_context_create_node_add_form($empty, $data = NULL, $conf = FALSE
       $context->form_id    = $type . '_node_form';
       $context->form_title = t('Submit @name', array('@name' => $types[$type]->name));
       $context->node_type  = $type;
+      $context->restrictions['type'] = array($type);
       return $context;
     }
   }
@@ -93,3 +100,12 @@ function ctools_context_node_add_form_settings_form($conf, $external = FALSE) {
   return $form;
 }
 
+/**
+ * Convert a context into a string.
+ */
+function ctools_context_node_add_form_convert($context, $type) {
+  switch ($type) {
+    case 'type':
+      return $context->data;
+  }
+}

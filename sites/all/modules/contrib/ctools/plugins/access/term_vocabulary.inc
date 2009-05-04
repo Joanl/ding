@@ -1,5 +1,5 @@
 <?php
-// $Id: term_vocabulary.inc,v 1.1 2009/02/04 22:32:34 merlinofchaos Exp $
+// $Id: term_vocabulary.inc,v 1.3 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,11 +7,11 @@
  */
 
 /**
- * Implementation of specially named hook_ctools_arguments().
+ * Implementation of specially named hook_ctools_access().
  */
 function ctools_term_vocabulary_ctools_access() {
   $args['term_vocabulary'] = array(
-    'title' => t("Term access by vocabulary"),
+    'title' => t("Taxonomy: Vocabulary"),
     'description' => t('Control access by term vocabulary.'),
     'callback' => 'ctools_term_vocabulary_ctools_access_check',
     'default' => array('vids' => array()),

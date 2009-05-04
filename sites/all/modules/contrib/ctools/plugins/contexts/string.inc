@@ -1,6 +1,5 @@
 <?php
-// $Id: string.inc,v 1.1 2009/02/04 22:32:34 merlinofchaos Exp $
-
+// $Id: string.inc,v 1.3 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -19,6 +18,12 @@ function ctools_string_ctools_contexts() {
     'keyword' => 'string',
     'no ui' => TRUE,
     'context name' => 'string',
+    'convert list' => array('raw' => t('Raw string')),
+    'convert' => 'ctools_context_string_convert',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the string for this context.'),
+    ),
   );
   return $args;
 }
@@ -42,4 +47,11 @@ function ctools_context_create_string($empty, $data = NULL, $conf = FALSE) {
     $context->data = $data;
     return $context;
   }
+}
+
+/**
+ * Convert a context into a string.
+ */
+function ctools_context_string_convert($context, $type) {
+  return $context->data;
 }

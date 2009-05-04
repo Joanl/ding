@@ -1,5 +1,5 @@
 <?php
-// $Id: node_edit.inc,v 1.4 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: node_edit.inc,v 1.5 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,10 @@ function ctools_node_edit_ctools_arguments() {
     'keyword' => 'node',
     'description' => t('Creates a node edit form context from a node ID argument.'),
     'context' => 'ctools_node_edit_context',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the node ID of a node for this argument'),
+    ),
   );
   return $args;
 }

@@ -1,4 +1,4 @@
-// $Id: modal.js,v 1.4 2009/03/26 20:17:59 merlinofchaos Exp $
+// $Id: modal.js,v 1.9 2009/04/24 00:08:51 merlinofchaos Exp $
 /**
  * @file 
  *
@@ -17,10 +17,26 @@ Drupal.CTools.Modal = Drupal.CTools.Modal || {};
  * Display the modal
  */
 Drupal.CTools.Modal.show = function() {
-  if (!Drupal.CTools.Modal.modal) {
-    Drupal.CTools.Modal.modal = $(Drupal.theme('CToolsModalDialog'));
+  var resize = function(e) {
+    // For reasons I do not understand, when creating the modal the context must be
+    // Drupal.CTools.Modal.modal but otherwise the context must be more than that.
+    var context = e ? document : Drupal.CTools.Modal.modal;
+    $('div.ctools-modal-content', context).css({
+      'width': $(window).width() * .8 + 'px', 
+      'height': $(window).height() * .8 + 'px'
+    });
+    $('div.ctools-modal-content .modal-content', context).css({
+      'width': ($(window).width() * .8 - 25) + 'px', 
+      'height': ($(window).height() * .8 - 35) + 'px'
+    });
   }
 
+  if (!Drupal.CTools.Modal.modal) {
+    Drupal.CTools.Modal.modal = $(Drupal.theme('CToolsModalDialog'));
+    $(window).bind('resize', resize);
+  }
+
+  resize();
   $('span.modal-title', Drupal.CTools.Modal.modal).html(Drupal.t('Loading...'));
   Drupal.CTools.Modal.modal.modalContent({
     // @todo this should be elsewhere.
@@ -81,7 +97,12 @@ Drupal.theme.prototype.CToolsModalThrobber = function () {
 Drupal.CTools.Modal.clickAjaxLink = function() {
   // show the empty dialog right away.
   Drupal.CTools.Modal.show();
-  return Drupal.CTools.AJAX.clickAJAXLink.apply(this);
+  Drupal.CTools.AJAX.clickAJAXLink.apply(this);
+  if (!$(this).hasClass('ctools-ajaxing')) {
+    Drupal.CTools.Modal.dismiss();
+  }
+
+  return false;
 };
 
 /**
@@ -89,27 +110,54 @@ Drupal.CTools.Modal.clickAjaxLink = function() {
  * specified by the href of the link.
  */
 Drupal.CTools.Modal.clickAjaxButton = function() {
+  if ($(this).hasClass('ctools-ajaxing')) {
+    return false;
+  }
+
   Drupal.CTools.Modal.show();
-  return Drupal.CTools.AJAX.clickAJAXButton.apply(this);
+  Drupal.CTools.AJAX.clickAJAXButton.apply(this);
+  if (!$(this).hasClass('ctools-ajaxing')) {
+    Drupal.CTools.Modal.dismiss();
+  }
+
+  return false;
 };
 
 /**
  * Submit responder to do an AJAX submit on all modal forms.
  */
 Drupal.CTools.Modal.submitAjaxForm = function() {
+  if ($(this).hasClass('ctools-ajaxing')) {
+    return false;
+  }
+
   url = $(this).attr('action');
-  url.replace('/nojs/', '/ajax/');
-  $(this).ajaxSubmit({
-    type: "POST",
-    url: url,
-    data: '',
-    global: true,
-    success: Drupal.CTools.AJAX.respond,
-    error: function() { 
-      alert("An error occurred while attempting to process " + url); 
-    },
-    dataType: 'json'
-  });
+  $(this).addClass('ctools-ajaxing');
+  var object = $(this);
+  try {
+    url.replace('/nojs/', '/ajax/');
+    $(this).ajaxSubmit({
+      type: "POST",
+      url: url,
+      data: '',
+      global: true,
+      success: Drupal.CTools.AJAX.respond,
+      error: function() { 
+        alert("An error occurred while attempting to process " + url); 
+      },
+      complete: function() {
+        object.removeClass('ctools-ajaxing');
+        $('.ctools-ajaxing', object).removeClass('ctools-ajaxing');
+      },
+      dataType: 'json'
+    });
+  }
+  catch (err) {
+    alert("An error occurred while attempting to process " + url); 
+    $(this).removeClass('ctools-ajaxing');
+    $('.ctools-ajaxing', this).removeClass('ctools-ajaxing');
+    return false;
+  }
   return false;
 }
 
@@ -131,16 +179,18 @@ Drupal.behaviors.CToolsModal = function(context) {
     // Bind submit links in the modal form.
     $('form:not(.ctools-use-modal-processed)', context)
       .addClass('ctools-use-modal-processed')
-      .submit(Drupal.CTools.Modal.submitAjaxForm)
-      .append('<input type="hidden" name="op" value="">');
+      .submit(Drupal.CTools.Modal.submitAjaxForm);
     // add click handlers so that we can tell which button was clicked,
     // because the AJAX submit does not set the values properly.
+
     $('input[type="submit"]:not(.ctools-use-modal-processed)', context)
       .addClass('ctools-use-modal-processed')
       .click(function() {
-        var name = $(this).attr('name');
-        $('input[name="' + name + '"]', context).val($(this).val());
+        // Make sure it knows our button.
+        this.form.clk = this;
+        $(this).after('<div class="ctools-ajaxing"> &nbsp; </div>');
       });
+
   }
 };
 

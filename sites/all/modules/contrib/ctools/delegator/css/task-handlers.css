@@ -1,4 +1,4 @@
-/* $Id: task-handlers.css,v 1.6 2008/12/20 05:37:31 merlinofchaos Exp $ */
+/* $Id: task-handlers.css,v 1.7 2009/03/31 03:35:35 merlinofchaos Exp $ */
 
 .delegator-operations {
   text-align: right;
@@ -15,6 +15,12 @@
 .delegator-locked {
   color: red;
   border: 1px solid red;
+  padding: 1em;
+}
+
+.delegator-owns-lock {
+  background: #FFFFDD none repeat scroll 0 0;
+  border: 1px solid #F0C020;
   padding: 1em;
 }
 

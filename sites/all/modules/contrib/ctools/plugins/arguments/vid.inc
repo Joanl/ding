@@ -1,5 +1,5 @@
 <?php
-// $Id: vid.inc,v 1.3 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: vid.inc,v 1.4 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,10 @@ function ctools_vid_ctools_arguments() {
     'keyword' => 'vocabulary',
     'description' => t('Creates a vocabulary context from a vocabulary ID argument.'),
     'context' => 'ctools_vid_context',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the vocabulary ID for this argument'),
+    ),
   );
   return $args;
 }

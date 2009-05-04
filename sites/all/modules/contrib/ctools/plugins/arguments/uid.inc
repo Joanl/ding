@@ -1,5 +1,5 @@
 <?php
-// $Id: uid.inc,v 1.7 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: uid.inc,v 1.8 2009/04/22 22:31:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,10 @@ function ctools_uid_ctools_arguments() {
     'keyword' => 'user',
     'description' => t('Creates a user context from a user ID argument.'),
     'context' => 'ctools_argument_uid_context',
+    'placeholder form' => array(
+      '#type' => 'textfield',
+      '#description' => t('Enter the user ID of a user for this argument'),
+    ),
   );
   return $args;
 }

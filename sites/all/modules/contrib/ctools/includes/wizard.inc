@@ -1,5 +1,5 @@
 <?php
-// $Id: wizard.inc,v 1.4 2008/12/20 05:37:32 merlinofchaos Exp $
+// $Id: wizard.inc,v 1.7 2009/04/17 19:16:22 merlinofchaos Exp $
 
 /**
  * @file
@@ -47,6 +47,11 @@
  *   whatever information the form(s) involved left for it.
  */
 function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
+  if (!isset($step)) {
+    $keys = array_keys($form_info['order']);
+    $step = array_shift($keys);
+  }
+
   $form_state['step'] = $step;
   $form_state['form_info'] = $form_info;
 
@@ -88,8 +93,12 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
     // Automatically use the modal tool if set to true.
     if (!empty($form_state['modal'])) {
       ctools_include('modal');
-      $title = isset($form_state['title']) ? $form_state['title'] : $info['title'];
-      $form_state['commands'][] = ctools_modal_command_display($title, $output);
+      if (empty($form_state['title'])) {
+        $form_state['title'] = $info['title'];
+      }
+
+      // This overwrites any previous commands.
+      $form_state['commands'] = ctools_modal_form_render($form_state, $output);
     }
   }
   else  {
@@ -276,6 +285,10 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
 
   if (!empty($form_state['modal'])) {
     $form['#action'] = url(ctools_wizard_get_path($form_state['form_info'], $form_state['step']));
+  }
+
+  if (isset($info['wrapper']) && function_exists($info['wrapper'])) {
+    $info['wrapper']($form, $form_state);
   }
 }
 

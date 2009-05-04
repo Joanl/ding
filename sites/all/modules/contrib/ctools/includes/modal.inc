@@ -1,5 +1,5 @@
 <?php
-// $Id: modal.inc,v 1.5 2009/01/29 22:12:05 merlinofchaos Exp $
+// $Id: modal.inc,v 1.6 2009/04/20 21:29:46 merlinofchaos Exp $
 
 /**
  * @file
@@ -169,7 +169,13 @@ function ctools_modal_form_render($form_state, $output) {
     $output = '<div class="messages">' . $messages . '</div>' . $output;
   }
 
-  return array(ctools_modal_command_display($title, $output));
+  $commands = array();
+  if (isset($form_state['js settings'])) {
+    $commands[] = ctools_ajax_command_settings($form_state['js settings']);
+  }
+
+  $commands[] = ctools_modal_command_display($title, $output);
+  return $commands;
 }
 
 /**
