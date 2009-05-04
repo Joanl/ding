@@ -1,7 +1,0 @@
-; $Id$
-name = Ding! Panels content
-description = Provides library-related content types to the Panel module.
-package = Ding!
-core = 6.x
-dependencies[] = panels
-

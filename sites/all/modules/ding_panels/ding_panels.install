@@ -1,0 +1,18 @@
+<?php // $Id$
+
+/**
+ * @file ding_panels.install
+ * Installation and update hooks for Ding Panels.
+ */
+
+/**
+ * Implementation of hook_update_N().
+ *
+ * Conversion from our old ding_panels_content module.
+ */
+function ding_panels_update_6000() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {panels_pane} SET type = 'library' WHERE type = 'ding_panels_content';");
+  return $ret;
+}
+

@@ -1,95 +1,70 @@
-<?php
-// $Id$
+<?php // $Id$
 
 /**
- * @file ding_panels_content.module
- * Provides a few library-related panes for the Panels module.
+ * @file library.inc
+ * Provides several library related panels content types.
  */
 
+
 /**
- * Implementation of hook_theme().
+ * Callback function to supply a list of content types.
+ *
+ * This is only required to make CTools know that we're providing 
+ * multiple types here (since we have no single => TRUE in the array).
  */
-function ding_panels_content_theme($existing, $type, $theme, $path) {
+function ding_panels_library_ctools_content_types() {
   return array(
-    'ding_panels_content_library_title' => array(
-      'arguments' => array('node' => NULL),
-      'file' => 'ding_panels_content.theme.inc',
-      'template' => 'ding_panels_content_libary_title',
-      'preprocess functions' => array('ding_panels_content_preprocess_library_title'),
-    ),
-    'ding_panels_content_library_location' => array(
-      'arguments' => array('node' => NULL),
-      'file' => 'ding_panels_content.theme.inc',
-      'template' => 'ding_panels_content_libary_location',
-      'preprocess functions' => array('ding_panels_content_preprocess_library_location'),
-    ),
-  );
-}
-
-/**
- * Implementation of hook_panels_content_types().
- */
-function ding_panels_content_panels_content_types() {
-  $items = array();
-  $items['ding_panels_content'] = array(
     'title' => t('Library page'),
-    'content_types' => '_ding_panels_content_types',
-    'render callback' => '_ding_panels_content_render',
-    'title callback' => '_ding_panels_content_title',
   );
-  return $items;
 }
 
 /**
- * Return all content types available.
+ * Callback function to supply a list of content types.
  */
-function _ding_panels_content_types() {
-  return array(
+function ding_panels_library_content_type_content_types() {
+  $types = array(
     'library_title' => array(
       'title' => t('Library title and navigation'),
       'description' => t('The title and navigation for a library page.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
     'library_location' => array(
       'title' => t('Library location'),
       'description' => t('Shows the address, map and other locative information for the library.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
     'library_hours' => array(
       'title' => t('Library opening hours'),
       'description' => t('Shows the library opening hours.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
     'library_about' => array(
       'title' => t('Library about text'),
       'description' => t('Shows the main library description text in its full length.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
     'library_feature_list' => array(
       'title' => t('Library feature list'),
       'description' => t('Simple list of library features, containing only the title.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
     'library_feature_detail_list' => array(
       'title' => t('Library detailed feature list'),
       'description' => t('More detailed view of library features with pictures and description.'),
-      'required context' => new ctools_context_required(t('Node'), 'node'),
-      'category' => array(t('Library page'), -9),
     ),
   );
+
+  // Append our default settings to every type.
+  foreach ($types as $name => $type) {
+    $types[$name] += array(
+      'category' => t('Library page'),
+      'required context' => new ctools_context_required(t('Node'), 'node'),
+    );
+  }
+  return $types;
 }
 
 /**
  * Return the pane contents.
  */
-function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
+function ding_panels_library_content_type_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
-  $node = $context->data;
+  $node = isset($context->data) ? drupal_clone($context->data) : NULL;
   switch($subtype) {
     case 'library_title':
       $block->content = theme('ding_panels_content_library_title', $node);
@@ -109,7 +84,7 @@ function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
     case 'library_feature_list':
     case 'library_feature_detail_list':
       $block->title = t('Services and facilities');
-      $block->content = theme_item_list(_ding_panels_content_features_by_library($node));
+      $block->content = theme_item_list(_ding_panels_library_features_by_library($node));
   }
   return $block;
 }
@@ -117,7 +92,7 @@ function _ding_panels_content_render($subtype, $conf, $panel_args, $context) {
 /**
  * Return the pane titles.
  */
-function _ding_panels_content_title($subtype, $conf, $context) {
+function ding_panels_library_content_type_admin_title($subtype, $conf, $context) {
   switch($subtype) {
     case 'library_title':
       return t('Library title and navigation');
@@ -134,6 +109,16 @@ function _ding_panels_content_title($subtype, $conf, $context) {
 }
 
 /**
+ * Returns an edit form for the content type.
+ *
+ * We're not actually doing anything here, but we need to have this hook 
+ * for this content type to work.
+ */
+function ding_panels_library_content_type_edit_form(&$form, &$form_state) {
+  return $form;
+}
+
+/**
  * Find all features related to a library node.
  *
  * @param object $node
@@ -141,7 +126,7 @@ function _ding_panels_content_title($subtype, $conf, $context) {
  * @return array
  *    Array of feature titles, keyed by node id.
  */
-function _ding_panels_content_features_by_library($node) {
+function _ding_panels_library_features_by_library($node) {
   // First, get the feature with a nice bit of SQL.
   $query = db_query("
     SELECT n.nid, n.title
