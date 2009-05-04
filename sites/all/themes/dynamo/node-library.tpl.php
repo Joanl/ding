@@ -1,6 +1,6 @@
 <?php
  if($node->nid =="1" ){
-//   dsm($node);	   
+   dsm($node);	   
  }
 
  
@@ -16,13 +16,20 @@
   <div class="info">
     
 
-    <div class="libary-status <?php print $node->field_opening_hours_processed['status'];?>">
+    <div class="libary-openstatus <?php print $node->field_opening_hours_processed['status'];?>">
         <?php print t($node->field_opening_hours_processed['status']);?>
       </div>
 
 
   	<?php if($node->title){	?>	
-      <h3><?php print l($node->title, 'biblioteker/'.$node->nid); ?></h3>
+    <?php
+      if($node->ding_slug){
+        $biblo_url = $node->ding_slug;
+      }else{
+        $biblo_url = $node->nid;
+      }
+    ?>
+    <h3><?php print l($node->title, 'biblioteker/'.$biblo_url); ?></h3>
   	<?php } ?>
     
       <?php print $node->locations['0']['street'];?><br/> 

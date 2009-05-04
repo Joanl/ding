@@ -19,6 +19,7 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 
 /* header */
 #pageheader{background:transparent url(../images/bg-header.png) no-repeat center -39px; margin:0 0 0 1px; min-height:200px;}
+	body.front #pageheader{min-height:175px;}
 	#top{height:145px;}
 		#search{width:600px; height:100px; overflow:hidden; margin:26px 0 0 56px; color:#fff;}
 		#account{width:260px;height:110px;  overflow:hidden; margin:30px 0 0 77px;}
@@ -72,11 +73,12 @@ Menu top
 
 /* left navigation */	
 #content-left{border-right: 1px solid #d1d9d7;}
-#content-left li{border: 1px solid #d1d9d7;  height:20px; margin:0 0 4px 0; padding:4px 0 0 10px;}
-#content-left li.active{background:#f1f5f4;}
+	#content-left li{border: 1px solid #d1d9d7;  height:20px; margin:0 0 4px 0; padding:4px 0 0 10px;}
+	#content-left li.active{background:#f1f5f4;}
 
-#path ul.breadcrumb li {margin:0;}
 #path ul.breadcrumb {display: inline;}
+	#path ul.breadcrumb li {margin:0;}
+
 /* =====================================
 node
 /*--------------------------------------*/
@@ -124,9 +126,7 @@ Account
 #user-login-form ul{clear:both;}
 #user-login-form ul li{float:left; margin:0 10px 0 0;}
 
-/*
-search
-*/
+/* search */
 #search h3{text-indent: -9999em; height:55px; margin:0; padding:0; background:transparent url(../images/search.png) no-repeat 0 0; }
 	#edit-search-block-form-1-wrapper input{height:20px; width:465px; background:#fff url(../images/magnifier.png) no-repeat 9px 5px; border: 1px solid #999; margin:0; padding:4px 0 0 25px; font-size:1.2em; color:#929292;}
 	/*overlabel*/
@@ -144,9 +144,9 @@ teaser
 /* =====================================
 bibloteks oversigtsiden
 /*--------------------------------------*/
-.libary-status{padding:0 5px; display:inline;}
-.libary-status.open{background:#71bf44;}
-.libary-status.closed{background:#6b0046;}
+.libary-openstatus{padding:0 5px; display:inline;}
+.libary-openstatus.open{background:#71bf44;}
+.libary-openstatus.closed{background:#6b0046;}
 
 .view-event-list  li,
 .view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
@@ -166,14 +166,13 @@ bibloteks oversigtsiden
 	padding:0 5px;
 } 
 
-
 .view-event-list .libary-tag div{display:inline;margin:0 5px 0 0;}
 
 
 /* =====================================
 Panels
 /*--------------------------------------*/
-#front-top{width:960px; display:block; height:300px;}
+#front-top{width:960px; display:block; height:240px;}
 #front-bottom{width:960px;}
 #front-left{width:470px;float:left;}
 #front-middle {width:240px; float:left;}
@@ -196,6 +195,7 @@ Panels
 #twocol-left-left{width:710px}
 
 #threecol-left-middle {width:240px; float:left;}
+
 /* =====================================
 Bibloteks siden
 /*--------------------------------------*/
@@ -308,13 +308,8 @@ test
 .test{background:#f0f url(../images/bg-trans-50.png) repeat 0 0;}
 *.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}
 
-
 /* =====================================
 Cowboy
 /*--------------------------------------*/
 
-#block-ding_library_map-0 h3{display:none;}
 #block-ding_library_map-0 {width:690px; margin:0 0 0 20px;}
-.field-image span{display:none;}
-.pane-event_list-page_1 h3, 
-.pane-event_list-page_1 .view-filters{display:none;}
