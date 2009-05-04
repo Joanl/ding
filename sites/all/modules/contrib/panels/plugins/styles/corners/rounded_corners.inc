@@ -1,5 +1,5 @@
 <?php
-// $Id: rounded_corners.inc,v 1.1.2.2 2009/03/24 18:32:20 merlinofchaos Exp $
+// $Id: rounded_corners.inc,v 1.1.2.5 2009/04/30 03:41:07 merlinofchaos Exp $
 
 /**
  * @file styles/rounded_corners.inc
@@ -48,18 +48,21 @@ function theme_panels_rounded_corners_style_render_panel($display, $panel_id, $p
 
   $print_separator = FALSE;
   foreach ($panes as $pane_id => $pane) {
-    // Add the separator if we've already displayed a pane.
-    if ($print_separator) {
-      $output .= '<div class="panel-separator"></div>';
-    }
     $text = panels_render_pane($pane, $display->content[$pane_id], $display);
     if ($text) {
-      $output .= ($where == 'pane') ? theme('panels_rounded_corners_box', $text) : $text;
-    }
+      // Add the separator if we've already displayed a pane.
+      if ($print_separator) {
+        $output .= '<div class="panel-separator">&nbsp;</div>';
+      }
 
-    // If we displayed a pane, this will become true; if not, it will become
-    // false.
-    $print_separator = (bool) $text;
+      if ($where == 'pane') {
+        $output .= theme('panels_rounded_corners_box', $text);
+      }
+      else {
+        $output .= $text;
+        $print_separator = TRUE;
+      }
+    }
   }
 
   if ($where == 'panel') {
@@ -120,7 +123,7 @@ function panels_rounded_corners_style_settings_form($style_settings) {
  *   A Panels display object.
  */
 function panels_rounded_corners_css($display) {
-  $idstr = empty($display->css_id) ? '.rounded_corner' : "#$display->css_id";
+  $idstr = empty($display->css_id) ? '.rounded-corner' : "#$display->css_id";
   $css_id = 'rounded-corner:' . $idstr;
 
   ctools_include('css');
@@ -198,6 +201,11 @@ $idstr .panel-separator {
   font-size: 1px;
   height: 30px;
 }
+
+$idstr .rounded-corner {
+  margin-bottom: 1em;
+}
+
 EOF;
 
   return $css;

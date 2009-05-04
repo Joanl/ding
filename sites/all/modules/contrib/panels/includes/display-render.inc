@@ -1,5 +1,5 @@
 <?php
-// $Id: display-render.inc,v 1.5.2.5 2009/03/30 19:43:20 merlinofchaos Exp $
+// $Id: display-render.inc,v 1.5.2.8 2009/04/29 03:19:07 merlinofchaos Exp $
 
 /**
  * @file
@@ -101,6 +101,9 @@ function panels_render_layout($layout, $content, $css_id = NULL, $settings = arr
 
 /**
  * Render the administrative layout of a display.
+ *
+ * This is used for the edit version, so that layouts can have different
+ * modes, such as the flexible layout designer mode.
  */
 function panels_render_layout_admin($layout, $content, $display) {
   // @todo This should be abstracted.
@@ -126,10 +129,9 @@ function panels_render_layout_admin($layout, $content, $display) {
  * the display theme function.
  */
 function panels_render_panes(&$display) {
-  // Safety check.
-  if (empty($display->content)) {
-    return array();
-  }
+  ctools_include('content');
+
+  $keywords = array();
 
   // First, render all the panes into little boxes. We do this here because
   // some panes request to be rendered after other panes (primarily so they
@@ -137,27 +139,26 @@ function panels_render_panes(&$display) {
   $panes = array();
   $later = array();
 
-  foreach ($display->content as $pid => $pane) {
-    $pane->shown = isset($pane->shown) ? $pane->shown : TRUE;
-    // TODO Really ought to design a method for creating a quick-access set of content_type (and other plugin) data to help optimize render performance
+  foreach ((array) $display->content as $pid => $pane) {
+    $pane->shown = !empty($pane->shown); // guarantee this field exists.
     // If the user can't see this pane, do not render it.
     if (!$pane->shown || !panels_pane_access($pane, $display)) {
       continue;
     }
 
     // If this pane wants to render last, add it to the $later array.
-    $content_type = panels_get_content_type($pane->type);
+    $content_type = ctools_get_content_type($pane->type);
 
     if (!empty($content_type['render last'])) {
       $later[$pid] = $pane;
       continue;
     }
 
-    $panes[$pid] = panels_render_pane_content($display, $pane);
+    $panes[$pid] = panels_render_pane_content($display, $pane, $keywords);
   }
 
   foreach ($later as $pid => $pane) {
-    $panes[$pid] = panels_render_pane_content($display, $pane);
+    $panes[$pid] = panels_render_pane_content($display, $pane, $keywords);
   }
 
   // Loop through all panels, put all panes that belong to the current panel
@@ -190,23 +191,8 @@ function panels_render_panes(&$display) {
  * Render a single pane, identifying its context, and put it into
  * the $panes array.
  */
-function panels_render_pane_content(&$display, &$pane) {
-  if (empty($pane->context)) {
-    $pane->context = panels_pane_select_context($pane, $display->context);
-    if ($pane->context === FALSE) {
-      return FALSE;
-    }
-  }
-
-  $content = panels_get_pane_content($display, $pane, $display->args, $pane->context, $display->incoming_content);
-
-  $keywords = !empty($display->keywords) ? $display->keywords : array();
-  // Override the title if configured to
-  if (!empty($pane->configuration['override_title'])) {
-    // Give previous title as an available substitution here.
-    $keywords['%title'] = empty($content->title) ? '' : $content->title;
-    $content->title = $pane->configuration['override_title_text'];
-  }
+function panels_render_pane_content(&$display, &$pane, $keywords) {
+  $content = panels_get_pane_content($display, $pane, $keywords, $display->args, $display->context, $display->incoming_content);
 
   // Pass long the css_id that is usually available.
   if (!empty($pane->css['css_id'])) {
@@ -218,28 +204,6 @@ function panels_render_pane_content(&$display, &$pane) {
     $content->css_class = $pane->css['css_class'];
   }
 
-  if (!empty($content->title)) {
-    // Perform substitutions
-    if (!empty($keywords)) {
-      $content->title = strtr($content->title, $keywords);
-    }
-
-    // Sterilize the title
-    $content->title = filter_xss_admin($content->title);
-
-    // If a link is specified, populate.
-    if (!empty($content->title_link)) {
-      if (!is_array($content->title_link)) {
-        $url = array('href' => $content->title_link);
-      }
-      else {
-        $url = $content->title_link;
-      }
-      // set defaults so we don't bring up notices
-      $url += array('href' => '', 'attributes' => NULL, 'query' => NULL, 'fragment' => NULL, 'absolute' => NULL, 'html' => TRUE);
-      $content->title = l($content->title, $url['href'], $url);
-    }
-  }
   return $content;
 }
 
@@ -343,9 +307,6 @@ function panels_render_panel($display, $panel, $panes) {
  * $content->more -- An optional 'more' link (destination only)
  * $content->admin_links -- Administrative links associated with the content
  * $content->feeds -- Any feed icons or associated with the content
- * $content->subject -- A legacy setting for block compatibility
- * $content->module -- A legacy setting for block compatibility
- * $content->delta -- A legacy setting for block compatibility
  */
 function theme_panels_pane($content, $pane, $display) {
   if (!empty($content->content)) {

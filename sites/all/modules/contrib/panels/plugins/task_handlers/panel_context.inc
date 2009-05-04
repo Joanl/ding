@@ -1,5 +1,5 @@
 <?php
-// $Id: panel_context.inc,v 1.1.2.10 2009/03/26 20:17:22 merlinofchaos Exp $
+// $Id: panel_context.inc,v 1.1.2.20 2009/04/30 23:59:55 merlinofchaos Exp $
 
 /**
  * @file
@@ -23,16 +23,18 @@ function panels_panel_context_delegator_task_handlers() {
     'admin title' => 'panels_panel_context_title',
     'render' => 'panels_panel_context_render',
     'save' => 'panels_panel_context_save',
+    'delete' => 'panels_panel_context_delete',
     'export' => 'panels_panel_context_export',
+    'clone' => 'panels_panel_context_clone',
 
     'add forms' => array(
-      'criteria' => t('Selection criteria'),
+      'criteria' => t('Selection rules'),
       'choose' => t('Choose layout'),
       'content' => t('Panel content'),
     ),
     'edit forms' => array(
       'content' => t('Panel content'),
-      'criteria' => t('Selection criteria'),
+      'criteria' => t('Selection rules'),
       'settings' => t('General'),
       'context' => t('Contexts'),
       'layout' => t('Change layout'),
@@ -122,12 +124,12 @@ function &panels_panel_context_get_display(&$handler) {
 }
 
 /**
- * Check selection criteria and, if passed, render the contexts.
+ * Check selection rules and, if passed, render the contexts.
  *
  * We must first check to ensure the node is of a type we're allowed
  * to render. If not, decline to render it by returning NULL.
  */
-function panels_panel_context_render($handler, $base_contexts) {
+function panels_panel_context_render($handler, $base_contexts, $args, $test = TRUE) {
   // Go through arguments and see if they match.
   ctools_include('context');
   ctools_include('context-task-handler');
@@ -135,7 +137,7 @@ function panels_panel_context_render($handler, $base_contexts) {
   $contexts = ctools_context_handler_get_handler_contexts($base_contexts, $handler);
 
   // Test.
-  if (!ctools_context_handler_select($handler, $contexts)) {
+  if ($test && !ctools_context_handler_select($handler, $contexts)) {
     return;
   }
 
@@ -143,6 +145,7 @@ function panels_panel_context_render($handler, $base_contexts) {
   $display = panels_panel_context_get_display($handler);
 
   $display->context = $contexts;
+  $display->args = $args;
   $display->css_id = $handler->conf['css_id'];
 
   // Check to see if there is any CSS.
@@ -154,21 +157,27 @@ function panels_panel_context_render($handler, $base_contexts) {
     drupal_add_css($handler->conf['css_cache']);
   }
 
+  // With an argument, this actually sets the display.
+  panels_get_current_page_display($display);
+
   $info = array(
     'content' => panels_render_display($display),
     'no_blocks' => !empty($handler->conf['no_blocks']),
   );
 
-  if (!empty($display->title)) {
-    $substitutions = ctools_context_get_keywords($contexts);
-    $info['title'] = filter_xss_admin(strtr($display->title, $substitutions));
+  // If the hide title flag is set, just remove the title altogether.
+  if (!empty($display->hide_title)) {
+    $info['title'] = '';
+  }
+  else if (!empty($display->title)) {
+    $info['title'] = filter_xss_admin(ctools_context_keyword_substitute($display->title, array(), $contexts));
   }
 
   return $info;
 }
 
 /**
- * Set up a title for the panel based upon the selection criteria.
+ * Set up a title for the panel based upon the selection rules.
  */
 function panels_panel_context_title($handler, $task, $subtask_id) {
   if (isset($handler->conf['title'])) {
@@ -183,8 +192,8 @@ function panels_panel_context_title($handler, $task, $subtask_id) {
  * Callback to allow the handler to react to being saved.
  *
  * When a handler with a display is saved, two things have to happen.
- * First, we have to scrub some contexts off the display that may
- * inadvertantly have been left on it. Second, we have to cache
+ * First, we have to save the display so that it becomes a real display,
+ * not the fake one we started with. Second, we have to cache
  * any CSS that the display is using. This CSS can get re-cached
  * later if the file disappears, but it's imperative that we do it here
  * to make sure that old, dirty CSS cache gets removed.
@@ -211,6 +220,10 @@ function panels_panel_context_save(&$handler, $update) {
   else {
     $handler->conf['css_cache'] = '';
   }
+
+  if (isset($page->conf['temp_layout'])) {
+    unset($page->conf['temp_layout']);
+  }
 }
 
 /**
@@ -222,13 +235,40 @@ function panels_panel_context_save(&$handler, $update) {
  */
 function panels_panel_context_export(&$handler, $indent) {
   $display = panels_panel_context_get_display($handler);
-  if (isset($handler->conf['display'])) {
-    unset($handler->conf['display']);
+  foreach (array('display', 'did', 'css_cache', 'temp_layout') as $item) {
+    if (isset($handler->conf[$item])) {
+      unset($handler->conf[$item]);
+    }
   }
 
   $output = panels_export_display($display, $indent);
   $output .= $indent . '$handler->conf[\'display\'] = $display' . ";\n";
   return $output;
+}
+
+/**
+ * When a handler is cloned, we have to clone the display.
+ */
+  function panels_panel_context_clone(&$handler) {
+  $old_display = panels_panel_context_get_display($handler);
+  $code = panels_export_display($old_display);
+  eval($code);
+  foreach (array('display', 'did', 'css_cache', 'temp_layout') as $item) {
+    if (isset($handler->conf[$item])) {
+      unset($handler->conf[$item]);
+    }
+  }
+  $display->did = 'new';
+  $handler->conf['display'] = $display;
+}
+
+/**
+ * Callback to delete the display when a handler is deleted.
+ */
+function panels_panel_context_delete(&$handler) {
+  if (!empty($handler->conf['did'])) {
+    panels_delete_display($handler->conf['did']);
+  }
 }
 
 /**
@@ -303,7 +343,7 @@ function panels_panel_context_edit_choose(&$form, &$form_state) {
   panels_load_include('plugins');
 
   // @todo -- figure out where/how to deal with this.
-  $form_state['allowed_layouts'] = NULL;
+  $form_state['allowed_layouts'] = 'panels_page';
 
   $form_state['display'] = &panels_panel_context_get_display($form_state['handler']);
 
@@ -332,7 +372,6 @@ function panels_panel_context_edit_choose_submit(&$form, &$form_state) {
   $form_state['handler']->conf['display'] = $form_state['display'];
 }
 
-
 /**
  * Change the layout for this panel.
  *
@@ -347,7 +386,7 @@ function panels_panel_context_edit_layout(&$form, &$form_state) {
   panels_load_include('plugins');
 
   // @todo -- figure out where/how to deal with this.
-  $form_state['allowed_layouts'] = NULL;
+  $form_state['allowed_layouts'] = 'panels_page';
 
   $form_state['display'] = &panels_panel_context_get_display($form_state['handler']);
 
@@ -400,9 +439,9 @@ function panels_panel_context_edit_move(&$form, &$form_state) {
   $form = array_merge($form, panels_change_layout($form_state));
 
   // Change the 'back' button to just go directly to the previous form
-  $task_id = $form_state['task']['name'];
-  $handler_id = $form_state['handler']->handler;
-  $name = $form_state['handler']->name;
+//  $task_id = $form_state['task']['name'];
+//  $handler_id = $form_state['handler']->handler;
+//  $name = $form_state['handler']->name;
 
   // This form is outside the normal wizard list, so we need to specify the
   // previous/next forms.
@@ -424,9 +463,9 @@ function panels_panel_context_edit_content(&$form, &$form_state) {
   $display = &panels_panel_context_get_display($form_state['handler']);
 
   $display->context = ctools_context_handler_get_all_contexts($form_state['task'], $form_state['subtask_id'], $form_state['handler']);
-  $content_types = panels_common_get_allowed_types('delegator', $display->context);
+  $content_types = panels_common_get_allowed_types('panels_page', $display->context);
 
-  // Load the display being edited from cache, if possible.
+// Load the display being edited from cache, if possible.
   if (!empty($_POST) && is_object($cache = panels_cache_get('display', $display->did))) {
     $display = $cache->display;
   }
@@ -440,7 +479,7 @@ function panels_panel_context_edit_content(&$form, &$form_state) {
   }
 
   $form_state['display'] = &$display;
-
+  $form_state['content_types'] = $content_types;
   // Tell the Panels form not to display buttons.
   $form_state['no buttons'] = TRUE;
 
@@ -457,7 +496,7 @@ function panels_panel_context_edit_settings(&$form, &$form_state) {
   $form['conf']['autogenerate_title'] = array(
     '#type' => 'checkbox',
     '#title' => t('Automatically generate title'),
-    '#description' => t('If checked, the administrative title will be automatically regenerated whenever the selection criteria changes. If you change the title and leave this check, your changes may disappear.'),
+    '#description' => t('If checked, the administrative title will be automatically regenerated whenever the selection rules changes. If you change the title and leave this check, your changes may disappear.'),
     '#default_value' => $conf['autogenerate_title'],
   );
 

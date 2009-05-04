@@ -1,5 +1,5 @@
 <?php
-// $Id: flexible.inc,v 1.1.2.7 2009/03/30 19:47:33 merlinofchaos Exp $
+// $Id: flexible.inc,v 1.1.2.11 2009/05/01 00:44:45 merlinofchaos Exp $
 
 /**
  * Implementation of hook_panels_layouts()
@@ -111,7 +111,7 @@ function panels_flexible_convert_settings(&$settings) {
       $settings['items']['sidebar-left-row'] = array(
         'type' => 'row',
         'contains' => 'region',
-        'children' => array('center'),
+        'children' => array('sidebar_left'),
         'parent' => 'sidebar-left',
       );
       $settings['items']['sidebar_left'] = array(
@@ -137,7 +137,7 @@ function panels_flexible_convert_settings(&$settings) {
       $settings['items']['sidebar-right-row'] = array(
         'type' => 'row',
         'contains' => 'region',
-        'children' => array('center'),
+        'children' => array('sidebar_right'),
         'parent' => 'sidebar-right',
       );
       $settings['items']['sidebar_right'] = array(
@@ -202,6 +202,7 @@ function panels_flexible_convert_settings(&$settings) {
     unset($settings['canvas']);
   }
 }
+
 /**
  * Define the actual list of columns and rows for this flexible panel.
  */
@@ -617,11 +618,17 @@ function panels_flexible_get_css_group(&$css, $renderer, $list, $owner_id, $type
     }
 
     $max = count($middle) - 1;
+
     // Because we love IE so much, auto scale everything to 99%. This
     // means adding up the actual widths and then providing a multiplier
     // to each so that the total is 99%.
-
-    $scale = 99.0 / $middle_total;
+//    if ($max > 0) {
+      $scale = 99.0 / $middle_total;
+//    }
+    // But we only scale if there's more than 1 item to scale.
+//    else {
+//      $scale = 1;
+//    }
     foreach ($middle as $position => $id) {
       $class = ".panels-flexible-$type-" . $renderer->did . "-$id";
       $css[$class] = array(
@@ -1045,6 +1052,7 @@ function panels_flexible_add_item_form(&$form_state) {
     // must also be fixed. Otherwise it can be either and should default to
     // fluid.
     $restrict = FALSE;
+    $fluid_only = FALSE;
 
     if (!empty($parent['children'])) {
       if ($location == 'left') {
@@ -1058,6 +1066,9 @@ function panels_flexible_add_item_form(&$form_state) {
         $item['width_type'] = 'px';
       }
     }
+    else {
+      $fluid_only = TRUE;
+    }
 
     $form['width_type'] = array(
       '#type' => 'select',
@@ -1067,13 +1078,17 @@ function panels_flexible_add_item_form(&$form_state) {
         '%' => t('Fluid'),
         'px' => t('Fixed'),
       ),
-      '#disabled' => $restrict,
+      '#disabled' => $restrict || $fluid_only,
     );
     if ($restrict) {
       // This forces the value because disabled items don't always send
       // their data back.
       $form['width_type']['#value'] = $item['width_type'];
       $form['width_type']['#description'] = t('Items cannot be set to fluid if there are fixed items already on that side.');
+    }
+    else if ($fluid_only) {
+      $form['width_type']['#value'] = $item['width_type'] = '%';
+      $form['width_type']['#description'] = t('The first item within a row must be fluid.');
     }
   }
   else {
@@ -1289,6 +1304,7 @@ function panels_ajax_flexible_edit_resize($did) {
   }
 
   $settings = &$cache->display->layout_settings;
+  panels_flexible_convert_settings($settings);
 
   $settings['items'][$_POST['left']]['width'] = $_POST['left_width'];
   $settings['items'][$_POST['right']]['width'] = $_POST['right_width'];
