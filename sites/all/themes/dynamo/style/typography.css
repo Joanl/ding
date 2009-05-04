@@ -84,8 +84,7 @@ h1,
 .view li div.title, 
 .view li div.title a,
 .view-library-list h3 a,
-.view-event-list h2 a
-{
+.view-event-list h2 a{
 	font-size:21px; line-height:25px; color:#050505;
 }
 
@@ -104,6 +103,12 @@ h1,
 	font-size:10px; line-height:15px;
 }
 
+#frontpagecarousel-controller li{color:#fff; 	font-size:11px; line-height:15px;}
+#frontpagecarousel-controller li a{
+	font-size:11px; line-height:15px; color:#050505;
+}
+
+
 #path,
 .view li div.tid a,
 .more-link a,
@@ -111,7 +116,6 @@ h1,
 .pane-event_list-block_1 h4 a,
 .pane-library_feature_list ul li,
 .view-feature-list li div.title a
-
 {
 	font-size:10px; line-height:17px;
 }
@@ -146,9 +150,6 @@ h1,
 
 
 #pagefooter{font-size:10px; line-height:13px;}
-
-
-
 #pagefooter h3,
 .pane-event_list-block_1 h3,
 .pane-library_feature_list h3

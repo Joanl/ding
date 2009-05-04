@@ -140,13 +140,14 @@ function mothership_preprocess_views_view_list(&$vars){
 /* =====================================
   Breadcrumb
 * ------------------------------------- */
+/*
 function mothership_preprocess(&$variables, $hook) {
     //Make active page title in breadcrumbs 
     if(!empty($variables['breadcrumb'])) $variables['breadcrumb'] = '<ul class="breadcrumb">'.$variables['breadcrumb'].'<li>: '.$variables['title'].'</li></ul>';
 }
-
+*/
 /*changes the home title to the sitename*/
-function mothership_breadcrumb($breadcrumb) {
+/*function mothership_breadcrumb($breadcrumb) {
   GLOBAL $base_path;
   if (strip_tags($breadcrumb[0]) == "Home") {
     $breadcrumb[0] ='<a href="'.$base_path.'">'.variable_get(site_name,'').'</a>';
@@ -156,3 +157,4 @@ function mothership_breadcrumb($breadcrumb) {
     return '<li>'. implode('/</li><li>', $breadcrumb) .'</li>';
   }
 }
+*/

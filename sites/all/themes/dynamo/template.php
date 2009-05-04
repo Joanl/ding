@@ -42,24 +42,9 @@ function dynamo_preprocess_views_view_list(&$vars){
   }
 
 
-/**
- * Render a panel pane like a block.
- *
- * A panel pane can have the following fields:
- *
- * $pane->type -- the content type inside this pane
- * $pane->subtype -- The subtype, if applicable. If a view it will be the
- *   view name; if a node it will be the nid, etc.
- * $content->title -- The title of the content
- * $content->content -- The actual content
- * $content->links -- Any links associated with the content
- * $content->more -- An optional 'more' link (destination only)
- * $content->admin_links -- Administrative links associated with the content
- * $content->feeds -- Any feed icons or associated with the content
- * $content->subject -- A legacy setting for block compatibility
- * $content->module -- A legacy setting for block compatibility
- * $content->delta -- A legacy setting for block compatibility
- */
+/*
+* panels
+*/
 function dynamo_panels_pane($content, $pane, $display) {
   if (!empty($content->content)) {
     $idstr = $classstr = '';
