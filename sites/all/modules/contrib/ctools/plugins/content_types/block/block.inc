@@ -56,7 +56,6 @@ function ctools_block_content_type_content_types() {
       }
     }
   }
-  dpm($types);
   return $types;
 }
 
