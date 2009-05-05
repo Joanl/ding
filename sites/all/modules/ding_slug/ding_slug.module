@@ -38,7 +38,7 @@ function ding_slug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
  */
 function ding_slug_form_alter(&$form, $form_state, $form_id) {
   if ($form['#id'] == 'node-form') {
-    $form['ding_slug'] = array(
+    $item = array(
       '#type' => 'textfield',
       '#title' => t('Slug'),
       '#description' => t('A short name for this node, used in URLs.'),
@@ -46,9 +46,12 @@ function ding_slug_form_alter(&$form, $form_state, $form_id) {
       '#weight' => -4,
     );
     if ($form['#node']->ding_slug) {
-      $form['ding_slug']['#value'] = $form['#node']->ding_slug;
-      $form['ding_slug']['#attributes']['readonly'] = 'readonly';
-      $form['ding_slug']['#attributes']['disabled'] = 'disabled';
+      $item['#value'] = $form['#node']->ding_slug;
+      $item['#attributes']['readonly'] = 'readonly';
+      $item['#attributes']['disabled'] = 'disabled';
+    }
+    if ($form['#node']->type == 'library') {
+      $form['library_settings']['ding_slug'] = $item;
     }
   }
 }
@@ -85,9 +88,9 @@ function ding_slug_theme() {
 function ding_slug_ctools_arguments() {
   $args = array();
   $args['ding_slug'] = array(
-    'title' => t('Library slug'),
+    'title' => t('Ding slug'),
     'keyword' => 'node', // TODO: What is this?
-    'description' => t('Finds the node context based on the "slug" name for a library.'),
+    'description' => t('Finds the node context based on the "slug" name for it.'),
     'context' => 'ding_slug_library_context',
   );
   return $args;
