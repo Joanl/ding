@@ -1,0 +1,242 @@
+<?php // $Id$
+
+/**
+ * @file ding_library.module
+ * Provides the library node type for the Ding! project.
+ */
+
+/**
+ * Implementation of hook_perm().
+ *
+ * Since we are limiting the ability to create new nodes to certain users,
+ * we need to define what those permissions are here. We also define a permission
+ * to allow users to edit the nodes they created.
+ */
+function ding_library_perm() {
+  return array(
+    'create library',
+    'edit library',
+    'delete library',
+  );
+}
+
+/**
+ * Implementation of hook_node_info().
+ */
+function ding_library_node_info() {
+  return array(
+    'library' => array(
+      'name' => t('library'),
+      'module' => 'ding_library',
+      'description' => 'A physical library, with a location, opening hours, etc.',
+      'title_label' => t('Name'),
+      'body_label' => t('Description'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_access().
+ */
+function ding_library_access($op, $node, $account) {
+  switch ($op) {
+    case 'create':
+      return user_access('create library', $account);
+    case 'update':
+      return user_access('edit library', $account);
+    case 'delete':
+      return user_access('delete library', $account);
+  }
+}
+
+/**
+ * Implementation of hook_form().
+ *
+ * Provides the node editing form.
+ */
+function ding_library_form(&$node) {
+  // The site admin can decide if this node type has a title and body, and how
+  // the fields should be labeled. We need to load these settings so we can
+  // build the node form correctly.
+  $type = node_get_types('type', $node);
+  $form = array();
+
+  if ($type->has_title) {
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => check_plain($type->title_label),
+      '#required' => TRUE,
+      '#default_value' => $node->title,
+      '#weight' => -5
+    );
+  }
+
+  if ($type->has_body) {
+    // In Drupal 6, we can use node_body_field() to get the body and filter
+    // elements. This replaces the old textarea + filter_form() method of
+    // setting this up. It will also ensure the teaser splitter gets set up
+    // properly.
+    $form['body_field'] = node_body_field($node, $type->body_label, $type->min_word_count);
+  }
+
+  $form['library_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Library settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['library_settings']['library_page_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Library type'),
+    '#options' => array(
+      'normal' => t('Normal library page'),
+      'portal' => t('Portal-style library page'),
+    ),
+    '#description' => t('Normal library pages has a blog section, events, and similar, while portal-style library pages have only a hierarchial menu with content.'),
+    '#default_value' => (isset($node->library_page_type)) ? $node->library_page_type : 'normal',
+  );
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function ding_library_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'library_node_form') {
+    // Hide the comment settings form and disable comments.
+    unset($form['comment_settings']);
+    $form['comment'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+
+    // Don't display menu settings and attachments.
+    unset($form['attachments']);
+    unset($form['menu']);
+
+    // Hide the revision settings and never allow creating new versions
+    unset($form['revision_information']);
+    $form['revision'] = array(
+      '#type' => 'value',
+      '#value' => FALSE,
+    );
+  }
+}
+
+/**
+ * Implementation of hook_validate().
+ */
+function ding_library_validate(&$node) {
+}
+
+/**
+ * Implementation of hook_insert().
+ *
+ * As a new node is being inserted into the database, we need to do our own
+ * database inserts.
+ */
+function ding_library_insert($node) {
+  drupal_write_record('ding_library', $node);
+
+  // Create a menu for hierarchial navigation for portal sites.
+  if ($node->library_page_type == 'portal') {
+    $menu = array(
+      'menu_name' => 'ding_library_' . $node->nid,
+      'title' => $node->title,
+      'description' => t('Navigation menu for %library', array('%library' => $node->title)),
+    );
+    drupal_write_record('menu_custom', $menu);
+  }
+}
+
+/**
+ * Implementation of hook_update().
+ *
+ * As an existing node is being updated in the database, we need to do our own
+ * database updates.
+ */
+function ding_library_update($node) {
+  // Check if theres an existing row in {ding_library}
+  $prev_vid = db_result(db_query("SELECT vid FROM {ding_library} WHERE nid=%d", $node->nid));
+  // If this is a new node or we're adding a new revision,
+  if ($node->revision || !$prev_vid) {
+    ding_library_insert($node);
+  }
+  else {
+    drupal_write_record('ding_library', $node, array('nid', 'vid'));
+    if ($node->library_page_type == 'portal') {
+      $menu = array(
+        'menu_name' => 'ding_library_' . $node->nid,
+        'title' => $node->title,
+        'description' => t('Navigation menu for %library', array('%library' => $node->title)),
+      );
+
+      // Check if this library already has a menu.
+      if (db_result(db_query("SELECT menu_name FROM {menu_custom} WHERE menu_name = 'ding_library_%d' LIMIT 1", $node->nid))) {
+        // If so, update the menu with the new name (if any).
+        drupal_write_record('menu_custom', $menu, array('menu_name'));
+      }
+      // Otherwise, create a new menu.
+      else {
+        drupal_write_record('menu_custom', $menu);
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ *
+ * When a node revision is deleted, we need to remove the corresponding record
+ * from our table. The only way to handle revision deletion is by implementing
+ * hook_nodeapi().
+ */
+function ding_library_nodeapi(&$node, $op, $teaser, $page) {
+  switch ($op) {
+    case 'delete revision':
+      // Notice that we're matching a single revision based on the node's vid.
+      db_query('DELETE FROM {ding_library} WHERE vid = %d', $node->vid);
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_delete().
+ *
+ * When a node is deleted, we need to remove all related records from our table.
+ */
+function ding_library_delete($node) {
+  // Notice that we're matching all revision, by using the node's nid.
+  db_query('DELETE FROM {ding_library} WHERE nid = %d', $node->nid);
+}
+
+/**
+ * Implementation of hook_load().
+ *
+ * Now that we've defined how to manage the node data in the database, we
+ * need to tell Drupal how to get the node back out. This hook is called
+ * every time a node is loaded, and allows us to do some loading of our own.
+ */
+function ding_library_load($node) {
+  $additions = db_fetch_object(db_query('SELECT * FROM {ding_library} WHERE vid = %d', $node->vid));
+  unset($additions->vid);
+  unset($additions->nid);
+  return $additions;
+}
+
+/**
+ * Implementation of hook_view().
+ *
+ * This is a typical implementation that simply runs the node text through
+ * the output filters.
+ */
+function ding_library_view($node, $teaser = FALSE, $page = FALSE) {
+  if (!$teaser) {
+    // TODO: Go to the library Panels view.
+  }
+  $node = node_prepare($node, $teaser);
+  return $node;
+}
+

@@ -1,0 +1,6 @@
+; $Id$
+name = Ding! library
+description = Controls the main library content type.
+package = Ding!
+core = 6.x
+
