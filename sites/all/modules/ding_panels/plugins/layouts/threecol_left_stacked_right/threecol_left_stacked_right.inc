@@ -13,7 +13,7 @@ function ding_panels_threecol_left_stacked_right_panels_layouts() {
   return array('threecol_left_stacked_right' => array(
     'title' => t('Three column left stacked wide right'),
     'icon' => 'threecol_left_stacked_right.png',
-    'theme' => 'ding_panels_threecol_left_stacked_right',
+    'theme' => 'panels_threecol_left_stacked_right',
     'css' => 'threecol_left_stacked_right.css',
     'panels' => array(
       'top' => t('Top'),
