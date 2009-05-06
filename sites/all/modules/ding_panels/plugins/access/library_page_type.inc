@@ -69,6 +69,6 @@ function ding_panels_library_page_type_ctools_access_settings(&$form, &$form_sta
  */
 function ding_panels_library_page_type_ctools_access_summary($conf, $context) {
   $type = (isset($conf['library_page_type'])) ? $conf['library_page_type'] : 'normal';
-  return t('Node must be a %type library', array('%type' => $type));
+  return t('@identifier must be a "@type" library', array('@identifier' => $context->identifier, '@type' => $type));
 }
 
