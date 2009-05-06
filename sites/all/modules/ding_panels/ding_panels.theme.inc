@@ -53,3 +53,10 @@ function ding_panels_content_preprocess_library_location(&$variables) {
   }
 }
 
+/**
+ * Theme function for library portal title.
+ */
+function theme_ding_panels_library_portal_title($node) {
+  return '<h1>' . check_plain($node->title) . '</h1>';
+}
+

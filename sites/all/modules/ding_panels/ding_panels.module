@@ -22,6 +22,10 @@ function ding_panels_theme($existing, $type, $theme, $path) {
       'template' => 'ding_panels_content_libary_location',
       'preprocess functions' => array('ding_panels_content_preprocess_library_location'),
     ),
+    'ding_panels_library_portal_title' => array(
+      'arguments' => array('node' => NULL),
+      'file' => 'ding_panels.theme.inc',
+    ),
   );
 }
 

@@ -51,10 +51,10 @@ function ding_panels_library_portal_content_type_render($subtype, $conf, $panel_
   $node = isset($context->data) ? drupal_clone($context->data) : NULL;
   switch($subtype) {
     case 'library_portal_title':
-      $block->content = theme('ding_panels_content_library_portal_title', $node);
+      $block->content = theme('ding_panels_library_portal_title', $node);
       break;
     case 'library_portal_navigation':
-      $block->content = theme('ding_panels_content_library_portal_navigation', $node);
+      $block->content = _ding_panels_library_portal_navigation_render($node);
       break;
   }
   return $block;
@@ -81,4 +81,20 @@ function ding_panels_library_portal_content_type_admin_title($subtype, $conf, $c
 function ding_panels_library_portal_content_type_edit_form(&$form, &$form_state) {
   return $form;
 }
+
+/**
+ * Render the menu for a portal page.
+ *
+ * @param object $node
+ *    The library node.
+ * @return string
+ *    Rendered menu.
+ */
+function _ding_panels_library_portal_navigation_render($node) {
+  $tree = menu_tree_all_data('ding_library_' . $node->nid);
+
+  //dpm($tree);
+  return menu_tree_output($tree);
+}
+
 
