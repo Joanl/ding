@@ -35,10 +35,6 @@ function ding_panels_library_content_type_content_types() {
       'title' => t('Library opening hours'),
       'description' => t('Shows the library opening hours.'),
     ),
-    'library_about' => array(
-      'title' => t('Library about text'),
-      'description' => t('Shows the main library description text in its full length.'),
-    ),
     'library_feature_list' => array(
       'title' => t('Library feature list'),
       'description' => t('Simple list of library features, containing only the title.'),
@@ -77,14 +73,11 @@ function ding_panels_library_content_type_render($subtype, $conf, $panel_args, $
       // Ask CCK to render the opening hours field for us.
       $block->content = content_format('field_opening_hours', $node->field_opening_hours, 'default', $node);
       break;
-    case 'library_about':
-      // Render the node body as block content.
-      $block->content = check_markup($node->body, $node->format, $node->language);
-      break;
     case 'library_feature_list':
     case 'library_feature_detail_list':
       $block->title = t('Services and facilities');
       $block->content = theme_item_list(_ding_panels_library_features_by_library($node));
+      break;
   }
   return $block;
 }
@@ -100,8 +93,6 @@ function ding_panels_library_content_type_admin_title($subtype, $conf, $context)
       return t('Library location');
     case 'library_hours':
       return t('Library opening hours');
-    case 'library_about':
-      return t('Library about text');
     case 'library_feature_list':
     case 'library_feature_detail_list':
       return t('Services and facilities');
