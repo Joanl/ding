@@ -142,12 +142,7 @@ function ding_library_insert($node) {
 
   // Create a menu for hierarchial navigation for portal sites.
   if ($node->library_page_type == 'portal') {
-    $menu = array(
-      'menu_name' => 'ding_library_' . $node->nid,
-      'title' => $node->title,
-      'description' => t('Navigation menu for %library', array('%library' => $node->title)),
-    );
-    drupal_write_record('menu_custom', $menu);
+    _ding_library_portal_menu($node, FALSE);
   }
 }
 
@@ -167,20 +162,15 @@ function ding_library_update($node) {
   else {
     drupal_write_record('ding_library', $node, array('nid', 'vid'));
     if ($node->library_page_type == 'portal') {
-      $menu = array(
-        'menu_name' => 'ding_library_' . $node->nid,
-        'title' => $node->title,
-        'description' => t('Navigation menu for %library', array('%library' => $node->title)),
-      );
-
       // Check if this library already has a menu.
       if (db_result(db_query("SELECT menu_name FROM {menu_custom} WHERE menu_name = 'ding_library_%d' LIMIT 1", $node->nid))) {
         // If so, update the menu with the new name (if any).
-        drupal_write_record('menu_custom', $menu, array('menu_name'));
+        _ding_library_portal_menu($node);
       }
       // Otherwise, create a new menu.
       else {
         drupal_write_record('menu_custom', $menu);
+        _ding_library_portal_menu($node, FALSE);
       }
     }
   }
@@ -238,5 +228,33 @@ function ding_library_view($node, $teaser = FALSE, $page = FALSE) {
   }
   $node = node_prepare($node, $teaser);
   return $node;
+}
+
+/**
+ * Create or update a library portal page menu.
+ *
+ * @param object $node
+ *    The library node.
+ * @param boolean $update
+ *    Whether to update or create menu.
+ */
+function _ding_library_portal_menu($node, $update = TRUE) {
+  $menu = array(
+    'menu_name' => 'ding_library_' . $node->nid,
+    'title' => $node->title,
+    'description' => t('Navigation menu for %library.', array('%library' => $node->title)),
+  );
+  if ($update) {
+    drupal_write_record('menu_custom', $menu, array('menu_name'));
+  }
+  else {
+    drupal_write_record('menu_custom', $menu);
+
+    // When creating a menu, insert it into the allowed menus for the 
+    // page content type.
+    $setting = variable_get('page_menu_settings', array());
+    $setting[$menu['menu_name']] = $menu['menu_name'];
+    variable_set('page_menu_settings', $setting);
+  }
 }
 
