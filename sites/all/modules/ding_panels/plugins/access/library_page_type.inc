@@ -38,8 +38,12 @@ function ding_panels_library_page_type_ctools_access_check($conf, $context) {
 
   // If library type is not set on the node, we allow it to pass if the 
   // selected type is normal.
-  if (!isset($node->library_page_type) && $type != 'normal') {
-    return FALSE;
+  if (!isset($node->library_page_type)) {
+    // Nested if statements, so that the elseif claus is skipped when
+    // the $node->library_page_type is not set.
+    if ($type != 'normal') {
+      return FALSE;
+    }
   }
   elseif ($node->library_page_type != $type) {
     return FALSE;
