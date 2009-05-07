@@ -17,7 +17,7 @@ $map = array('id' => $mapId, 'type' => 'map', 'zoom' => 12, 'minzoom' => 9, 'max
 //add markers for libraries
 foreach ($nodes as $node)
 {
-	$libraryId = (isset($node->ding_slug)) ? $node->ding_slug : $node->nid;
+	$libraryId = ($node->ding_slug) ? $node->ding_slug : $node->nid;
 	$marker = array('latitude' => $node->location['latitude'], 
 									'longitude' => $node->location['longitude'], 
 									'markername' => 'ding_library_map_'.$node->field_opening_hours_processed['status'],
