@@ -225,7 +225,7 @@ Bibloteks siden
 }
 
 .pane-article_list .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
-.pane-article_list .view li.first{background:#f0f; padding-top:0;}
+.pane-article_list .view li.first{background:none; padding-top:0;}
 .pane-article_list .view .view-node{display:inline;}
 .pane-article_list .view .field-library-ref-nid,
 .pane-article_list .view .created, 
@@ -310,3 +310,8 @@ Cowboy
 /*--------------------------------------*/
 #block-ding_library_map-0 {width:690px; margin:0 0 0 20px;}
 .pane-article_list h3{display:none;}
+.pane-article_list .view li.first {style.css?m (line 228)
+background:transparent none repeat scroll 0 0;
+padding-top:0;
+}
+.pane-article_list .view li{padding:10px 10px 10px 20px ;}
