@@ -145,7 +145,7 @@ bibloteks oversigtsiden
 /*--------------------------------------*/
 .libary-openstatus{padding:0 5px; display:inline; color:#fff;}
 .libary-openstatus.open{background:#71bf44;}
-.libary-openstatus.closed{background:#6b0046;}
+.info .libary-openstatus.closed{background:#6b0046;}
 
 .view-event-list  li,
 .view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
@@ -212,7 +212,8 @@ Bibloteks siden
 }
 #twocol-left-top, 
 #threecol-left-top {
-	background:transparent url(../images/bg-divider.png) no-repeat left bottom; min-height:314px;
+	background:transparent url(../images/bg-divider.png) no-repeat left bottom; 
+	min-height:314px; height:auto !important; height:314px;
 }
 
 #twocol-left-left h3{margin:0 0 0 20px;}
