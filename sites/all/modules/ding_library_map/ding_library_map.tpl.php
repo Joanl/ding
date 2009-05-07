@@ -5,9 +5,10 @@
  * @file ding_library_map.tpl.php
  * Library location, map, etc.
  */
+
+//TODO: Move config to theme preprocess
 drupal_add_css(drupal_get_path('module', 'ding_library_map') .'/css/ding_library_map.css', 'module');
 drupal_add_js(drupal_get_path('module', 'ding_library_map') .'/js/ding_library_map.js', 'module');
-
 
 //setup map
 $mapId = 'library_map';
@@ -16,6 +17,7 @@ $map = array('id' => $mapId, 'type' => 'map', 'zoom' => 12, 'minzoom' => 9, 'max
 //add markers for libraries
 foreach ($nodes as $node)
 {
+	$libraryId = (isset($node->ding_slug)) ? $node->ding_slug : $node->nid;
 	$marker = array('latitude' => $node->location['latitude'], 
 									'longitude' => $node->location['longitude'], 
 									'markername' => 'ding_library_map_'.$node->field_opening_hours_processed['status'],
@@ -25,7 +27,7 @@ foreach ($nodes as $node)
 									'postal-code' => $node->location['postal_code'],
 									'opening_hours' => $node->field_opening_hours_processed['week'],
 									'state' => $node->field_opening_hours_processed['status'], 
-									'url' => url('node/'.$node->nid, array('absolute' => TRUE)),
+									'url' => url('biblioteker/'.$libraryId, array('absolute' => TRUE)),
 									'text' => FALSE);
 	$map['markers'][] = $marker;
 }
@@ -33,6 +35,7 @@ foreach ($nodes as $node)
 ?>
 <?php echo theme('gmap', $map) ?>
 <script type="text/javascript">
+	<?php //TODO: Move to Drupal javascript settings ?>
 	var options = { fullDayNames: {	'mon': '<?php echo t('Monday') ?>',
 									 								'tue': '<?php echo t('Tuesday') ?>',
 																	'wed': '<?php echo t('Wednesday') ?>',
