@@ -177,7 +177,6 @@ Panels
 #front-right{}
 #front-bottom{width:960px;}
 
-
 #twocol-left{width:710px; float:left;}
 	#twocol-left-left{width:710px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px  }
 #twocol-right{width:250px; float:left;}
@@ -186,8 +185,6 @@ Panels
 	#threecol-left-left{width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px}
 #threecol-left-middle {width:240px; float:left;}
 #threecol-right{width:250px; float:left;}
-
-
 
 /* =====================================
 Bibloteks siden
@@ -227,7 +224,7 @@ Bibloteks siden
 }
 
 .pane-article_list .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
-.pane-article_list .view li.first{background:none; padding-top:0;}
+.pane-article_list .view li.first{background:#f0f; padding-top:0;}
 .pane-article_list .view .view-node{display:inline;}
 .pane-article_list .view .field-library-ref-nid,
 .pane-article_list .view .created, 
