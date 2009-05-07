@@ -144,7 +144,7 @@ teaser
 /* =====================================
 bibloteks oversigtsiden
 /*--------------------------------------*/
-.libary-openstatus{padding:0 5px; display:inline;}
+.libary-openstatus{padding:0 5px; display:inline; color:#fff;}
 .libary-openstatus.open{background:#71bf44;}
 .libary-openstatus.closed{background:#6b0046;}
 
