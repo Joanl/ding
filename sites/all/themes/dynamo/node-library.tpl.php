@@ -1,10 +1,3 @@
-<?php
- if($node->nid =="1" ){
-   dsm($node);	   
- }
-
- 
- ?>	
 <?php  //dsm(get_defined_vars());  ?> 
 <?php //print $FIELD_NAME_rendered ?>
 <?php if ($page == 0){ ?>
