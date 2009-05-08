@@ -1,4 +1,3 @@
-
 /* =====================================
 	Dynamo style.css
 	------------------------------------
@@ -26,7 +25,7 @@ body{background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;}
 	#navigation{height:30px;}
 		#navigation-inner{margin:0 37px;}
 	#path{margin:5px 37px 0;}
-
+		#path div.breadcrumb{display:inline;}
 /* body */
 #pagebody{background:transparent url(../images/bg-page.png) repeat-y 0 0;}
 	#pagebody-inner{background:transparent url(../images/bg-page-top.png) no-repeat 0px 0px; padding:0 17px 0 17px; /*32*/ /*37*/}
@@ -146,7 +145,7 @@ bibloteks oversigtsiden
 /*--------------------------------------*/
 .libary-openstatus{padding:0 5px; display:inline; color:#fff;}
 .libary-openstatus.open{background:#71bf44;}
-.libary-openstatus.closed{background:#6b0046;}
+.info .libary-openstatus.closed{background:#6b0046;}
 
 .view-event-list  li,
 .view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
@@ -173,28 +172,19 @@ bibloteks oversigtsiden
 Panels
 /*--------------------------------------*/
 #front-top{width:960px; display:block; height:240px;}
-#front-bottom{width:960px;}
-#front-left{width:470px;float:left;}
+#front-left{width:470px;float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px}
 #front-middle {width:240px; float:left;}
-#twocol-left{width:710px; float:left; }
+#front-right{}
+#front-bottom{width:960px;}
 
-#twocol-right,
-#threecol-right{
-	width:250px; float:left;
-}
+#twocol-left{width:710px; float:left;}
+	#twocol-left-left{width:710px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px  }
+#twocol-right{width:250px; float:left;}
 
 #threecol-left{width:710px; float:left;}
-
-#twocol-left-left,
-#threecol-left-left, 
-#front-left {
-	width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px;
-}
-
-
-#twocol-left-left{width:710px}
-
+	#threecol-left-left{width:470px; float:left; background:transparent url(../images/bg-divider-horizontalt.png) no-repeat right top; min-height:300px}
 #threecol-left-middle {width:240px; float:left;}
+#threecol-right{width:250px; float:left;}
 
 /* =====================================
 Bibloteks siden
@@ -222,34 +212,42 @@ Bibloteks siden
 }
 #twocol-left-top, 
 #threecol-left-top {
-	background:transparent url(../images/bg-divider.png) no-repeat left bottom; min-height:314px;
+	background:transparent url(../images/bg-divider.png) no-repeat left bottom; 
+	min-height:314px; height:auto !important; height:314px;
 }
 
+#twocol-left-left h3{margin:0 0 0 20px;}
 /*biblo teasers*/
 #twocol-left-left .view li,
 #twocol-left-left .item-list li,
-#twocol-left-left .pane-library_about
-{background:transparent url(../images/bg-divider-small.png) no-repeat left bottom; padding:0px 20px 20px 20px;}
+#twocol-left-left .pane-library_about{
+	background:transparent url(../images/bg-divider-small.png) no-repeat left bottom; padding:0px 20px 20px 20px;
+}
 
-.pane-article_list-block_1 .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
-.pane-article_list-block_1 .view li.first{background:none; padding-top:0;}
-.pane-article_list-block_1 .view .view-node{display:inline;}
-.pane-article_list-block_1 .view-empty{margin:20px 0 0 20px;}
-.pane-article_list-block_1 .more-link{margin:0 20px 0 20px;}
-.pane-article_list-block_1 .view .field-library-ref-nid,
-.pane-article_list-block_1 .view .created, 
-.pane-article_list-block_1 .view .name{
+.pane-article_list .view li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px;}
+.pane-article_list .view li.first{background:none; padding-top:0;}
+.pane-article_list .view .view-node{display:inline;}
+.pane-article_list .view .field-library-ref-nid,
+.pane-article_list .view .created, 
+.pane-article_list .view .name{
 	color:#999999; display:inline;
 }
 
+.pane-article_list .view-empty,
+.pane-article_list .feed, 
+.pane-article_list .more-link{
+	margin:20px 0 0 20px;
+}
+
+
 /*calender*/
-.pane-event_list-block_1 .panel-pane{margin:0 5px;}
-.pane-event_list-block_1 h3{background:#d1d9d7; padding:3px 10px; margin:0 10px 0 14px;}
-.pane-event_list-block_1 .view-event-list{margin:10px 0 0 0;}
-.pane-event_list-block_1 .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
-.pane-event_list-block_1 .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
-.pane-event_list-block_1 .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
-.pane-event_list-block_1 .view-event-list li div.info{float:left; overflow:hidden; width:154px;}
+.pane-event_list .panel-pane{margin:0 5px;}
+.pane-event_list h3{background:#d1d9d7; padding:3px 10px; margin:0 10px 0 14px;}
+.pane-event_list .view-event-list{margin:10px 0 0 0;}
+.pane-event_list .view-event-list li{background:transparent url(../images/bg-divider-verysmall.png) no-repeat left top; padding:5px 0 5px 20px; clear:both;} 
+.pane-event_list .view-event-list li.first{background:none; padding-top:0px; clear:both;} 
+.pane-event_list .view-event-list li div.leaf{height:65px; width:55px; float:left; padding:2px 0 0 0; background:transparent url(../images/bg-calender.png) no-repeat 0 0; }
+.pane-event_list .view-event-list li div.info{float:left; overflow:hidden; width:154px;}
 span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:0 0 0 14px;}
 
 .view-filters{width:690px;}
@@ -303,7 +301,6 @@ span.time{background:transparent url(../images/ur.png) no-repeat 0 2px; padding:
 /* =====================================
 test
 /*--------------------------------------*/
-
 #page.pagetest{background:transparent url(../images/test.png) no-repeat 0 0; border: 1px solid #f0f;}
 .test{background:#f0f url(../images/bg-trans-50.png) repeat 0 0;}
 *.test{opacity: 0.5; -moz-opacity: 0.5; filter:alpha(opacity=50);}
@@ -311,5 +308,10 @@ test
 /* =====================================
 Cowboy
 /*--------------------------------------*/
-
 #block-ding_library_map-0 {width:690px; margin:0 0 0 20px;}
+.pane-article_list h3{display:none;}
+.pane-article_list .view li.first {style.css?m (line 228)
+background:transparent none repeat scroll 0 0;
+padding-top:0;
+}
+.pane-article_list .view li{padding:10px 10px 10px 20px ;}

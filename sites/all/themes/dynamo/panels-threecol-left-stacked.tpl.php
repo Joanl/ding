@@ -1,10 +1,5 @@
-<?php
-/* =====================================
-
-* ------------------------------------- */
-?>
+<!--panels-threecol-left-stacked.tpl.php-->
 <div id="threecol-left">
-
     <?php if (!empty($content['top'])): ?>
       <div id="threecol-left-top">
         <?php print $content['top']; ?>
@@ -32,3 +27,4 @@
       <?php print $content['right']; ?>
     <?php endif; ?>
 </div>
+<!--/panels-threecol-left-stacked.tpl.php-->

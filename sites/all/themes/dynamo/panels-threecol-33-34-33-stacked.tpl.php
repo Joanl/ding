@@ -2,15 +2,14 @@
 /*
   TODO ja det er så ren dummy data...
 */
-
-
 ?>
+<!--panels-threecol-33-34-33-stacked.tpl.php-->
 <div id="front-top">
   <ul id="frontpagecarousel" class="jcarousel-skin-biblo">
-    <li><img src="<?php print path_to_theme();?>/images/test-carousel-1.jpg" width="895" height="183" alt="Test Carousel 1"></li>
-    <li><img src="<?php print path_to_theme();?>/images/test-carousel-2.jpg" width="895" height="183" alt="Test Carousel 1"></li>
-    <li><img src="<?php print path_to_theme();?>/images/test-carousel-3.jpg" width="895" height="183" alt="Test Carousel 1"></li>
-    <li><img src="<?php print path_to_theme();?>/images/test-carousel-4.jpg" width="895" height="183" alt="Test Carousel 1"></li>    
+    <li><img src="<?php print path_to_theme();?>/images/test-carousel-1.jpg" width="895" height="183" alt="Test Carousel 1" /></li>
+    <li><img src="<?php print path_to_theme();?>/images/test-carousel-2.jpg" width="895" height="183" alt="Test Carousel 1" /></li>
+    <li><img src="<?php print path_to_theme();?>/images/test-carousel-3.jpg" width="895" height="183" alt="Test Carousel 1" /></li>
+    <li><img src="<?php print path_to_theme();?>/images/test-carousel-4.jpg" width="895" height="183" alt="Test Carousel 1" /></li>    
   </ul>
 
   <ul id="frontpagecarousel-controller">
@@ -37,3 +36,4 @@
 <div id="front-bottom">
     <?php print $content['bottom']; ?>  
 </div>
+<!-- / panels-threecol-33-34-33-stacked.tpl.php-->

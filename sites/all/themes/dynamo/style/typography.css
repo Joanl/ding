@@ -112,8 +112,8 @@ h1,
 #path,
 .view li div.tid a,
 .more-link a,
-.pane-event_list-block_1 li div,
-.pane-event_list-block_1 h4 a,
+.pane-event_list li div,
+.pane-event_list h4 a,
 .pane-library_feature_list ul li,
 .view-feature-list li div.title a
 {
@@ -135,23 +135,23 @@ h1,
 .view li div.tid a{color:#fff; background-color: #b41630; padding:2px;}
 
 /*calender block*/
-.pane-event_list-block_1 .title{color:#000; font-weight:bold;}
-.pane-event_list-block_1 li div.leaf{font-family: Georgia, serif; text-align: center;}
-	.pane-event_list-block_1 li div.leaf .day{color:#fff; font-size:10px; line-height:15px;}
-	.pane-event_list-block_1 li div.leaf .date{font-size:32px; line-height:26px;}
-	.pane-event_list-block_1 li div.leaf .month{font-size:11px; line-height:15px;}
-	.pane-event_list-block_1 li div a{color:#666;}
-	.pane-event_list-block_1 .view-event-list li div h4 a{color:#050505;line-height:8px;}
-	.pane-event_list-block_1 .view-event-list li div h4{line-height:8px;}
+.pane-event_list .title{color:#000; font-weight:bold;}
+.pane-event_list li div.leaf{font-family: Georgia, serif; text-align: center;}
+	.pane-event_list li div.leaf .day{color:#fff; font-size:10px; line-height:15px;}
+	.pane-event_list li div.leaf .date{font-size:32px; line-height:26px;}
+	.pane-event_list li div.leaf .month{font-size:11px; line-height:15px;}
+	.pane-event_list li div a{color:#666;}
+	.pane-event_list .view-event-list li div h4 a{color:#050505;line-height:8px;}
+	.pane-event_list .view-event-list li div h4{line-height:8px;}
 
 .vcard .fn{font-weight:bold;}
 
-.libary-status{	font-size:10px; line-height:17px; text-transform: uppercase; color:#fff;}
+.libary-openstatus{	font-size:10px; line-height:17px; text-transform: uppercase; color:#fff;}
 
 
 #pagefooter{font-size:10px; line-height:13px;}
 #pagefooter h3,
-.pane-event_list-block_1 h3,
+.pane-event_list h3,
 .pane-library_feature_list h3
 {
 	font-size:10px; line-height:17px;

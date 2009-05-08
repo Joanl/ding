@@ -1,4 +1,4 @@
-
+<!--panels-twocol-left-stacked.tpl.php-->
 <div id="twocol-left">
 
   <?php if (!empty($content['top'])): ?>
@@ -12,20 +12,20 @@
   </div>
 
 
-</div>
-
-<div id="twocol-right">
-
-  <?php if (!empty($content['right'])): ?>
-    <?php print $content['right']; ?>
+  <?php if (!empty($content['bottom'])): ?>
+    <div id="twocol-bottom">
+    <?php print $content['bottom']; ?>        
+    </div>
   <?php endif; ?>
 
 
+</div>
+
+<div id="twocol-right">
+  <?php if (!empty($content['right'])): ?>
+    <?php print $content['right']; ?>
+  <?php endif; ?>
 </div>  
 
 
-<?php if (!empty($content['bottom'])): ?>
-  <div id="twocol-bottom">
-  <?php print $content['bottom']; ?>        
-  </div>
-<?php endif; ?>
+<!--/panels-twocol-left-stacked.tpl.php-->
