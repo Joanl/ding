@@ -142,9 +142,6 @@ function ding_slug_token_values($type, $object = NULL, $options = array()) {
           $tokens['ding_library_slug'] = $node->field_library_ref[0];
         }
       }
-      else {
-        $tokens['ding_library_slug'] = 'alle';
-      }
     }
     return $tokens;
   }
