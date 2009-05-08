@@ -97,6 +97,60 @@ function ding_slug_ctools_arguments() {
 }
 
 /**
+ * Implementation of hook_token_list().
+ */
+function ding_slug_token_list($type = 'all') {
+  if ($type == 'node' || $type == 'all') {
+    $tokens = array();
+    $tokens['node']['ding_slug'] = t('Slug for the current node');
+    $tokens['node']['ding_library_slug'] = t('Slug for the library');
+    return $tokens;
+  }
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function ding_slug_token_values($type, $object = NULL, $options = array()) {
+  if ($type == 'node') {
+    $node = $object;
+    $tokens = array();
+
+    // If node has a slug, use that.
+    if (isset($node->ding_slug)) {
+      $tokens['ding_slug'] = check_plain($node->ding_slug);
+      // For the library node, the library slug is their own.
+      if ($node->type == 'library') {
+        $tokens['ding_library_slug'] = check_plain($node->ding_slug);
+      }
+    }
+    // If it has no slug, return the node id.
+    else {
+      $tokens['ding_slug'] = $node->nid;
+    }
+
+    // If we didn't set the library slug above, try looking it up.
+    if (!isset($tokens['ding_library_slug'])) {
+      // Look up the slug of the related library.
+      if (isset($node->field_library_ref[0])) {
+        $slug = db_result(db_query("SELECT slug FROM {ding_slug} WHERE nid = %d LIMIT 1;", $node->field_library_ref[0]));
+        if ($slug) {
+          $tokens['ding_library_slug'] = check_plain($slug);
+        }
+        // If the related library doesn't have a slug, return its nid.
+        else {
+          $tokens['ding_library_slug'] = $node->field_library_ref[0];
+        }
+      }
+      else {
+        $tokens['ding_library_slug'] = 'alle';
+      }
+    }
+    return $tokens;
+  }
+}
+
+/**
  * Lookup an argument to see if it corresponds to a library.
  */
 function ding_slug_library_context($arg = NULL, $conf = NULL, $empty = FALSE) {

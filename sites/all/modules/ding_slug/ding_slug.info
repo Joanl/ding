@@ -3,6 +3,7 @@ name = Ding! slugs
 description = Handles "slugs" for nodes, short names to be referenced in URLs
 package = Ding!
 core = 6.x
-dependencies[] = transliteration
 dependencies[] = ctools
+dependencies[] = token
+dependencies[] = transliteration
 
