@@ -97,6 +97,12 @@ function ding_library_form(&$node) {
     '#default_value' => (isset($node->library_page_type)) ? $node->library_page_type : 'normal',
   );
 
+  $form['library_settings']['library_show_on_map'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show library on map'),
+    '#default_value' => (isset($node->library_show_on_map)) ? $node->library_show_on_map : 1,
+  );
+
   return $form;
 }
 

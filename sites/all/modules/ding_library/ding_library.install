@@ -42,10 +42,24 @@ function ding_library_schema() {
         'length' => 50,
         'default' => 'normal',
       ),
+      'library_weight' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'library_show_on_map' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
     ),
     'primary key' => array('vid', 'nid'),
     'indexes' => array(
       'nid' => array('nid'),
+      'library_weight' => array('library_weight'),
+      'library_show_on_map' => array('library_show_on_map'),
     ),
   );
   return $schema;
@@ -60,4 +74,25 @@ function ding_library_update_6001() {
   return $ret;
 }
 
+/**
+ * Second update, add two new fields and their indexes.
+ */
+function ding_library_update_6002() {
+  $ret = array();
+
+  db_add_field($ret, 'ding_library', 'library_weight', array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+    ), array('indexes' => array('library_weight' => array('library_weight'))));
+
+  db_add_field($ret, 'ding_library', 'library_show_on_map', array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 1,
+    ), array('indexes' => array('library_show_on_map' => array('library_show_on_map'))));
+  return $ret;
+}
 
