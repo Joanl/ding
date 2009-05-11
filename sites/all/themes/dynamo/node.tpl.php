@@ -18,13 +18,6 @@
 	<h1><?php print $title;?></h1>
 		
 	<div class="meta">
-  	<?php if ($picture) { ;?>
-			<span class="author-picture">
-		  		<?php print $picture; ?>  
-			</span>
-		<?php } ?>
-
-
 		<span class="time">
 			<?php print format_date($node->created, 'custom', "j F Y") ?> 
 		</span>	
@@ -32,10 +25,8 @@
 			af <?php print theme('username', $node); ?>
 		</span>	
 
-
-
 		<?php if (count($taxonomy)){ ?>
-		  <div class="taxanomy">
+		  <div class="taxonomy">
 	   	  <?php print $terms ?> 
 		  </div>  
 		<?php } ?>

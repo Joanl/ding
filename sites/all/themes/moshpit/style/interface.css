@@ -35,7 +35,7 @@ body.page-user ul.tabs.primary li a:hover{border-bottom: 0; border-top: 0;}
 div.indented{margin:0 0 0 30px;}
 div.comment {width: auto; margin:0 0 10px 0;}
 div.comment blockquote {border: 1px solid #dedede; background:#fff;}
-div.comment blockquote h4{margin: 10px 10px 5px 10px; font-size:1.2em;}
+div.comment blockquote h4{margin: 10px 10px 5px 10px; font-size:0.9em;}
 div.comment blockquote h4.new a{color:#000;}
 div.comment blockquote p {margin: 0 10px;}
 div.comment ul.links{text-align:right; margin: 5px 10px}

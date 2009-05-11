@@ -1,0 +1,103 @@
+/* =====================================
+	Dynamo biblo style.css
+	------------------------------------
+	biloteks relaterede styles
+/*--------------------------------------*/
+
+/* Bibloteks siden */
+#twocol-left-top .picture-inner,
+#threecol-left-top .picture-inner{
+	width:680px; height:200px; overflow:hidden; background:#eee;
+}	
+
+#twocol-left-top h1 a, 
+#threecol-left-top h1 a{
+	color:#000; margin:20px 0 0 0;
+}
+#twocol-left-top ul.item-list, 
+#threecol-left-top ul.item-list{
+	margin:10px 0 0 0;
+}
+#twocol-left-top ul.item-list li, 
+#threecol-left-top ul.item-list li {
+	float:left; margin:0 30px 0 0;
+}
+#twocol-left-top, 
+#threecol-left-top {
+	background:transparent url(../images/bg-divider.png) no-repeat left bottom; 
+	min-height:275px; height:auto !important; height:275px;
+	padding:0 0 0 20px;
+}
+
+
+
+
+/* =====================================
+bibloteks oversigtsiden
+/*--------------------------------------*/
+.libary-openstatus{padding:0 5px; display:inline; color:#fff;}
+.libary-openstatus.open{background:#71bf44;}
+.info .libary-openstatus.closed{background:#6b0046;}
+
+.view-event-list  li,
+.view-library-list li{background:transparent url(../images/bg-divider.png) no-repeat left top;  clear:both; padding:10px 0 10px 20px;}
+
+.view-event-list li.first
+.view-library-list li.first{background:none;}
+
+.view-event-list .picture,
+.view-library-list .picture{
+	width:120px; height:120px; margin:0 20px 0 0; float:left;
+}
+.view-library-list .info{width:355px; ; margin:0 20px 0 0; float:left; }
+.view-library-list .office-hours-week{width:175px; float:left;}
+.view-library-list .office-hours-week .week-info{background:#d1d9d7}
+.view-library-list .office-hours-week .odd, 
+.view-library-list .office-hours-week .even{
+	padding:0 5px;
+} 
+
+.view-event-list .libary-tag div{display:inline;margin:0 5px 0 0;}
+
+
+
+
+/*BOX sprite*/
+.box, 
+.box .vcard,
+.box .library-map,
+.pane-library_feature_list,
+.pane-library_feature_list  h3,
+.pane-library_feature_list .item-list,
+.pane-library_hours,
+.pane-library_hours h3,
+.pane-library_hours .office-hours-week{
+	background:transparent url(../images/sprite-box.png) no-repeat 0px 0; width:228px; overflow:hidden;
+}
+/*biblo adresse*/
+.box{background-repeat: repeat-y;}
+.box .vcard{background-position:-460px 0px; padding:15px; min-height:170px;}
+.box .library-map{background-position:-700px bottom;}
+.box .library-map{padding:15px 15px 10px 15px;}
+.box .library-map-inner{width:194px; height:140px;}
+
+/*features*/
+.pane-library_feature_list{background-repeat: repeat-y; margin:0 0 0 10px;}
+.pane-library_feature_list h3{background-position:-230px -30px; padding:10px 0 0 10px; height:18px; }
+.pane-library_feature_list .item-list{background-position:-700px bottom; padding:0px 0px 10px 20px; min-height:30px;}
+.pane-library_feature_list ul li{background:transparent url(../images/ok.png) no-repeat left center; padding:0 0 0 15px;}
+
+/*åbningstider*/
+.pane-feature_list-block_1{background-repeat: repeat-y;}
+.pane-library_hours h3{background-position:-230px -30px; padding:6px 0 0 20px; height:21px;}
+.pane-library_hours .office-hours-week{background-position:-700px bottom; padding:0 0 10px 0; }
+
+.pane-library_hours .office-hours-week .even,
+.pane-library_hours .office-hours-week .odd{
+	width:190px; padding:0 10px; margin:0 10px;
+}
+.pane-library_hours .office-hours-week .week-info{margin:0 0 0 20px;}
+.week-info a.prev{ color:#757575;}
+.week-info a.next{color:#757575;}
+.office-hours-week .odd{background:#f3f5f5;}
+.office-hours-week .even{background:#fff;}

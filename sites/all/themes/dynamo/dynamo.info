@@ -6,7 +6,6 @@ core        = 6.x
 engine      = phptemplate
 base theme  = moshpit
 
-
 ;--------------------- regions -----------------------------
 regions[account]        = account
 regions[search]         = search
@@ -31,9 +30,10 @@ features[] = primary_links
 features[] = secondary_links
 
 ;--------------------- styles ------------------------------
-;stylesheets[all][] = style/grid.css
-stylesheets[all][]  = style/style.css
+stylesheets[all][]  = style/grid.css
 stylesheets[all][]  = style/typography.css
+stylesheets[all][]  = style/biblo.css
+stylesheets[all][]  = style/style.css
 stylesheets[all][]  = style/jcarousel.css
 stylesheets[all][]  = style.css
 ;stylesheets[print][]  = style/print.css 
@@ -46,4 +46,3 @@ stylesheets[all][]  = style.css
 scripts[] = script/jquery.overlabel.js
 scripts[] = script/jquery.jcarousel.pack.js
 scripts[] = script.js
-
