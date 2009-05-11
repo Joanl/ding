@@ -61,6 +61,16 @@ code, tt, pre {
   font-size: 10px;
 }
 
+/* ===================================== 
+account
+* ------------------------------------- */
+#account a{color:#fff;font-size:0.9em; text-decoration: underline;}
+#user-login-form label{font-size:0.8em; color:#000;}
+#search p{font-size:0.7em; color:#eccdd3;}
+	#edit-search-block-form-1-wrapper input{font-size:1.2em; color:#929292;}
+	#edit-search-block-form-1-wrapper p{font-size:0.9em; color:#dfa1ab;}
+
+
 /*-- links --*/
 a, a:link, a:visited, a:active {text-decoration: none; color:#006a87;}
 a:hover, a:focus { text-decoration: underline; color:#006a87;}
@@ -71,24 +81,14 @@ tr.odd td{padding:5px;}
 tr.odd a{color:#000;}
 tr.even{}
 
-
-/* ===================================== 
-account
-* ------------------------------------- */
-#account a{color:#fff;font-size:0.9em; text-decoration: underline;}
-#user-login-form label{font-size:0.8em; color:#000;}
-#search p{font-size:0.7em; color:#eccdd3;}
-	#edit-search-block-form-1-wrapper input{font-size:1.2em; color:#929292;}
-	#edit-search-block-form-1-wrapper p{font-size:0.9em; color:#dfa1ab;}
-
 /*headers*/
 h1,
-h2 a:link,
-h3 a:link{
+h2 a, h2 a:link,h2 a:visited,h2 a:active,
+h3 a, h3 a:link,h3 a:visited,h3 a:active{
 	font-size:21px; line-height:25px; color:#050505;
 }
+h4 a, h4 a:link,h4 a:visited,h4 a:active{font-size:12px; line-height:15px; color:#050505;}
 
-h4 a:link{font-size:12px; line-height:15px; color:#050505;}
 .view-event-list li div.title,
 .view-event-list .time,
 .view-event-list li div.title a{
@@ -96,7 +96,7 @@ h4 a:link{font-size:12px; line-height:15px; color:#050505;}
 }
 
 .meta,
-.view .view-empty,
+.view-empty,
 .view-event-list .libary-tag,
 .view .field-library-ref-nid,
 .view .created, 

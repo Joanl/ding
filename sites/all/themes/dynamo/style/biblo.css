@@ -35,6 +35,8 @@
 /* =====================================
 bibloteks oversigtsiden
 /*--------------------------------------*/
+.node-teaser.node-library{background:transparent url(../images/bg-divider.png) no-repeat left top; padding:10px 0 0 0;}
+
 .libary-openstatus{padding:0 5px; display:inline; color:#fff;}
 .libary-openstatus.open{background:#71bf44;}
 .info .libary-openstatus.closed{background:#6b0046;}

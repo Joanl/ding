@@ -5,27 +5,24 @@
 	sets all the local design elements 
 /*--------------------------------------*/
 
-/*artcile lists*/
+/*article lists*/
 .view-article-list li{background:transparent url(../images/bg-divider-small.png) no-repeat left top; padding:10px 20px 10px 20px; margin:0; color:#999999;}
 .view-article-list li.first{background:none; padding:0 20px ;}
 .view-article-list li li{background:none; padding:0px 10px 0px 0px; margin:0;}
 
 /*node og list*/
 .node .meta ul{margin:0 0 0 10px;}
-
 .meta div.taxonomy{display:inline;}
 .meta li {padding:0 10px 0 0;}
 
 
-
-
 .view-empty,
 .feed, 
- .more-link{
+.more-link{
 	margin:20px 0 0 20px; 
 }
 
-
+/*panels node*/
 .page-comment .comment,
 .page-comment #comment-form,
 .pane-node_content, 
@@ -69,7 +66,6 @@ div.comment .meta .date{color:#999;}
 /* =====================================
 teaser
 /*--------------------------------------*/
-.node-teaser.node-library{background:transparent url(../images/bg-divider.png) no-repeat left top; padding:10px 0 0 0;}
 
 
 
